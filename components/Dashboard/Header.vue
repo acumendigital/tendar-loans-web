@@ -1,21 +1,38 @@
 <template>
-  <div class="flex justify-between align-center h-[90px] border-slate-50 border-2">
-    <TendarLogo />
-    <div class="profile">
-      <MazDropdown :items="dropDownItems">
+  <div
+    class="border-slate-50 border-2 "
+  >
+    <div class="h-[90px] flex justify-between align-center max-w-[1600px]">
+      <TendarLogo />
+      <div class="profile">
+        <p class="username">Lanre Anderson</p>
+        <img src="~assets/images/Ellipse 45.png" alt="" />
+        <!-- <MazDropdown :items="dropDownItems">
         Josh Anaba
         <MazAvatar
           src="https://pbs.twimg.com/profile_images/598181608198381570/-cFG43y2_400x400.jpg"
         />
-      </MazDropdown>
+      </MazDropdown> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const dropDownItems = ref([
-  { label: "Profile", to: '/profile' },
-  { label: "Link (href)", href: "https://www.google.com", target: "_blank" },
-  { label: "Router Link", to: { name: "index" } },
-]);
+// const dropDownItems = ref([
+//   { label: "Profile", to: '/profile' },
+//   { label: "Link (href)", href: "https://www.google.com", target: "_blank" },
+//   { label: "Router Link", to: { name: "index" } },
+// ]);
 </script>
+
+<style scoped>
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.profile img {
+  margin-left: 15px;
+}
+</style>
