@@ -1,5 +1,114 @@
 <template>
-  <div></div>
+  <div>
+    <div class="top_section">
+      <div class="title">Loans</div>
+      <button class="global_btn">Get a Loan</button>
+    </div>
+    <div class="cards_section">
+      <DashboardCard
+        v-for="(data, index) in cardData"
+        :key="index"
+        :cardLength="index"
+        :cardData="data"
+      />
+    </div>
+    <TableLoans :tableData="tableData" />
+  </div>
 </template>
 
-<script setup></script>
+<script>
+export default {
+  data() {
+    return {
+      cardData: [
+        {
+          title: "Next instalment due",
+          text: "₦50,000.00",
+          date: "Aug 30, 2023",
+          active: "",
+        },
+        {
+          title: "Active loan amount",
+          text: "₦300,000.00",
+          date: "",
+          active: "",
+        },
+        {
+          title: "Number of payments",
+          text: "1 of 4",
+          date: "",
+          active: "Active loan",
+        },
+      ],
+      tableData: [
+        {
+          reference: "BN-B1E73DA–0017",
+          amount_borrowed: "23000",
+          amount_repaid: "30000",
+          date_disbursed: "Aug 30, 2023",
+          repayment_date: "Dec 30, 09:42 PM",
+          transaction_status: "Ongoing",
+        },
+        {
+          reference: "BN-B1E73DA–0017",
+          amount_borrowed: "23000",
+          amount_repaid: "30000",
+          date_disbursed: "Aug 30, 2023",
+          repayment_date: "Dec 30, 09:42 PM",
+          transaction_status: "Unsuccessful",
+        },
+        {
+          reference: "BN-B1E73DA–0017",
+          amount_borrowed: "23000",
+          amount_repaid: "30000",
+          date_disbursed: "Aug 30, 2023",
+          repayment_date: "Dec 30, 09:42 PM",
+          transaction_status: "Completed",
+        },
+        {
+          reference: "BN-B1E73DA–0017",
+          amount_borrowed: "23000",
+          amount_repaid: "30000",
+          date_disbursed: "Aug 30, 2023",
+          repayment_date: "Dec 30, 09:42 PM",
+          transaction_status: "Unsuccessful",
+        },
+        {
+          reference: "BN-B1E73DA–0017",
+          amount_borrowed: "23000",
+          amount_repaid: "30000",
+          date_disbursed: "Aug 30, 2023",
+          repayment_date: "Dec 30, 09:42 PM",
+          transaction_status: "Completed",
+        },
+        {
+          reference: "BN-B1E73DA–0017",
+          amount_borrowed: "23000",
+          amount_repaid: "30000",
+          date_disbursed: "Aug 30, 2023",
+          repayment_date: "Dec 30, 09:42 PM",
+          transaction_status: "Completed",
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style scoped>
+.top_section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.title {
+  color: var(--dark-gray-dark-gray-2, #252c32);
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 700;
+}
+.cards_section {
+  display: flex;
+}
+</style>
