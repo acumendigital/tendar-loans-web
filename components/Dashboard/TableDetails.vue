@@ -57,7 +57,7 @@
               <Badge :type="'Ongoing'" />
             </div>
           </div>
-          <div class="table_section">
+          <div class="table_section" v-if="$route.name === 'loans'">
             <TableRepaymentHistory :tableData="tableData" />
           </div>
         </div>
@@ -204,6 +204,7 @@ export default {
 
 .main_content {
   height: 100%;
+  width: 700px;
   position: fixed;
   overflow: auto;
 
