@@ -5,7 +5,7 @@
       v-for="(link, index) in nav"
       :key="index"
       :to="link.to"
-      class="text-[#000] rounded-md h-[50px] hover:bg-[#7a62eb1a] flex justify-between align-center gap-2 px-5 group"
+      class="menu_link text-[#000] rounded-md h-[50px] hover:bg-[#7a62eb1a] flex justify-between align-center gap-2 px-5 group"
     >
       <span class="group-hover:text-[#7a62eb]">{{ link.name }}</span>
       <span v-html="link.icon" />
@@ -70,5 +70,23 @@ const nav = ref([
   margin-left: 20px;
   color: #84919A;
   margin-bottom: 10px;
+}
+
+.menu_link {
+  transition: 0.4s ease;
+}
+
+.router-link-exact-active,
+.router-link-active:not(.first-link){
+  background-color: rgba(122, 98, 235, 0.10);
+}
+
+.router-link-exact-active span,
+.router-link-active span:not(.first-link),
+.router-link-exact-active path,
+.router-link-active path:not(.first-link) {
+  padding-left: 15px;
+  color: var(--primary-purple);
+  stroke: var(--primary-purple);
 }
 </style>
