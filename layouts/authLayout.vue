@@ -1,14 +1,19 @@
 <template>
   <div class="form-ctn">
     <div class="logo-ctn">
-      <!-- <TendarPurpleLogo /> -->
+      <TendarPurpleLogo />
     </div>
     <div class="form-content">
-      <Nuxt />
+      <slot />
     </div>
-    <!-- <TendarBackground /> -->
+    <TendarBackground />
   </div>
 </template>
+<script>
+export default {
+  name: 'authLayout'
+}
+</script>
 
 <style scoped>
 .form-ctn {
