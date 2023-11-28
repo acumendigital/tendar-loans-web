@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div class="title">Welcome Josh</div>
+      <div class="title">Welcome Lanre</div>
     </div>
     <div class="cards_section">
       <DashboardCard
@@ -41,54 +41,60 @@ export default {
       ],
       tableData: [
         {
-          reference: 'BN-B1E73DA–0017',
-          transaction_type: 'Wallet top-up',
-          amount: '30000',
-          date: 'Dec 30, 09:42 PM',
-          transaction_status: 'Successful',
+          reference: "BN-B1E73DA–0017",
+          transaction_type: "Wallet top-up",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
         {
-          reference: 'BN-B1E73DA–0017',
-          transaction_type: 'Wallet top-up',
-          amount: '30000',
-          date: 'Dec 30, 09:42 PM',
-          transaction_status: 'Unsuccessful',
+          reference: "BN-B1E73DA–0017",
+          transaction_type: "Wallet top-up",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Unsuccessful",
         },
         {
-          reference: 'BN-B1E73DA–0017',
-          transaction_type: 'Wallet top-up',
-          amount: '30000',
-          date: 'Dec 30, 09:42 PM',
-          transaction_status: 'Successful',
+          reference: "BN-B1E73DA–0017",
+          transaction_type: "Wallet top-up",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
         {
-          reference: 'BN-B1E73DA–0017',
-          transaction_type: 'Wallet top-up',
-          amount: '30000',
-          date: 'Dec 30, 09:42 PM',
-          transaction_status: 'Unsuccessful',
+          reference: "BN-B1E73DA–0017",
+          transaction_type: "Wallet top-up",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Unsuccessful",
         },
         {
-          reference: 'BN-B1E73DA–0017',
-          transaction_type: 'Wallet top-up',
-          amount: '30000',
-          date: 'Dec 30, 09:42 PM',
-          transaction_status: 'Successful',
+          reference: "BN-B1E73DA–0017",
+          transaction_type: "Wallet top-up",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
         {
-          reference: 'BN-B1E73DA–0017',
-          transaction_type: 'Wallet top-up',
-          amount: '30000',
-          date: 'Dec 30, 09:42 PM',
-          transaction_status: 'Successful',
+          reference: "BN-B1E73DA–0017",
+          transaction_type: "Wallet top-up",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
-      ]
+      ],
     };
   },
 };
 </script>
 
 <style scoped>
+.title {
+  color: var(--dark-gray-dark-gray-2, #252c32);
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: 700;
+}
 .cards_section {
   display: flex;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-3.5 bg-[#F6F8F9] w-[300px] min-h-screen gap-3 pd-10 pt-10">
+  <div class="sidebar_ctn flex flex-col p-3.5 bg-[#F6F8F9] w-[300px] min-h-screen gap-3 pd-10 pt-10">
     <p class="sidebar_title">GET STARTED</p>
     <NuxtLink
       v-for="(link, index) in nav"
@@ -61,6 +61,11 @@ const nav = ref([
 </script>
 
 <style scoped>
+
+.sidebar_ctn {
+  position: fixed;
+  margin-top: 90px;
+}
 .sidebar_title {
   margin-left: 20px;
   color: #84919A;
