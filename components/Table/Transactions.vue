@@ -20,8 +20,8 @@
           <div class="rhs"></div>
         </div> -->
         <div class="search-filter-row">
-         <TableSearch />
-             <!--<div class="filters">
+          <TableSearch />
+          <!--<div class="filters">
             <FilterCustomersTable
               @filter-data="filterData"
               @clear-filter="clearFilter"
@@ -30,7 +30,7 @@
         </div>
         <TabHeaders
           v-if="true"
-          :tabs="['All', 'Top-up', 'Withdrawals']"
+          :tabs="['All Transactions', 'Top-up', 'Withdrawals']"
           :active-tab="activeTab"
           @set-active-tab="setActiveTab"
         />
@@ -89,46 +89,47 @@
               <td class="td-4">
                 <div class="th-content">Transaction status</div>
               </td>
-              <td class="td-1">
-              </td>
+              <td class="td-1"></td>
             </tr>
           </thead>
           <tbody>
-            <tr class="table-row">
+            <tr v-for="(data, index) in tableData" :key="index" class="table-row">
               <td class="td-4">
-                <div class="td-content">Test</div>
+                <div class="td-content">{{ data.reference }}</div>
               </td>
               <td class="td-4">
-                <div class="td-content">Test</div>
+                <div class="td-content">{{ data.transaction_type }}</div>
               </td>
               <td class="td-4">
-                <div class="td-content text-bold">{{formatMoney('20000', 'NGN')}}</div>
+                <div class="td-content text-bold">
+                  {{ formatMoney(data.amount, "NGN") }}
+                </div>
               </td>
               <td class="td-4">
-                <div class="td-content">Dec 30, 09:42 PM</div>
+                <div class="td-content">{{ data.date }}</div>
               </td>
               <td class="td-4">
                 <div class="td-content">
-                  <Badge type="successful" />
+                  <Badge :type="data.transaction_status" />
                   <!-- <Badge type="failed" /> -->
                 </div>
               </td>
               <td class="td-1">
                 <div class="td-content">
                   <button>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
-                      <path d="M8 12.5781C8 13.1086 7.78929 13.6173 7.41421 13.9923C7.03914 14.3674 6.53043 14.5781 6 14.5781C5.46957 14.5781 4.96086 14.3674 4.58579 13.9923C4.21071 13.6173 4 13.1086 4 12.5781C4 12.0477 4.21071 11.539 4.58579 11.1639C4.96086 10.7888 5.46957 10.5781 6 10.5781C6.53043 10.5781 7.03914 10.7888 7.41421 11.1639C7.78929 11.539 8 12.0477 8 12.5781ZM14 12.5781C14 13.1086 13.7893 13.6173 13.4142 13.9923C13.0391 14.3674 12.5304 14.5781 12 14.5781C11.4696 14.5781 10.9609 14.3674 10.5858 13.9923C10.2107 13.6173 10 13.1086 10 12.5781C10 12.0477 10.2107 11.539 10.5858 11.1639C10.9609 10.7888 11.4696 10.5781 12 10.5781C12.5304 10.5781 13.0391 10.7888 13.4142 11.1639C13.7893 11.539 14 12.0477 14 12.5781ZM18 14.5781C18.5304 14.5781 19.0391 14.3674 19.4142 13.9923C19.7893 13.6173 20 13.1086 20 12.5781C20 12.0477 19.7893 11.539 19.4142 11.1639C19.0391 10.7888 18.5304 10.5781 18 10.5781C17.4696 10.5781 16.9609 10.7888 16.5858 11.1639C16.2107 11.539 16 12.0477 16 12.5781C16 13.1086 16.2107 13.6173 16.5858 13.9923C16.9609 14.3674 17.4696 14.5781 18 14.5781Z" fill="#5B6871"/>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="25"
+                      viewBox="0 0 24 25"
+                      fill="none"
+                    >
+                      <path
+                        d="M8 12.5781C8 13.1086 7.78929 13.6173 7.41421 13.9923C7.03914 14.3674 6.53043 14.5781 6 14.5781C5.46957 14.5781 4.96086 14.3674 4.58579 13.9923C4.21071 13.6173 4 13.1086 4 12.5781C4 12.0477 4.21071 11.539 4.58579 11.1639C4.96086 10.7888 5.46957 10.5781 6 10.5781C6.53043 10.5781 7.03914 10.7888 7.41421 11.1639C7.78929 11.539 8 12.0477 8 12.5781ZM14 12.5781C14 13.1086 13.7893 13.6173 13.4142 13.9923C13.0391 14.3674 12.5304 14.5781 12 14.5781C11.4696 14.5781 10.9609 14.3674 10.5858 13.9923C10.2107 13.6173 10 13.1086 10 12.5781C10 12.0477 10.2107 11.539 10.5858 11.1639C10.9609 10.7888 11.4696 10.5781 12 10.5781C12.5304 10.5781 13.0391 10.7888 13.4142 11.1639C13.7893 11.539 14 12.0477 14 12.5781ZM18 14.5781C18.5304 14.5781 19.0391 14.3674 19.4142 13.9923C19.7893 13.6173 20 13.1086 20 12.5781C20 12.0477 19.7893 11.539 19.4142 11.1639C19.0391 10.7888 18.5304 10.5781 18 10.5781C17.4696 10.5781 16.9609 10.7888 16.5858 11.1639C16.2107 11.539 16 12.0477 16 12.5781C16 13.1086 16.2107 13.6173 16.5858 13.9923C16.9609 14.3674 17.4696 14.5781 18 14.5781Z"
+                        fill="#5B6871"
+                      />
                     </svg>
                   </button>
-                  <!-- <MazDropdown
-                  trigger="click"
-                  icon="bars-3" :items="[{
-                    label: 'Delete',
-                    label: 'Reinitiate'
-                  }]"
-  no-chevron>
-                    
-                  </MazDropdown> -->
                 </div>
               </td>
             </tr>
@@ -192,11 +193,15 @@ export default {
       type: Boolean,
       default: () => true,
     },
+    tableData: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
       customersData: {},
-      activeTab: this.$route.query?.type || "All",
+      activeTab: this.$route.query?.type || "All Transactions",
       limit:
         (this.$route.query?.perPage > 30
           ? 30
@@ -273,7 +278,7 @@ export default {
       fromDate,
       toDate,
       search,
-      loanStatus,
+      loanStatus
     ) {
       switch (tab.toLowerCase()) {
         case "all":
@@ -388,7 +393,7 @@ export default {
         val.fromDate,
         val.toDate,
         this.search,
-        val.loanStatus,
+        val.loanStatus
       );
     },
     clearFilter() {
@@ -400,11 +405,11 @@ export default {
         "",
         "",
         this.search,
-        "",
+        ""
       );
     },
     setActiveTab(val) {
-      this.activeTab = val
+      this.activeTab = val;
       // this.getCustomers(
       //   false,
       //   val,
@@ -425,7 +430,7 @@ export default {
         this.filterFromDate,
         this.filterToDate,
         search,
-        this.filterLoanStatus,
+        this.filterLoanStatus
       );
     },
     setLimit(limit) {
@@ -437,7 +442,7 @@ export default {
         this.filterFromDate,
         this.filterToDate,
         this.search,
-        this.filterLoanStatus,
+        this.filterLoanStatus
       );
     },
     setPage(page) {
@@ -449,17 +454,15 @@ export default {
         this.filterFromDate,
         this.filterToDate,
         this.search,
-        this.filterLoanStatus,
+        this.filterLoanStatus
       );
     },
   },
 };
 </script>
 
-
 <style scoped>
 .search-filter-row {
   margin-bottom: 30px;
 }
-
 </style>
