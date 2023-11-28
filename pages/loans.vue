@@ -12,7 +12,13 @@
         :cardData="data"
       />
     </div>
-    <TableLoans :tableData="tableData" />
+    <TableLoans :tableData="tableData" @openSidebar="toggleSidebar" />
+    <div class="sidebar_ctn">
+      <DashboardTableDetails
+        :isOpenProp="isOpen"
+        @update:isOpenProp="updateIsOpen"
+      />
+    </div>
   </div>
 </template>
 
@@ -20,6 +26,7 @@
 export default {
   data() {
     return {
+      isOpen: false,
       cardData: [
         {
           title: "Next instalment due",
@@ -92,6 +99,14 @@ export default {
       ],
     };
   },
+  methods: {
+    toggleSidebar() {
+      this.isOpen = !this.isOpen;
+    },
+    updateIsOpen(newVal) {
+      this.isOpen = newVal;
+    },
+  },
 };
 </script>
 
@@ -110,5 +125,8 @@ export default {
 }
 .cards_section {
   display: flex;
+}
+.sidebar_ctn {
+  z-index: 3;
 }
 </style>

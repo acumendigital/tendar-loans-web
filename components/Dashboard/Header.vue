@@ -30,7 +30,7 @@
 .header_ctn {
   position: fixed;
   width: 100%;
-  z-index: 5;
+  z-index: 2;
   background-color: #fff;
 }
 .profile {

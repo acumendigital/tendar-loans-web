@@ -15,7 +15,6 @@
 <style scoped>
 .sidebar_main {
   display: flex;
-  /* position: fixed; */
 }
 
 .main_content {
