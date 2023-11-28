@@ -1,0 +1,27 @@
+<template>
+  <div>
+    <DashboardHeader />
+    <div class="sidebar_main">
+      <DashboardSideBar />
+      <div class="main_content">
+        <slot />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup></script>
+
+<style scoped>
+.sidebar_main {
+  display: flex;
+  /* position: fixed; */
+}
+
+.main_content {
+  padding: 3rem 3rem;
+  margin-top: 90px;
+  margin-left: 300px;
+  z-index: 1;
+}
+</style>
