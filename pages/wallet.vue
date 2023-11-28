@@ -81,7 +81,7 @@
         <p>Send money</p>
       </div>
     </div>
-    <TableLoans :tableData="tableData" @openSidebar="toggleSidebar" />
+    <TableWallet :tableData="tableData" @openSidebar="toggleSidebar" />
     <div class="sidebar_ctn">
       <DashboardTableDetails
         :isOpenProp="isOpen"
@@ -119,51 +119,51 @@ export default {
       tableData: [
         {
           reference: "BN-B1E73DA–0017",
-          amount_borrowed: "23000",
-          amount_repaid: "30000",
-          date_disbursed: "Aug 30, 2023",
-          repayment_date: "Dec 30, 09:42 PM",
-          transaction_status: "Ongoing",
+          transaction_type: "Wallet top-up",
+          name: "Courtney Henry",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
         {
           reference: "BN-B1E73DA–0017",
-          amount_borrowed: "23000",
-          amount_repaid: "30000",
-          date_disbursed: "Aug 30, 2023",
-          repayment_date: "Dec 30, 09:42 PM",
+          transaction_type: "Wallet top-up",
+          name: "Courtney Henry",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
           transaction_status: "Unsuccessful",
         },
         {
           reference: "BN-B1E73DA–0017",
-          amount_borrowed: "23000",
-          amount_repaid: "30000",
-          date_disbursed: "Aug 30, 2023",
-          repayment_date: "Dec 30, 09:42 PM",
-          transaction_status: "Completed",
+          transaction_type: "Wallet top-up",
+          name: "Courtney Henry",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
         {
           reference: "BN-B1E73DA–0017",
-          amount_borrowed: "23000",
-          amount_repaid: "30000",
-          date_disbursed: "Aug 30, 2023",
-          repayment_date: "Dec 30, 09:42 PM",
+          transaction_type: "Wallet top-up",
+          name: "Courtney Henry",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
           transaction_status: "Unsuccessful",
         },
         {
           reference: "BN-B1E73DA–0017",
-          amount_borrowed: "23000",
-          amount_repaid: "30000",
-          date_disbursed: "Aug 30, 2023",
-          repayment_date: "Dec 30, 09:42 PM",
-          transaction_status: "Completed",
+          transaction_type: "Wallet top-up",
+          name: "Courtney Henry",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
         {
           reference: "BN-B1E73DA–0017",
-          amount_borrowed: "23000",
-          amount_repaid: "30000",
-          date_disbursed: "Aug 30, 2023",
-          repayment_date: "Dec 30, 09:42 PM",
-          transaction_status: "Completed",
+          transaction_type: "Wallet top-up",
+          name: "Courtney Henry",
+          amount: "30000",
+          date: "Dec 30, 09:42 PM",
+          transaction_status: "Successful",
         },
       ],
     };
