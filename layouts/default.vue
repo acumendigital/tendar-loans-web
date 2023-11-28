@@ -22,5 +22,7 @@
   margin-top: 90px;
   margin-left: 300px;
   z-index: 1;
+  width: 100%;
+  max-width: 1300px;
 }
 </style>
