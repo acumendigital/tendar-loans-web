@@ -137,6 +137,18 @@ button {
   z-index: 20;
 }
 
+.global_btn {
+	background-color: var(--primary-purple);
+	color: white;
+	border: 1px solid var(--primary-purple);
+	padding: 7px 30px;
+	border-radius: 5px;
+	min-width: 8rem;
+  width: fit-content;
+	/* font-weight: 700; */
+	white-space: nowrap;
+}
+
 span.material-icons-outlined,
 span.material-icons-round {
   color: var(--gray-light);
