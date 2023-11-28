@@ -50,7 +50,7 @@ export default {
   width: 100%;
   gap: 3px;
   padding: 0 10px;
-  border-bottom: 1px solid var(--border-one);
+  border-bottom: 1px solid var(--border-two);
 }
 
 .tab {
