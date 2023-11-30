@@ -1,14 +1,23 @@
 <template>
   <div class="form-ctn">
-    <div class="logo-ctn">
-      <!-- <TendarPurpleLogo /> -->
+    <!-- <div class="form-content">
+      
+    </div> -->
+    <slot />
+    <div class="bottom_links">
+      <p class="text_link">Powered by Tendar</p>
+      <p class="strokes">|</p>
+      <p class="text_link">Terms & Conditions</p>
+      <p class="strokes">|</p>
+      <p class="text_link">Privacy Policy</p>
     </div>
-    <div class="form-content">
-      <Nuxt />
-    </div>
-    <!-- <TendarBackground /> -->
   </div>
 </template>
+<script>
+export default {
+  name: 'authlayout'
+}
+</script>
 
 <style scoped>
 .form-ctn {
@@ -17,22 +26,29 @@
   min-height: 100vh;
   display: flex;
   padding: 50px;
+  padding-top: 70px;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 }
-.form-content {
-  background: #fff;
-  width: 35vw;
-  min-width: 500px;
-  height: auto;
-  min-height: fit-content;
-  padding: 2vh 1vw;
-  border-radius: 10px;
-  margin-top: 5vh;
+
+.bottom_links {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  z-index: 1;
+  justify-content: center;
+  /* width: 100%; */
+}
+
+.text_link {
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.strokes {
+  margin: 0 20px;
+}
+
+.text_link:hover {
+  color: var(--primary-purple);
 }
 </style>
