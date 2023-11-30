@@ -1,8 +1,9 @@
 <template>
   <div class="form-ctn">
-    <div class="form-content">
-      <slot />
-    </div>
+    <!-- <div class="form-content">
+      
+    </div> -->
+    <slot />
     <div class="bottom_links">
       <p class="text_link">Powered by Tendar</p>
       <p class="strokes">|</p>
@@ -29,21 +30,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-}
-.form-content {
-  background: #fff;
-  width: 30vw;
-  min-width: 500px;
-  height: auto;
-  min-height: fit-content;
-  padding: 40px 30px 50px 50px;
-  border-radius: 10px;
-  margin-top: 5vh;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center; */
-  z-index: 1;
 }
 
 .bottom_links {

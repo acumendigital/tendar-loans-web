@@ -10,57 +10,58 @@
           />
         </div>
         <div class="rhs">
-          <p class="auth_text">
-            Don’t have an account? <br /><span
-              class="signup_btn"
-              @click="navigateTo('/auth/signup')"
-              >Sign up</span
-            >
-          </p>
+          <img
+            class="payment_logo"
+            src="~assets/images/stripe_logo.png"
+            alt=""
+          />
         </div>
       </div>
-      <p class="welcome_text">Welcome</p>
-      <p class="instruction_text">Sign in to your account to continue</p>
+      <p class="welcome_text">Add bank details</p>
+      <p class="instruction_text">Enter your bank account details</p>
       <!-- <div class="signin-form-ctn"> -->
       <div class="form">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="bank">Bank</label>
           <input
-            id="email"
-            v-model="email_name"
+            id="bank"
+            v-model="bank"
             type="text"
-            name="email"
-            placeholder="Enter your email"
+            name="bank"
+            placeholder="Enter your bank"
           />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
-          <SecretKeyInput
-            id="password"
-            placeholder=""
-            :copy-needed="false"
-            :current-key="password"
-            @keyup.enter="signIn()"
-            @update-value="updateValue($event)"
+          <label for="acct_num">Account number</label>
+          <input
+            id="acct_num"
+            v-model="acct_num"
+            type="number"
+            name="acct_num"
+            placeholder="Enter your account number"
           />
         </div>
-        <div class="forgot-pass-row">
-          <div class="keep-signin">
-            <CustomCheckbox />
-            <label for="keep" class="keep-label">Keep me signed in</label>
-          </div>
-          <nuxt-link class="forgot-text" to="/auth/password/forgot-password"
-            >Forgot password?</nuxt-link
-          >
+        <div class="form-group">
+          <label for="acct_name">Account holder name</label>
+          <input
+            id="acct_name"
+            v-model="acct_name"
+            type="number"
+            name="acct_name"
+            placeholder="Enter your account name"
+          />
         </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="signIn()">
-            Sign In
+            Continue
           </button>
           <button v-else class="action-btn" disabled>
             <BtnLoader color="#fff" />
           </button>
         </div>
+        <p class="link_text">
+          I’ll do this later
+        </p>
       </div>
       <!-- </div> -->
     </div>
@@ -72,8 +73,9 @@ definePageMeta({
   layout: "authlayout",
 });
 
-const email_name = ref("");
-const password = ref("");
+const bank = ref("");
+const acct_num = ref("");
+const acct_name = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
 // import functions from '~/utils/functions'
@@ -224,6 +226,11 @@ const loading = ref(false);
   width: 50%;
 }
 
+.payment_logo {
+  width: 60%;
+  text-align: right;
+}
+
 .auth_text {
   color: #00000086;
   font-size: 16px;
@@ -292,5 +299,14 @@ a.forgot-text:hover {
   border: 1px solid var(--primary-purple);
   background: var(--primary-purple);
   color: #fff;
+}
+
+.link_text {
+  color: var(--primary-purple);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>

@@ -1,69 +1,79 @@
 <template>
-  <div class="page-form-ctn">
-    <div class="auth_top">
-      <div class="lhs">
-        <img class="company_logo" src="~assets/images/aumen_logo.png" alt="" />
-      </div>
-      <div class="rhs">
-        <p class="auth_text">
-          Already have an account? <br /><span class="signup_btn" @click="navigateTo('/auth/login')">Sign in</span>
-        </p>
-      </div>
-    </div>
-    <p class="welcome_text">Get started now</p>
-    <p class="instruction_text">Create an account with us to continue</p>
-    <!-- <div class="signin-form-ctn"> -->
-    <div class="form">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          v-model="email_name"
-          type="text"
-          name="email"
-          placeholder="Enter your email"
-        />
-      </div>
-      <div class="form-group">
-        <label for="email">Phone number</label>
-        <input
-          id="email"
-          v-model="phone"
-          type="number"
-          name="phone"
-          placeholder="Enter your phone number"
-        />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <SecretKeyInput
-          id="password"
-          placeholder=""
-          :copy-needed="false"
-          :current-key="password"
-          @keyup.enter="signIn()"
-          @update-value="updateValue($event)"
-        />
-      </div>
-      <div class="forgot-pass-row">
-        <div class="keep-signin">
-          <CustomCheckbox />
-          <label for="keep" class="keep-label">Keep me signed in</label>
+  <div class="form-content">
+    <div class="page-form-ctn">
+      <div class="auth_top">
+        <div class="lhs">
+          <img
+            class="company_logo"
+            src="~assets/images/aumen_logo.png"
+            alt=""
+          />
         </div>
-        <nuxt-link class="forgot-text" to="/auth/password/forgot-password"
-          >Forgot password?</nuxt-link
-        >
+        <div class="rhs">
+          <p class="auth_text">
+            Already have an account? <br /><span
+              class="signup_btn"
+              @click="navigateTo('/auth/login')"
+              >Sign in</span
+            >
+          </p>
+        </div>
       </div>
-      <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="signIn()">
-          Sign In
-        </button>
-        <button v-else class="action-btn" disabled>
-          <BtnLoader color="#fff" />
-        </button>
+      <p class="welcome_text">Get started now</p>
+      <p class="instruction_text">Create an account with us to continue</p>
+      <!-- <div class="signin-form-ctn"> -->
+      <div class="form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            v-model="email_name"
+            type="text"
+            name="email"
+            placeholder="Enter your email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone number</label>
+          <input
+            id="phone"
+            v-model="phone"
+            type="number"
+            name="phone"
+            placeholder="Enter your phone number"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <SecretKeyInput
+            id="password"
+            placeholder=""
+            :copy-needed="false"
+            :current-key="password"
+            @keyup.enter="signIn()"
+            @update-value="updateValue($event)"
+          />
+        </div>
+        <p class="terms_privacy_text">
+          By clicking continue, you agree to
+          <span class="link_text">Tendar’s Terms of Service</span> and
+          <span class="link_text">Privacy Policy</span>.
+        </p>
+        <div class="btn-div">
+          <button
+            v-if="!loading"
+            class="action-btn"
+            @click="navigateTo('/auth/signup/add-bank')"
+          >
+            Continue
+          </button>
+          <button v-else class="action-btn" disabled>
+            <BtnLoader color="#fff" />
+          </button>
+        </div>
       </div>
+      <!-- </div> -->
     </div>
-    <!-- </div> -->
   </div>
 </template>
 
@@ -193,6 +203,21 @@ const loading = ref(false);
 </script>
 
 <style scoped>
+.form-content {
+  background: #fff;
+  width: 30vw;
+  min-width: 500px;
+  height: auto;
+  min-height: fit-content;
+  padding: 40px 30px 50px 50px;
+  border-radius: 10px;
+  margin-top: 5vh;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center; */
+  z-index: 1;
+}
 .auth_top {
   display: flex;
   justify-content: space-between;
@@ -277,5 +302,20 @@ a.forgot-text:hover {
   border: 1px solid var(--primary-purple);
   background: var(--primary-purple);
   color: #fff;
+}
+
+.terms_privacy_text {
+  color: rgba(16, 37, 62, 0.5);
+  font-size: 13px;
+  font-weight: 400;
+  margin-top: -20px;
+  margin-bottom: 25px;
+}
+
+.link_text {
+  color: var(--primary-purple);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
 }
 </style>
