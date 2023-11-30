@@ -220,6 +220,10 @@ const loading = ref(false);
   font-weight: 700;
 }
 
+.instruction_text {
+  color: #021c3e73;
+}
+
 .company_logo {
   width: 50%;
 }
@@ -235,10 +239,6 @@ const loading = ref(false);
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-}
-
-.instruction_text {
-  color: #021c3e73;
 }
 
 .form {
