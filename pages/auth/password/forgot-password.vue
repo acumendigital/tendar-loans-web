@@ -1,8 +1,8 @@
 <template>
   <div class="form-content">
     <div class="page-form-ctn">
-      <p class="hello-text">Forgot password</p>
-      <p class="instruction-text">
+      <p class="welcome_text">Forgot password?</p>
+      <p class="instruction_text">
         Please enter your email, a reset OTP will be sent to you soon
       </p>
       <div class="form">
@@ -20,14 +20,14 @@
           This field is reqired
         </p>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="sendOtp()">
+          <button v-if="!loading" class="action-btn" @click="navigateTo('/auth/password/reset-password')">
             Submit
           </button>
           <button v-else class="action-btn" disabled>
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <div class="cancel-action-text" @click="$router.go(-1)">Cancel</div>
+        <p class="link_text" @click="$router.go(-1)">Cancel</p>
       </div>
     </div>
   </div>
@@ -120,7 +120,23 @@ const sendClicked = ref(false);
   align-items: center; */
   z-index: 1;
 }
+.welcome_text {
+  color: #021c3e;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.instruction_text {
+  color: #021c3e73;
+}
+
+.form {
+  margin-top: 4vh;
+  padding-right: 30px;
+}
+
 .action-btn {
+  margin-top: 6vh;
   width: 100%;
 }
 
@@ -132,5 +148,13 @@ const sendClicked = ref(false);
 
 .error-text {
   margin-top: -1.7vh;
+}
+.link_text {
+  color: var(--primary-purple);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>
