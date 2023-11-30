@@ -6,12 +6,12 @@
       </div>
       <div class="rhs">
         <p class="auth_text">
-          Don’t have an account? <br /><span class="signup_btn" @click="navigateTo('/auth/signup')">Sign up</span>
+          Already have an account? <br /><span class="signup_btn" @click="navigateTo('/auth/login')">Sign in</span>
         </p>
       </div>
     </div>
-    <p class="welcome_text">Welcome</p>
-    <p class="instruction_text">Sign in to your account to continue</p>
+    <p class="welcome_text">Get started now</p>
+    <p class="instruction_text">Create an account with us to continue</p>
     <!-- <div class="signin-form-ctn"> -->
     <div class="form">
       <div class="form-group">
@@ -22,6 +22,16 @@
           type="text"
           name="email"
           placeholder="Enter your email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="email">Phone number</label>
+        <input
+          id="email"
+          v-model="phone"
+          type="number"
+          name="phone"
+          placeholder="Enter your phone number"
         />
       </div>
       <div class="form-group">
