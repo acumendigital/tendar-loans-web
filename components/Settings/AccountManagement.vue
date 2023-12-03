@@ -11,7 +11,7 @@
             </div>
             <div>
               <p class="bank_name">
-                Stanbic IBTC <span class="material-icons-outlined"> info </span>
+                Stanbic IBTC <span class="material-icons-outlined info"> info </span>
               </p>
               <p class="bank_acct_num_title">Account Number</p>
               <p class="bank_acct_num">*******67890</p>
@@ -103,12 +103,13 @@ const setActiveTab = (tab) => {
 .bank_ctn {
   display: flex;
   align-items: center;
+  margin-top: 20px;
 }
 
 .bank_box {
   border: 1px solid #888f9b;
   border-radius: 20px;
-  padding: 20px 20px;
+  padding: 20px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -121,17 +122,40 @@ const setActiveTab = (tab) => {
 
 .bank_logo {
   margin-right: 20px;
+  padding-top: 10px;
+}
+
+.bank_logo img {
+  width: 80%;
 }
 
 .bank_name {
   color: #6a707e;
   font-size: 18px;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+}
+
+.info {
+  font-size: 16px;
+  margin-left: 10px;
 }
 
 .bank_acct_num_title {
   color: #021c3e;
   font-size: 16px;
+  font-weight: 500;
+}
+
+.bank_acct_num {
+  color: #021c3e6b;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.bank_default {
+  /* color: var(--primary-purple); */
   font-weight: 500;
 }
 
