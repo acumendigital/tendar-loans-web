@@ -2,4 +2,6 @@
   <div></div>
 </template>
 
-<script setup></script>
+<script setup>
+navigateTo('/dashboard')
+</script>
