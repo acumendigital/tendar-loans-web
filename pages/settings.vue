@@ -15,6 +15,7 @@
       <div class="center_line"></div>
       <div class="rhs">
         <SettingsPersonalDetails v-if="activeTab === 'Personal Details'" />
+        <SettingsCards v-if="activeTab === 'Cards'" />
         <SettingsAccountManagement v-if="activeTab === 'Bank Account Management'" />
         <SettingsSecurity v-if="activeTab === 'Security'" />
       </div>
