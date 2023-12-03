@@ -52,7 +52,7 @@ export default {
   gap: 5px;
   /* border-left: 1px solid var(--border-one); */
   padding: 8px 0;
-  width: 300px;
+  width: 250px;
 }
 
 .tab {

@@ -7,21 +7,21 @@
       <div class="lhs">
         <VertTabHeaders
           class="tab-ctns"
-          :tabs="['Personal details', 'Cards', 'Bank account management', 'Security']"
+          :tabs="['Personal Details', 'Cards', 'Bank account management', 'Security']"
           :active-tab="activeTab"
           @set-active-tab="setActiveTab"
         />
       </div>
       <div class="center_line"></div>
       <div class="rhs">
-        
+        <SettingsPersonalDetails v-if="activeTab === 'Personal Details'" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const activeTab = ref('Personal details');
+const activeTab = ref('Personal Details');
 
 const setActiveTab = (tab) => {
   activeTab.value = tab
@@ -41,11 +41,11 @@ const setActiveTab = (tab) => {
 }
 
 .lhs {
-  flex-basis: 15%;
+  flex-basis: 12%;
 }
 
 .center_line {
   border-left: 2px solid #E5E9EB;
-  height: 20rem;
+  height: 25rem;
 }
 </style>
