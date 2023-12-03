@@ -48,7 +48,7 @@
 
 <style scoped>
 .section_ctn {
-  padding: 0 30px;
+  padding: 0 50px;
   animation: come-up-sm 0.4s ease-in-out forwards;
   -webkit-animation: come-up-sm 0.4s ease-in-out forwards;
 }
@@ -70,6 +70,7 @@
   text-decoration: underline;
   font-weight: 500;
   margin-left: 10px;
+  cursor: pointer;
 }
 
 .contents {

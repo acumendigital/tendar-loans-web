@@ -7,7 +7,7 @@
       <div class="lhs">
         <VertTabHeaders
           class="tab-ctns"
-          :tabs="['Personal Details', 'Cards', 'Bank account management', 'Security']"
+          :tabs="['Personal Details', 'Cards', 'Bank Account Management', 'Security']"
           :active-tab="activeTab"
           @set-active-tab="setActiveTab"
         />
@@ -15,6 +15,8 @@
       <div class="center_line"></div>
       <div class="rhs">
         <SettingsPersonalDetails v-if="activeTab === 'Personal Details'" />
+        <SettingsAccountManagement v-if="activeTab === 'Bank Account Management'" />
+        <SettingsSecurity v-if="activeTab === 'Security'" />
       </div>
     </div>
   </div>
@@ -40,12 +42,16 @@ const setActiveTab = (tab) => {
   display: flex;
 }
 
-.lhs {
+/* .lhs {
   flex-basis: 12%;
-}
+} */
 
 .center_line {
   border-left: 2px solid #E5E9EB;
   height: 25rem;
+}
+
+.rhs {
+  flex-basis:  60%;
 }
 </style>
