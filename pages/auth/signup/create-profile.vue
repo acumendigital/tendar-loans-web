@@ -9,7 +9,7 @@
             alt=""
           />
         </div>
-        <div class="rhs">
+        <!-- <div class="rhs">
           <p class="auth_text">
             Already have an account? <br /><span
               class="signup_btn"
@@ -17,60 +17,112 @@
               >Sign in</span
             >
           </p>
-        </div>
+        </div> -->
       </div>
-      <p class="welcome_text">Get started now</p>
-      <p class="instruction_text">Create an account with us to continue</p>
+      <p class="welcome_text">Let’s get to know you</p>
+      <p class="instruction_text">
+        Tell us a bit about yourself, we just need the basics
+      </p>
       <!-- <div class="signin-form-ctn"> -->
       <div class="form">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-          />
+        <div class="form_group_flex">
+          <div class="form-group">
+            <label class="form_label" for="firstName">First Name</label>
+            <input
+              id="firstName"
+              v-model="profile.firstName"
+              type="text"
+              name="firstName"
+              placeholder="Enter your First Name"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form_label" for="lastName">Last Name</label>
+            <input
+              id="lastName"
+              v-model="profile.lastName"
+              type="text"
+              name="lastName"
+              placeholder="Enter your Last Name"
+            />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="phone">Phone number</label>
-          <input
-            id="phone"
-            v-model="phone"
-            type="text"
-            name="phone"
-            placeholder="Enter your phone number"
-          />
+        <div class="form_group_flex">
+          <div class="form-group">
+            <label class="form_label" for="dob">Date of Birth</label>
+            <input
+              id="dob"
+              v-model="profile.dob"
+              type="date"
+              name="firstName"
+              placeholder="Enter your First Name"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form_label" for="gender">Gender</label>
+            <input
+              id="gender"
+              v-model="profile.gender"
+              type="text"
+              name="gender"
+              placeholder="Enter your Last Name"
+            />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <SecretKeyInput
-            id="password"
-            placeholder=""
-            :copy-needed="false"
-            :current-key="password"
-            @keyup.enter="signIn()"
-            @update-value="updateValue($event)"
-          />
+        <div class="form_group_flex">
+          <div class="modal-input-field">
+            <label class="form_label" for="employmentStatus">Employment status</label>
+            <select
+              id="employmentStatus"
+              ref="employmentStatus"
+              v-model="profile.employmentStatus"
+              name="employmentStatus"
+            >
+              <option value="">Select</option>
+              <option value="Employed">Employed</option>
+              <option value="Unemployed">Unemployed</option>
+              <option value="Student">Student</option>
+            </select>
+            <!-- </div> -->
+            <!-- <div
+              :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div> -->
+          </div>
+          <div class="form-group">
+            <label class="form_label" for="jobTitle">Job title (Optional)</label>
+            <input
+              id="jobTitle"
+              v-model="profile.jobTitle"
+              type="text"
+              name="jobTitle"
+              placeholder="Enter your Job Title"
+            />
+          </div>
         </div>
-        <p class="terms_privacy_text">
-          By clicking continue, you agree to
-          <span class="link_text">Tendar’s Terms of Service</span> and
-          <span class="link_text">Privacy Policy</span>.
-        </p>
+          <div class="form-group">
+            <label class="form_label" for="address">Home Address</label>
+            <input
+              id="address"
+              v-model="profile.address"
+              type="text"
+              name="address"
+              placeholder="Enter your Address"
+            />
+          </div>
         <div class="btn-div">
-          <button
-            v-if="!loading"
-            class="action-btn"
-            @click="signUp()"
-          >
+          <button v-if="!loading" class="action-btn" @click="signUp()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
             <BtnLoader color="#fff" />
           </button>
         </div>
+        <p class="link_text">
+          I’ll do this later
+        </p>
       </div>
       <!-- </div> -->
     </div>
@@ -88,15 +140,20 @@ const config = useRuntimeConfig();
 const baseUrl = config.public.BASE_URL;
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
-const email = ref("");
-const phone = ref("");
-const password = ref("");
+const profile = ref({
+  firstName: "",
+  lastName: "",
+  dob: "",
+  gender: "",
+  employmentStatus: "",
+  jobTitle: "",
+  address: "",
+});
 const showOtpModal = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
 const tokenStore = useTokenStore();
-
 
 const updateValue = (e) => {
   password.value = e;
@@ -120,11 +177,11 @@ const signUp = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      const token = onfulfilled.data.data.token
-      const api_token = onfulfilled.data.data.api_token
-      tokenStore.token = token
-      tokenStore.apiToken = api_token
-      showOtpModal.value = true
+      const token = onfulfilled.data.data.token;
+      const api_token = onfulfilled.data.data.api_token;
+      tokenStore.token = token;
+      tokenStore.apiToken = api_token;
+      showOtpModal.value = true;
       // navigateTo('/auth/signup/add-bank')
       // if (
       //   onfulfilled.data.message ===
@@ -301,7 +358,7 @@ const signUp = () => {
 <style scoped>
 .form-content {
   background: #fff;
-  width: 30vw;
+  width: 35vw;
   min-width: 500px;
   height: auto;
   min-height: fit-content;
@@ -413,5 +470,35 @@ a.forgot-text:hover {
   font-size: 13px;
   font-weight: 400;
   cursor: pointer;
+}
+
+.form_group_flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form_group_flex div {
+  flex-basis: 48%;
+  margin-top: 0;
+}
+
+.form-group {
+  margin-top: 0;
+}
+
+.form_label {
+  margin-bottom: 10px;
+  color: #464a53 !important;
+  font-size: 14px;
+  font-weight: 400;
+}
+.link_text {
+  color: var(--primary-purple);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>
