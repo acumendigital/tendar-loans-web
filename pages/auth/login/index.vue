@@ -83,6 +83,10 @@ const showPassword = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
+const store = useCounterStore();
+
+console.log(store);
+
 const fetchCars = () => {
   fetchCarsLoading.value = true;
   // console.log(baseUrl);
