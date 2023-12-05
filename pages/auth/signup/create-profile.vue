@@ -71,7 +71,9 @@
         </div>
         <div class="form_group_flex">
           <div class="modal-input-field">
-            <label class="form_label" for="employmentStatus">Employment status</label>
+            <label class="form_label" for="employmentStatus"
+              >Employment status</label
+            >
             <select
               id="employmentStatus"
               ref="employmentStatus"
@@ -92,7 +94,9 @@
             </div> -->
           </div>
           <div class="form-group">
-            <label class="form_label" for="jobTitle">Job title (Optional)</label>
+            <label class="form_label" for="jobTitle"
+              >Job title (Optional)</label
+            >
             <input
               id="jobTitle"
               v-model="profile.jobTitle"
@@ -102,27 +106,25 @@
             />
           </div>
         </div>
-          <div class="form-group">
-            <label class="form_label" for="address">Home Address</label>
-            <input
-              id="address"
-              v-model="profile.address"
-              type="text"
-              name="address"
-              placeholder="Enter your Address"
-            />
-          </div>
+        <div class="form-group">
+          <label class="form_label" for="address">Home Address</label>
+          <input
+            id="address"
+            v-model="profile.address"
+            type="text"
+            name="address"
+            placeholder="Enter your Address"
+          />
+        </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signUp()">
+          <button v-if="!loading" class="action-btn" @click="save()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text">
-          I’ll do this later
-        </p>
+        <p class="link_text">Cancel</p>
       </div>
       <!-- </div> -->
     </div>
@@ -147,7 +149,12 @@ const profile = ref({
   gender: "",
   employmentStatus: "",
   jobTitle: "",
-  address: "",
+  address: {
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+  },
 });
 const showOtpModal = ref(false);
 const loading = ref(false);
@@ -159,19 +166,23 @@ const updateValue = (e) => {
   password.value = e;
 };
 
-const signUp = () => {
+const save = () => {
   loading.value = true;
-  // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
-  // console.log(email.value.trim());
-  // console.log(encrptedPassword)
-  password.value =
-    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
-    email: email.value.trim(),
-    phone: phone.value,
-    password: password.value,
+    first_name: profile.firstName.value,
+    last_name: profile.lastName.value,
+    date_of_birth: profile.dob.value,
+    gender: profile.gender.value,
+    address: {
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+    },
+    employment_status: profile.employmentStatus.value,
+    job_title: profile.jobTitle.value,
   };
-  const path = "user/register";
+  const path = "customer/create";
   axios
     .post(`${baseUrl}${path}`, data)
     .then((onfulfilled) => {
@@ -358,7 +369,7 @@ const signUp = () => {
 <style scoped>
 .form-content {
   background: #fff;
-  width: 35vw;
+  width: 38vw;
   min-width: 500px;
   height: auto;
   min-height: fit-content;
@@ -375,7 +386,7 @@ const signUp = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 .welcome_text {
   color: #021c3e;
