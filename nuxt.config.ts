@@ -2,7 +2,19 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css", "~/assets/css/table.css"],
-  modules: ["@nuxtjs/tailwindcss", "maz-ui/nuxt"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "maz-ui/nuxt",
+    [
+      "@pinia/nuxt",
+      {
+        autoImports: ["defineStore", "acceptHMRUpdate"],
+      },
+    ],
+  ],
+  imports: {
+    dirs: ["stores"],
+  },
   tailwindcss: {
     exposeConfig: true,
     viewer: true,
