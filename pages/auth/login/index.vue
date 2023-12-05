@@ -83,9 +83,8 @@ const showPassword = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
-const store = useCounterStore();
+const tokenStore = useTokenStore();
 
-console.log(store);
 
 const fetchCars = () => {
   fetchCarsLoading.value = true;
@@ -118,7 +117,6 @@ const updateValue = (e) => {
 
 const signIn = () => {
   loading.value = true;
-  console.log(encryptionKey.value);
   // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
   // console.log(email_name.value.trim());
   // console.log(encrptedPassword)
@@ -134,7 +132,11 @@ const signIn = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo('/dashboard')
+      const token = onfulfilled.data.data.token
+      const api_token = onfulfilled.data.data.api_token
+      tokenStore.token = token
+      tokenStore.apiToken = api_token
+      // navigateTo('/dashboard')
       // if (
       //   onfulfilled.data.message ===
       //     'A one time token has been sent to your email address' ||
