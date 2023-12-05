@@ -18,4 +18,13 @@ export default defineNuxtConfig({
       ],
     },
   },
+  runtimeConfig: {
+    public: {
+      BASE_URL: process.env.BASE_URL || "https://low-code-api.fly.dev/api/v1/",
+      ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+    },
+    private: {
+      ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+    },
+  },
 });

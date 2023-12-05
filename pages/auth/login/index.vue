@@ -72,10 +72,121 @@ definePageMeta({
   layout: "authlayout",
 });
 
+import axios from "axios";
+const config = useRuntimeConfig();
+const baseUrl = config.public.BASE_URL;
+const encryptionKey = config.public.ENCRYPTION_KEY;
+
 const email_name = ref("");
 const password = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
+// const encryptData = functions.encryptData;
+
+const fetchCars = () => {
+  fetchCarsLoading.value = true;
+  // console.log(baseUrl);
+  const path = "api/sell";
+  axios
+    .get(`${baseUrl}${path}`)
+    .then((response) => {
+      console.log(response);
+      const updatedCars = response.data.docs;
+      let limitedCars = updatedCars;
+      if (updatedCars.length > 6) {
+        limitedCars = updatedCars.slice(0, 6);
+      }
+      cars.value = limitedCars;
+      // console.log(cars);
+    })
+    .catch((error) => {
+      const { message } = error?.response?.data;
+      apiErrorMessage.value = message;
+    })
+    .finally(() => {
+      fetchCarsLoading.value = false;
+    });
+};
+
+const updateValue = (e) => {
+  password.value = e;
+};
+
+const signIn = () => {
+  loading.value = true;
+  console.log(encryptionKey.value);
+  // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
+  // console.log(email_name.value.trim());
+  // console.log(encrptedPassword)
+  password.value =
+    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  const data = {
+    email: email_name.value.trim(),
+    password: password.value,
+  };
+  const path = "auth/login";
+  axios
+    .post(`${baseUrl}${path}`, data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+      // if (
+      //   onfulfilled.data.message ===
+      //     'A one time token has been sent to your email address' ||
+      //   onfulfilled.data.message ===
+      //     'A one time token has been sent to your phone number'
+      // ) {
+      //   this.$store.commit('saveEmailForOTP', this.email_name)
+      //   this.$toast.success(onfulfilled.data.message, {
+      //     duration: 4000,
+      //     action: {
+      //       icon: 'check',
+      //       onClick: (e, toastObject) => {
+      //         toastObject.goAway(0)
+      //       },
+      //     },
+      //   })
+      //   let otpAuth = ""
+      //   if (data.email_authentication) {
+      //     otpAuth = "email"
+      //   } else if (data.sms_authentication) {
+      //     otpAuth = "sms"
+      //   }
+      //   // console.log("david", otpAuth)
+      //   this.$router.push(`/auth/login/security?authType=${otpAuth}`)
+      // } else if (
+      //   onfulfilled.data.message === 'user signed in successfully'
+      // ) {
+      //   this.$store.commit('setLoggedInState', true)
+      //   this.$store.commit('saveUserDetails', data)
+      //   this.$store.commit('saveToken', data.token)
+      //   this.$store.commit('saveXApiKey', data.api_token)
+      //   this.$store.commit('saveAdminDetails', data.admin)
+      //   const url = this.$route.query.fallBackUrl || '/'
+      //   this.$router.push(`${url}`)
+      // } else {
+      //   this.$store.commit('setLoggedInState', true)
+      //   this.$store.commit('saveUserDetails', data)
+      //   this.$store.commit('saveToken', data.token)
+      //   this.$store.commit('saveXApiKey', data.api_token)
+      //   this.$store.commit('saveAdminDetails', data.admin)
+      //   const url = this.$route.query.fallBackUrl || '/'
+      //   this.$router.push(`${url}`)
+      // }
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        this.$toast.error(errorMsg);
+      } else {
+        this.$toast.error("Oops, something went wrong, please try again later");
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
 // import functions from '~/utils/functions'
 // export default {
 //   layout: 'authlayout',
