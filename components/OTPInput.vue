@@ -17,7 +17,42 @@
 </template>
 
 <script>
-import Vue from "vue";
+// const props = defineProps({
+//   inputs: {
+//     type: String,
+//     default: () => "4",
+//   },
+// });
+// const emit = defineEmits('input')
+// const pin = ref("");
+// const nextInput = (el, index) => {
+//   const { value } = el.target;
+//   console.log(el)
+//   console.log(index)
+//   if (index < props.inputs.value) {
+//     if (value !== "") {
+//       pinCtn.children[index].focus();
+//     }
+//   }
+//   pin.value.length = props.inputs.value;
+//   emit("input", pin.value.toString().replaceAll(",", ""));
+// };
+// const previousInput = (_el, index) => {
+//   if (index > 1) {
+//     pin.value[index] = "";
+//     pinCtn.children[index - 2].focus();
+//   }
+// };
+// const pasteCodeFromClipboard = (e) => {
+//   if (e.target.type === "password") {
+//     let data = e.clipboardData.getData("Text");
+//     data = data.split("");
+//     pin.value = data;
+//     $refs.pinCtn?.children?.[Number(props.inputs.value) - 1].focus();
+//   }
+// };
+
+// import Vue from "vue";
 export default {
   name: "PinInput",
   props: {
@@ -80,7 +115,7 @@ export default {
 }
 .pin-grid input {
   text-align: center;
-  font-size: 3rem;
+  font-size: 16px;
   margin-right: 3%;
   padding: 0 0.5rem;
   caret-color: transparent;

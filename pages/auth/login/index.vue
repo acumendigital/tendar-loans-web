@@ -27,7 +27,7 @@
           <label for="email">Email</label>
           <input
             id="email"
-            v-model="email_name"
+            v-model="email"
             type="text"
             name="email"
             placeholder="Enter your email"
@@ -77,7 +77,7 @@ const config = useRuntimeConfig();
 const baseUrl = config.public.BASE_URL;
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
-const email_name = ref("");
+const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
@@ -118,12 +118,12 @@ const updateValue = (e) => {
 const signIn = () => {
   loading.value = true;
   // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
-  // console.log(email_name.value.trim());
+  // console.log(email.value.trim());
   // console.log(encrptedPassword)
   password.value =
     "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
-    email: email_name.value.trim(),
+    email: email.value.trim(),
     password: password.value,
   };
   const path = "auth/login";
@@ -143,7 +143,7 @@ const signIn = () => {
       //   onfulfilled.data.message ===
       //     'A one time token has been sent to your phone number'
       // ) {
-      //   this.$store.commit('saveEmailForOTP', this.email_name)
+      //   this.$store.commit('saveEmailForOTP', this.email)
       //   this.$toast.success(onfulfilled.data.message, {
       //     duration: 4000,
       //     action: {
@@ -200,7 +200,7 @@ const signIn = () => {
 //   data() {
 //     return {
 //       encryptData: functions.encryptData,
-//       email_name: '',
+//       email: '',
 //       password: '',
 //       showPassword: false,
 //       loading: false,
@@ -214,7 +214,7 @@ const signIn = () => {
 //   },
 // watch: {
 //   password(val) {
-//     if (this.email_name.length && val.length) {
+//     if (this.email.length && val.length) {
 //       this.inputsFilled = false
 //     } else {
 //       this.inputsFilled = true
@@ -231,10 +231,10 @@ const signIn = () => {
 //   signIn() {
 //     this.loading = true
 //     // const encrptedPassword = this.encryptData(this.password, this.encryption_key)
-//     // console.log(this.email_name.trim());
+//     // console.log(this.email.trim());
 //     // console.log(encrptedPassword)
 //     const data = {
-//       email: this.email_name.trim(),
+//       email: this.email.trim(),
 //       password: this.encryptData(this.password, this.encryption_key),
 //       address: '',
 //       longitude: null,
@@ -254,7 +254,7 @@ const signIn = () => {
 //           onfulfilled.data.message ===
 //             'A one time token has been sent to your phone number'
 //         ) {
-//           this.$store.commit('saveEmailForOTP', this.email_name)
+//           this.$store.commit('saveEmailForOTP', this.email)
 //           this.$toast.success(onfulfilled.data.message, {
 //             duration: 4000,
 //             action: {
