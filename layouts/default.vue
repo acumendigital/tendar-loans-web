@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DashboardHeader />
+    <DashboardHeader @open-modal="showLogout = true" />
     <div class="sidebar_main">
       <DashboardSideBar />
       <div class="main_content">
@@ -10,7 +10,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const showLogout = ref(false)
+</script>
 
 <style scoped>
 .sidebar_main {

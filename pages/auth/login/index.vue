@@ -130,6 +130,7 @@ const signIn = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
+      navigateTo('/dashboard')
       // if (
       //   onfulfilled.data.message ===
       //     'A one time token has been sent to your email address' ||
