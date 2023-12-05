@@ -183,6 +183,18 @@ function sortArrayOfDates(arr) {
   });
 }
 
+
+function encryptData(data, key) {
+  data = JSON.stringify(data);
+  const encrypted = CryptoJS.AES.encrypt(data, key);
+  return encrypted.toString();
+}
+
+function decryptData(data, key) {
+  const decryptedData = CryptoJS.AES.decrypt(data, key);
+  return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
+}
+
 const functions = {
   lastFourDigits,
   formatNumber: number,
@@ -202,6 +214,8 @@ const functions = {
   emailValid,
   getMonth,
   sortArrayOfDates,
+  encryptData,
+  decryptData,
 };
 
 export default functions;

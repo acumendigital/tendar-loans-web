@@ -25,6 +25,8 @@
   },
   "dependencies": {
     "@mazui/cli": "^3.24.0",
+    "@nuxtjs/axios": "^5.13.6",
+    "crypto-js": "^4.2.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "maz-ui": "^3.25.1",
