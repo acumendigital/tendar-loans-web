@@ -11,7 +11,7 @@
 //   return { count, name, doubleCount, increment };
 // });
 
-export const useTokenStore = defineStore("token", {
+export const useStore = defineStore("token", {
   state: () => ({
     token: "",
     apiToken: "",

@@ -74,7 +74,6 @@ definePageMeta({
 
 import axios from "axios";
 const config = useRuntimeConfig();
-const baseUrl = config.public.BASE_URL;
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const email = ref("");
@@ -83,7 +82,7 @@ const showPassword = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
-const tokenStore = useTokenStore();
+const tokenStore = useStore();
 
 
 const fetchCars = () => {
@@ -128,7 +127,7 @@ const signIn = () => {
   };
   const path = "auth/login";
   axios
-    .post(`${baseUrl}${path}`, data)
+    .post('auth/login', data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);

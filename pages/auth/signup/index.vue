@@ -85,7 +85,6 @@ definePageMeta({
 
 import axios from "axios";
 const config = useRuntimeConfig();
-const baseUrl = config.public.BASE_URL;
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const email = ref("");
@@ -95,7 +94,7 @@ const showOtpModal = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
-const tokenStore = useTokenStore();
+const tokenStore = useStore();
 
 
 const updateValue = (e) => {
@@ -114,9 +113,9 @@ const signUp = () => {
     phone: phone.value,
     password: password.value,
   };
-  const path = "user/register";
+  // const path = "user/register";
   axios
-    .post(`${baseUrl}${path}`, data)
+    .post('user/register', data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);

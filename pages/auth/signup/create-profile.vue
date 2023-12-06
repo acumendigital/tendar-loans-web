@@ -160,7 +160,7 @@ const showOtpModal = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
-const tokenStore = useTokenStore();
+const tokenStore = useStore();
 
 const updateValue = (e) => {
   password.value = e;
