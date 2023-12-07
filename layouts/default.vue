@@ -20,11 +20,11 @@ const showLogout = ref(false)
 }
 
 .main_content {
-  padding: 3rem 3rem;
+  padding: 3rem 2vw;
   margin-top: 90px;
-  margin-left: 300px;
+  margin-left: 17vw;
   z-index: 1;
-  width: 100%;
+  width: 83%;
   max-width: 1300px;
 }
 </style>
