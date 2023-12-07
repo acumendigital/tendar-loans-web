@@ -135,7 +135,7 @@ const signIn = () => {
       const api_token = onfulfilled.data.data.api_token
       tokenStore.token = token
       tokenStore.apiToken = api_token
-      // navigateTo('/dashboard')
+      navigateTo('/dashboard')
       // if (
       //   onfulfilled.data.message ===
       //     'A one time token has been sent to your email address' ||
