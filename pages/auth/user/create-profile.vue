@@ -30,7 +30,7 @@
             <label class="form_label" for="firstName">First Name</label>
             <input
               id="firstName"
-              v-model="profile.firstName"
+              v-model="firstName"
               type="text"
               name="firstName"
               placeholder="Enter your First Name"
@@ -40,7 +40,7 @@
             <label class="form_label" for="lastName">Last Name</label>
             <input
               id="lastName"
-              v-model="profile.lastName"
+              v-model="lastName"
               type="text"
               name="lastName"
               placeholder="Enter your Last Name"
@@ -52,21 +52,36 @@
             <label class="form_label" for="dob">Date of Birth</label>
             <input
               id="dob"
-              v-model="profile.dob"
+              v-model="dob"
               type="date"
-              name="firstName"
+              name="dob"
               placeholder="Enter your First Name"
             />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="form_label" for="gender">Gender</label>
             <input
               id="gender"
-              v-model="profile.gender"
+              v-model="gender"
               type="text"
               name="gender"
-              placeholder="Enter your Last Name"
+              placeholder="Enter your Gender"
             />
+          </div> -->
+          <div class="modal-input-field">
+            <label class="form_label" for="gender">Gender</label>
+            <select id="gender" v-model="gender" name="gender">
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+            <!-- </div> -->
+            <!-- <div
+              :class="submitClicked && !gender ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div> -->
           </div>
         </div>
         <div class="form_group_flex">
@@ -75,15 +90,17 @@
               >Employment status</label
             >
             <select
-              id="employmentStatus"
-              ref="employmentStatus"
-              v-model="profile.employmentStatus"
-              name="employmentStatus"
+              id="employment-status"
+              v-model="employmentStatus"
+              name="employment-status"
             >
               <option value="">Select</option>
-              <option value="Employed">Employed</option>
-              <option value="Unemployed">Unemployed</option>
-              <option value="Student">Student</option>
+              <option value="contract worker">Contract Worker</option>
+              <option value="self employed">Self Employed</option>
+              <option value="employed">Employed</option>
+              <option value="business owner">Business Owner</option>
+              <option value="student">Student</option>
+              <option value="unemployed">Unemployed</option>
             </select>
             <!-- </div> -->
             <!-- <div
@@ -99,22 +116,56 @@
             >
             <input
               id="jobTitle"
-              v-model="profile.jobTitle"
+              v-model="jobTitle"
               type="text"
               name="jobTitle"
               placeholder="Enter your Job Title"
             />
           </div>
         </div>
-        <div class="form-group">
-          <label class="form_label" for="address">Home Address</label>
-          <input
-            id="address"
-            v-model="profile.address"
-            type="text"
-            name="address"
-            placeholder="Enter your Address"
-          />
+        <div class="form_group_flex">
+          <div class="form-group">
+            <label class="form_label" for="address">Address</label>
+            <input
+              id="address"
+              v-model="address"
+              type="text"
+              name="address"
+              placeholder="Enter your Address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form_label" for="country">Country</label>
+            <input
+              id="country"
+              v-model="country"
+              type="text"
+              name="country"
+              placeholder="Enter your Country"
+            />
+          </div>
+        </div>
+        <div class="form_group_flex">
+          <div class="form-group">
+            <label class="form_label" for="state">State</label>
+            <input
+              id="state"
+              v-model="state"
+              type="text"
+              name="state"
+              placeholder="Enter your State"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form_label" for="city">City</label>
+            <input
+              id="city"
+              v-model="city"
+              type="text"
+              name="city"
+              placeholder="Enter your City"
+            />
+          </div>
         </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="save()">
@@ -142,100 +193,59 @@ const config = useRuntimeConfig();
 const baseUrl = config.public.BASE_URL;
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
-const profile = ref({
-  firstName: "",
-  lastName: "",
-  dob: "",
-  gender: "",
-  employmentStatus: "",
-  jobTitle: "",
-  address: {
-    address: "",
-    city: "",
-    state: "",
-    country: "",
-  },
-});
+// const profile = ref({
+//   firstName: "",
+//   lastName: "",
+//   dob: "",
+//   gender: "",
+//   employmentStatus: "",
+//   jobTitle: "",
+//   address: "",
+//   city: "",
+//   state: "",
+//   country: "",
+// });
+const firstName = ref("");
+const lastName = ref("");
+const dob = ref("");
+const gender = ref("");
+const employmentStatus = ref("");
+const jobTitle = ref("");
+const address = ref("");
+const city = ref("");
+const state = ref("");
+const country = ref("");
 const showOtpModal = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
 const tokenStore = useStore();
 
-const updateValue = (e) => {
-  password.value = e;
-};
-
 const save = () => {
   loading.value = true;
+  console.log(loading.value);
   const data = {
-    first_name: profile.firstName.value,
-    last_name: profile.lastName.value,
-    date_of_birth: profile.dob.value,
-    gender: profile.gender.value,
+    first_name: firstName.value,
+    last_name: lastName.value,
+    date_of_birth: dob.value,
+    gender: gender.value,
     address: {
-      address: "",
-      city: "",
-      state: "",
-      country: "",
+      address: address.value.toLowerCase(),
+      city: city.value.toLowerCase(),
+      state: state.value.toLowerCase(),
+      country: country.value.toLowerCase(),
     },
-    employment_status: profile.employmentStatus.value,
-    job_title: profile.jobTitle.value,
+    employment_status: employmentStatus.value,
+    job_title: jobTitle.value,
   };
-  const path = "customer/create";
+  console.log(data);
+  // const path = "customer/create";
   axios
-    .post(`${baseUrl}${path}`, data)
+    .post("customer/create", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      const token = onfulfilled.data.data.token;
-      const api_token = onfulfilled.data.data.api_token;
-      tokenStore.token = token;
-      tokenStore.apiToken = api_token;
-      showOtpModal.value = true;
-      // navigateTo('/auth/signup/add-bank')
-      // if (
-      //   onfulfilled.data.message ===
-      //     'A one time token has been sent to your email address' ||
-      //   onfulfilled.data.message ===
-      //     'A one time token has been sent to your phone number'
-      // ) {
-      //   this.$store.commit('saveEmailForOTP', this.email)
-      //   this.$toast.success(onfulfilled.data.message, {
-      //     duration: 4000,
-      //     action: {
-      //       icon: 'check',
-      //       onClick: (e, toastObject) => {
-      //         toastObject.goAway(0)
-      //       },
-      //     },
-      //   })
-      //   let otpAuth = ""
-      //   if (data.email_authentication) {
-      //     otpAuth = "email"
-      //   } else if (data.sms_authentication) {
-      //     otpAuth = "sms"
-      //   }
-      //   // console.log("david", otpAuth)
-      //   this.$router.push(`/auth/login/security?authType=${otpAuth}`)
-      // } else if (
-      //   onfulfilled.data.message === 'user signed in successfully'
-      // ) {
-      //   this.$store.commit('setLoggedInState', true)
-      //   this.$store.commit('saveUserDetails', data)
-      //   this.$store.commit('saveToken', data.token)
-      //   this.$store.commit('saveXApiKey', data.api_token)
-      //   this.$store.commit('saveAdminDetails', data.admin)
-      //   const url = this.$route.query.fallBackUrl || '/'
-      //   this.$router.push(`${url}`)
-      // } else {
-      //   this.$store.commit('setLoggedInState', true)
-      //   this.$store.commit('saveUserDetails', data)
-      //   this.$store.commit('saveToken', data.token)
-      //   this.$store.commit('saveXApiKey', data.api_token)
-      //   this.$store.commit('saveAdminDetails', data.admin)
-      //   const url = this.$route.query.fallBackUrl || '/'
-      //   this.$router.push(`${url}`)
+      navigateTo("/auth/user/add-bank");
       // }
     })
     .catch((_err) => {
@@ -373,9 +383,9 @@ const save = () => {
   min-width: 500px;
   height: auto;
   min-height: fit-content;
-  padding: 40px 30px 50px 50px;
+  padding: 30px 30px 30px 50px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 4vh;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
