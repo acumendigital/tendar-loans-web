@@ -35,13 +35,18 @@
         </div>
         <div class="form-group">
           <label for="phone">Phone number</label>
-          <input
+          <div class="custom_phone_input">
+            <div class="country_code">
+              <p>+234</p>
+            </div>
+            <input
             id="phone"
             v-model="phone"
-            type="text"
+            type="number"
             name="phone"
             placeholder="Enter your phone number"
           />
+          </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -74,7 +79,7 @@
       </div>
       <!-- </div> -->
     </div>
-    <ModalEnterOtp v-if="showOtpModal" @close-modal="showOtpModal = false" />
+    <ModalEnterOtp v-if="showOtpModal" @close-modal="showOtpModal = false" :email="email" />
   </div>
 </template>
 
@@ -101,6 +106,11 @@ const updateValue = (e) => {
   password.value = e;
 };
 
+
+// const signUp = () => {
+//   showOtpModal.value = true
+// }
+
 const signUp = () => {
   loading.value = true;
   // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
@@ -108,9 +118,11 @@ const signUp = () => {
   // console.log(encrptedPassword)
   password.value =
     "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  const phoneNum = `+234${phone.value}`
+  console.log(phoneNum);
   const data = {
     email: email.value.trim(),
-    phone: phone.value,
+    phone: phoneNum,
     password: password.value,
   };
   // const path = "user/register";
@@ -306,7 +318,7 @@ const signUp = () => {
   min-height: fit-content;
   padding: 40px 30px 50px 50px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 120px;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -412,5 +424,48 @@ a.forgot-text:hover {
   font-size: 13px;
   font-weight: 400;
   cursor: pointer;
+}
+
+.custom_phone_input {
+  display: flex;
+  align-items: center;
+  border: var(--input-border-width) solid var(--border-two);
+  font-size: 14px;
+  width: 100%;
+  height: 45px;
+  /* padding: var(--input-padding); */
+  background: var(--input-bg);
+  border-radius: var(--input-border-radius);
+  -webkit-border-radius: var(--input-border-radius);
+  -moz-border-radius: var(--input-border-radius);
+  -ms-border-radius: var(--input-border-radius);
+  -o-border-radius: var(--input-border-radius);
+}
+
+.country_code {
+  padding: 0 15px;
+  /* background-color: #bcc7d3; */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #bcc7d3;
+  /* width: 100%; */
+}
+
+.country_code p {
+  font-size: 14px;
+}
+
+.custom_phone_input input {
+  border: none !important;
+  height: 100%;
+  /* flex-basis: 85%; */
+  width: 100%;
+}
+
+.custom_phone_input input:focus {
+  border: none !important;
+  outline: none !important;
 }
 </style>

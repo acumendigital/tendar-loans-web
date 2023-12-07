@@ -25,8 +25,9 @@ export default {
   height: 100%;
   min-height: 100vh;
   display: flex;
-  padding: 50px;
-  padding-top: 70px;
+  /* padding: 50px; */
+  /* padding-top: 70px; */
+  padding-bottom: 50px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

@@ -5,20 +5,20 @@
         <h1 class="modal_title">Enter OTP</h1>
         <span
           class="material-icons-outlined close"
-          @click="$emit('close-modal')"
+           @click="$emit('close-modal')"
         >
           close
         </span>
       </div>
       <p class="modal_subtitle">
         Please enter the verification code we sent to
-        {{ props.email || "david991@gmail.com" }}
+        {{ props.email }}
       </p>
       <div class="modal_content">
         <OTPInput inputs="6" @input="handleOTPChange($event)" />
         <div class="bottom_link">
           <p class="bottom_text">
-            Didn’t get a code? <span class="resend_btn">Resend code</span>
+            Didn’t get a code? <span class="resend_btn" @click="resendOtp()">Resend code</span>
           </p>
         </div>
       </div>
@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+import axios from "axios";
 const props = defineProps({
   email: {
     type: String,
@@ -35,6 +36,8 @@ const props = defineProps({
 });
 
 const otp = ref('');
+const loading = ref(false);
+const resendLoading = ref(false);
 
 const handleOTPChange = (value) => {
   otp.value = value;
@@ -45,23 +48,46 @@ const handleOTPChange = (value) => {
 };
 
 
+const resendOtp = () => {
+  console.log(email.value);
+  resendLoading.value = true;
+  const data = {
+    email: email.value,
+  };
+  console.log(data);
+  // const path = "user/send-verification-email";
+  axios
+    .post('user/send-verification-email', data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        this.$toast.error(errorMsg);
+      } else {
+        this.$toast.error("Oops, something went wrong, please try again later");
+      }
+    })
+    .finally(() => {
+      resendLoading.value = false;
+    });
+};
+
 const sendOtp = () => {
   loading.value = true;
-  // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
-  // console.log(email.value.trim());
-  // console.log(encrptedPassword)
-  password.value =
-    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
+    email: email.value,
     token: otp.value,
   };
   const path = "user/email/verify";
   axios
-    .post(`${baseUrl}${path}`, data)
+    .post('user/email/verify', data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo('/auth/signup/add-bank')
+      navigateTo('/auth/user/create-profile')
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -173,7 +199,7 @@ const sendOtp = () => {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1400px) {
   .modal {
     width: 50%;
   }
