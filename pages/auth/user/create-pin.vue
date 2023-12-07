@@ -31,7 +31,9 @@
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text" @click="navigateTo('/dashboard')">Skip, continue to dashboard</p>
+        <p class="link_text" @click="navigateTo('/dashboard')">
+          Skip, continue to dashboard
+        </p>
       </div>
     </div>
   </div>
@@ -54,6 +56,41 @@ const handleNewPinChange = (value) => {
 const handleConfirmPinChange = (value) => {
   confirmPin.value = value;
   console.log(confirmPin.value);
+};
+
+const save = () => {
+  if (newPin.value === confirmPin.value) {
+    loading.value = true;
+    console.log(loading.value);
+    newPin.value =
+      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+    const data = {
+      pin: newPin.value,
+    };
+    console.log(data);
+    axios
+      .post("user/pin/set", data)
+      .then((onfulfilled) => {
+        console.log(onfulfilled);
+        navigateTo("/dashboard");
+        // }
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          this.$toast.error(errorMsg);
+        } else {
+          this.$toast.error(
+            "Oops, something went wrong, please try again later"
+          );
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  } else {
+    
+  }
 };
 </script>
 

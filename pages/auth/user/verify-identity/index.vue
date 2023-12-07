@@ -9,47 +9,52 @@
             alt=""
           />
         </div>
-        <div class="rhs">
-          <img
-            class="payment_logo"
-            src="~assets/images/stripe_logo.png"
-            alt=""
-          />
-        </div>
       </div>
-      <p class="welcome_text">Add bank details</p>
-      <p class="instruction_text">Enter your bank account details</p>
+      <p class="welcome_text">Verify your identity</p>
+      <p class="instruction_text">
+        Instantly verify your identity for secure access.
+      </p>
       <!-- <div class="signin-form-ctn"> -->
       <div class="form">
-        <div class="form-group">
-          <label for="bank">Bank</label>
-          <input
-            id="bank"
-            v-model="bank"
-            type="text"
-            name="bank"
-            placeholder="Enter your bank"
-          />
+        <div class="modal-input-field">
+          <label class="form_label" for="gender">Select your preference</label>
+          <select id="gender" v-model="preference" name="gender">
+            <option value="">Select</option>
+            <option value="bvn">BVN</option>
+            <option value="nin">NIN</option>
+          </select>
+          <!-- </div> -->
+          <!-- <div
+              :class="submitClicked && !gender ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div> -->
         </div>
         <div class="form-group">
-          <label for="acct_num">Account number</label>
+          <label for="acct_num">BVN</label>
           <input
             id="acct_num"
-            v-model="acct_num"
+            v-model="bvn"
             type="number"
             name="acct_num"
-            placeholder="Enter your account number"
+            placeholder="Enter your BVN"
           />
         </div>
-        <div class="form-group">
-          <label for="acct_name">Account holder name</label>
-          <input
-            id="acct_name"
-            v-model="acct_name"
-            type="number"
-            name="acct_name"
-            placeholder="Enter your account name"
-          />
+        <div class="modal-input-field">
+          <label class="form_label" for="gender">How do you want to receive the code?</label>
+          <select id="gender" v-model="codePlatform" name="gender">
+            <option value="">Select</option>
+            <option value="email">Email</option>
+            <option value="phoneNumber">Phone Number</option>
+          </select>
+          <!-- </div> -->
+          <!-- <div
+              :class="submitClicked && !gender ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div> -->
         </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="signIn()">
@@ -59,9 +64,7 @@
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text">
-          I’ll do this later
-        </p>
+        <!-- <p class="link_text">I’ll do this later</p> -->
       </div>
       <!-- </div> -->
     </div>
@@ -80,6 +83,7 @@ const showPassword = ref(false);
 const loading = ref(false);
 
 
+
 const save = () => {
   loading.value = true;
   console.log(loading.value);
@@ -95,7 +99,7 @@ const save = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo("/auth/user/verify-identity");
+      navigateTo("/auth/user/verify-identity/enter-otp");
       // }
     })
     .catch((_err) => {
@@ -121,7 +125,7 @@ const save = () => {
   min-height: fit-content;
   padding: 40px 30px 50px 50px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 120px;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;

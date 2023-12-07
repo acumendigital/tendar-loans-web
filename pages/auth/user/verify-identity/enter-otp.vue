@@ -9,47 +9,15 @@
             alt=""
           />
         </div>
-        <div class="rhs">
-          <img
-            class="payment_logo"
-            src="~assets/images/stripe_logo.png"
-            alt=""
-          />
-        </div>
       </div>
-      <p class="welcome_text">Add bank details</p>
-      <p class="instruction_text">Enter your bank account details</p>
-      <!-- <div class="signin-form-ctn"> -->
+      <p class="welcome_text">Enter verification code</p>
+      <p class="instruction_text">Please enter the code sent to ******re@gmail.com</p>
       <div class="form">
-        <div class="form-group">
-          <label for="bank">Bank</label>
-          <input
-            id="bank"
-            v-model="bank"
-            type="text"
-            name="bank"
-            placeholder="Enter your bank"
-          />
-        </div>
-        <div class="form-group">
-          <label for="acct_num">Account number</label>
-          <input
-            id="acct_num"
-            v-model="acct_num"
-            type="number"
-            name="acct_num"
-            placeholder="Enter your account number"
-          />
-        </div>
-        <div class="form-group">
-          <label for="acct_name">Account holder name</label>
-          <input
-            id="acct_name"
-            v-model="acct_name"
-            type="number"
-            name="acct_name"
-            placeholder="Enter your account name"
-          />
+        <div class="pin_ctn">
+          <div class="form-group">
+            <label for="email">OTP</label>
+            <OTPInput inputs="6" @input="handleOTPChange($event)" />
+          </div>
         </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="signIn()">
@@ -59,11 +27,10 @@
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text">
-          I’ll do this later
-        </p>
+        <!-- <p class="link_text" @click="navigateTo('/dashboard')">
+          Skip, continue to dashboard
+        </p> -->
       </div>
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -73,42 +40,47 @@ definePageMeta({
   layout: "authlayout",
 });
 
-const bank = ref("");
-const acct_num = ref("");
-const acct_name = ref("");
-const showPassword = ref(false);
+const otp = ref("");
 const loading = ref(false);
 
+const handleOTPChange = (value) => {
+  otp.value = value;
+  console.log(otp.value);
+};
 
 const save = () => {
-  loading.value = true;
-  console.log(loading.value);
-  const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
-  };
-  console.log(data);
-  axios
-    .post("", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      navigateTo("/auth/user/verify-identity");
-      // }
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        this.$toast.error(errorMsg);
-      } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  if (otp.value === confirmPin.value) {
+    loading.value = true;
+    console.log(loading.value);
+    otp.value =
+      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+    const data = {
+      pin: otp.value,
+    };
+    console.log(data);
+    axios
+      .post("user/pin/set", data)
+      .then((onfulfilled) => {
+        console.log(onfulfilled);
+        navigateTo("/dashboard");
+        // }
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          this.$toast.error(errorMsg);
+        } else {
+          this.$toast.error(
+            "Oops, something went wrong, please try again later"
+          );
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  } else {
+    
+  }
 };
 </script>
 
@@ -121,7 +93,7 @@ const save = () => {
   min-height: fit-content;
   padding: 40px 30px 50px 50px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 170px;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -167,8 +139,14 @@ const save = () => {
 }
 
 .form {
+  /* width: 80%; */
+  margin: auto;
   margin-top: 3vh;
   padding-right: 30px;
+}
+
+.form-group {
+  margin-bottom: 50px;
 }
 
 .forgot-pass-row,
