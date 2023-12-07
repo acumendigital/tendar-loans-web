@@ -10,13 +10,13 @@
           <label for="otp">Enter OTP</label>
           <input
             id="otp"
-            v-model="email_otp"
-            type="text"
+            v-model="otp"
+            type="number"
             name="otp"
             placeholder="Enter the OTP sent to your email"
           />
         </div>
-        <p v-if="sendClicked && !email_otp" class="error-text">
+        <p v-if="sendClicked && !otp" class="error-text">
           This field is reqired
         </p>
         <div class="form-group">
@@ -27,7 +27,7 @@
             :current-key="password"
             :disabled="false"
             placeholder="Enter your password"
-            @update-value="updateValue($event)"
+            @update-value="updatePasswordValue($event)"
           />
         </div>
         <p v-if="sendClicked && !password" class="error-text">
@@ -40,15 +40,15 @@
             :copy-needed="false"
             :current-key="confirm_password"
             placeholder="Enter your password"
-            @keyup.enter="routeToLogin()"
-            @update-value="updateSecValue($event)"
+            @keyup.enter="resetPassword()"
+            @update-value="updateConfirmPasswordValue($event)"
           />
         </div>
         <p v-if="sendClicked && !confirm_password" class="error-text">
           This field is reqired
         </p>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="routeToLogin()">
+          <button v-if="!loading" class="action-btn" @click="resetPassword()">
             Create Password
           </button>
           <button v-else class="action-btn" disabled>
@@ -66,87 +66,59 @@ definePageMeta({
   layout: "authlayout",
 });
 
-const email_otp = ref("");
+import axios from "axios";
+const route = useRoute();
+const email = ref("");
+const otp = ref("");
 const password = ref("");
 const confirm_password = ref("");
 const emailError = ref(false);
 const loading = ref(false);
 const sendClicked = ref(false);
 
-// export default {
-//   layout: 'authLayout',
-//   data() {
-//     return {
-//       email_otp: '',
-//       emailError: false,
-//       loading: false,
-//       password: '',
-//       confirm_password: '',
-//       sendClicked: false,
-//     }
-//   },
-//   methods: {
-//     routeToLogin() {
-//       this.sendClicked = true
-//       if (
-//         this.email_otp.trim() !== '' &&
-//         this.password.trim() !== '' &&
-//         this.confirm_password.trim() !== ''
-//       ) {
-//         if (this.password.trim() === this.confirm_password.trim()) {
-//           this.loading = true
-//           const data = {
-//             email: this.$store.state.OTPEmail,
-//             password: this.password,
-//             email_token: this.email_otp,
-//             address: 'Lagos, Nigeria',
-//             longitude: null,
-//             latitude: null,
-//           }
-//           this.$axios({
-//             url: '/admin/auth/reset/password',
-//             method: 'POST',
-//             data,
-//           })
-//             .then((onfulfilled) => {
-//               this.$toast.success(onfulfilled.data.message, {
-//                 duration: 4000,
-//                 action: {
-//                   icon: 'check',
-//                   onClick: (e, toastObject) => {
-//                     toastObject.goAway(0)
-//                   },
-//                 },
-//               })
-//               this.$router.push('/auth/login')
-//             })
-//             .catch((_err) => {
-//               const errorMsg = _err?.response?.data?.message || _err?.message
-//               if (errorMsg) {
-//                 this.$toast.error(errorMsg)
-//               } else {
-//                 this.$toast.error(
-//                   'Oops, something went wrong, please try again later'
-//                 )
-//               }
-//             })
-//             .finally(() => {
-//               this.loading = false
-//             })
-//         } else {
-//           this.loading = false
-//           this.$toast.error('Password unmatch error')
-//         }
-//       }
-//     },
-//     updateValue(e) {
-//       this.password = e
-//     },
-//     updateSecValue(e) {
-//       this.confirm_password = e
-//     },
-//   },
-// }
+const updatePasswordValue = (e) => {
+  password.value = e;
+};
+
+const updateConfirmPasswordValue = (e) => {
+  confirm_password.value = e;
+};
+
+const resetPassword = () => {
+  if (password.value === confirm_password.value) {
+    email.value = route.query.email;
+  console.log(email.value);
+  loading.value = true;
+  password.value =
+    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  const data = {
+    email: email.value,
+    token: otp.value,
+    password: password.value,
+  };
+  console.log(data);
+  axios
+    .post("auth/password/reset/send-email", data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+      navigateTo("/auth/login");
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        this.$toast.error(errorMsg);
+      } else {
+        this.$toast.error("Oops, something went wrong, please try again later");
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+  } else {
+
+  }
+};
 </script>
 
 <style scoped>
@@ -158,7 +130,7 @@ const sendClicked = ref(false);
   min-height: fit-content;
   padding: 40px 30px 50px 50px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 140px;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;

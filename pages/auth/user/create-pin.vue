@@ -10,7 +10,7 @@
           />
         </div>
       </div>
-      <p class="welcome_text">Create PIN</p>
+      <p class="welcome_text">Create your PIN</p>
       <!-- <p class="instruction_text">Enter your bank account details</p> -->
       <div class="form">
         <div class="pin_ctn">
@@ -89,7 +89,7 @@ const save = () => {
         loading.value = false;
       });
   } else {
-    
+
   }
 };
 </script>
@@ -101,7 +101,7 @@ const save = () => {
   min-width: 500px;
   height: auto;
   min-height: fit-content;
-  padding: 40px 30px 50px 50px;
+  padding: 40px 30px 50px 70px;
   border-radius: 10px;
   margin-top: 120px;
   /* display: flex;
@@ -120,7 +120,6 @@ const save = () => {
   color: #021c3e;
   font-size: 26px;
   font-weight: 700;
-  text-align: center;
 }
 
 .company_logo {
@@ -150,8 +149,6 @@ const save = () => {
 }
 
 .form {
-  width: 80%;
-  margin: auto;
   margin-top: 3vh;
   padding-right: 30px;
 }
@@ -214,7 +211,7 @@ a.forgot-text:hover {
 }
 
 .pin_ctn {
-  width: 80%;
-  margin: auto;
+  width: 75%;
+  /* margin: auto; */
 }
 </style>
