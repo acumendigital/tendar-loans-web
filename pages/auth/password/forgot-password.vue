@@ -10,17 +10,17 @@
           <label for="email">Email</label>
           <input
             id="email"
-            v-model="email_name"
+            v-model="email"
             type="text"
             name="email"
             placeholder="Enter your username or email"
           />
         </div>
-        <p v-if="sendClicked && !email_name" class="error-text">
+        <p v-if="sendClicked && !email" class="error-text">
           This field is reqired
         </p>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="navigateTo('/auth/password/reset-password')">
+          <button v-if="!loading" class="action-btn" @click="sendEmail()">
             Submit
           </button>
           <button v-else class="action-btn" disabled>
@@ -38,70 +38,40 @@ definePageMeta({
   layout: "authlayout",
 });
 
-const email_name = ref("");
-const emailError = ref(false);
+import axios from "axios";
+const email = ref("");
 const loading = ref(false);
 const sendClicked = ref(false);
 
-// export default {
-//   layout: 'authlayout',
-//   data() {
-//     return {
-//       email_name: "",
-//       emailError: false,
-//       loading: false,
-//       sendClicked: false,
-//     };
-//   },
-//   methods: {
-//     sendOtp() {
-//       this.sendClicked = true;
-//       if (this.email_name.trim() !== "") {
-//         this.loading = true;
-//         const data = {
-//           email: this.email_name,
-//         };
-//         this.$axios({
-//           url: "/admin/auth/sendResetOTP/email/password",
-//           method: "POST",
-//           data,
-//         })
-//           .then((onfulfilled) => {
-//             this.$store.commit("saveEmailForOTP", this.email_name);
-//             this.$toast.success(onfulfilled.data.message, {
-//               duration: 4000,
-//               action: {
-//                 icon: "check",
-//                 onClick: (e, toastObject) => {
-//                   toastObject.goAway(0);
-//                 },
-//               },
-//             });
-//             // this.$toast.success(onfulfilled.data.message, {duration: 4000})
-//             this.$router.push("/auth/password/reset-password");
-//           })
-//           .catch((_err) => {
-//             const errorMsg = _err?.response?.data?.message || _err?.message;
-//             if (errorMsg) {
-//               this.$toast.error(errorMsg, {
-//                 duration: 4000,
-//               });
-//             } else {
-//               this.$toast.error(
-//                 "Oops, something went wrong, please try again later",
-//                 {
-//                   duration: 4000,
-//                 }
-//               );
-//             }
-//           })
-//           .finally(() => {
-//             this.loading = false;
-//           });
-//       }
-//     },
-//   },
-// };
+
+
+const sendEmail = () => {
+  console.log(email.value);
+  loading.value = true;
+  const data = {
+    email: email.value,
+  };
+  console.log(data);
+  // const path = "user/send-verification-email";
+  axios
+    .post('auth/password/reset/send-email', data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+      navigateTo(`/auth/password/reset-password?email=${email.value}`)
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        this.$toast.error(errorMsg);
+      } else {
+        this.$toast.error("Oops, something went wrong, please try again later");
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 </script>
 
 <style scoped>
@@ -113,7 +83,7 @@ const sendClicked = ref(false);
   min-height: fit-content;
   padding: 40px 30px 50px 50px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 160px;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
