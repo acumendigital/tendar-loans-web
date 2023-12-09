@@ -248,7 +248,7 @@ const save = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo("/auth/user/verify-identity");
+      navigateTo("/user/verify-identity");
       // }
     })
     .catch((_err) => {

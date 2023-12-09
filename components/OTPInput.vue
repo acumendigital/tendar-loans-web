@@ -87,7 +87,7 @@ export default {
         // }
       }
       this.pin.length = this.inputs;
-      this.$emit("input", this.pin.toString().replaceAll(",", ""));
+      this.$emit("inputs", this.pin.toString().replaceAll(",", ""));
     },
     previousInput(_el, index) {
       if (index > 1) {

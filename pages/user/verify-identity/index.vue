@@ -16,7 +16,7 @@
       </p>
       <!-- <div class="signin-form-ctn"> -->
       <div class="form">
-        <div class="modal-input-field">
+        <div class="modal-input-field form-group">
           <label class="form_label" for="gender">Select your preference</label>
           <select id="gender" v-model="preference" name="gender">
             <option value="">Select</option>
@@ -48,7 +48,7 @@
             v-model="nin"
             type="number"
             name="acct_num"
-            placeholder="Enter your BVN"
+            placeholder="Enter your NIN"
           />
         </div>
         <div class="btn-div">
@@ -94,7 +94,7 @@ const save = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo("/auth/user/verify-identity/enter-otp");
+      navigateTo("/user/verify-identity/enter-otp");
       // }
     })
     .catch((_err) => {

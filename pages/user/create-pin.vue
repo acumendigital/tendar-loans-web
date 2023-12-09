@@ -9,61 +9,32 @@
             alt=""
           />
         </div>
-        <div class="rhs">
-          <img
-            class="payment_logo"
-            src="~assets/images/stripe_logo.png"
-            alt=""
-          />
-        </div>
       </div>
-      <p class="welcome_text">Add bank details</p>
-      <p class="instruction_text">Enter your bank account details</p>
-      <!-- <div class="signin-form-ctn"> -->
+      <p class="welcome_text">Create your PIN</p>
+      <!-- <p class="instruction_text">Enter your bank account details</p> -->
       <div class="form">
-        <div class="form-group">
-          <label for="bank">Bank</label>
-          <input
-            id="bank"
-            v-model="bank"
-            type="text"
-            name="bank"
-            placeholder="Enter your bank"
-          />
-        </div>
-        <div class="form-group">
-          <label for="acct_num">Account number</label>
-          <input
-            id="acct_num"
-            v-model="acct_num"
-            type="number"
-            name="acct_num"
-            placeholder="Enter your account number"
-          />
-        </div>
-        <div class="form-group">
-          <label for="acct_name">Account holder name</label>
-          <input
-            id="acct_name"
-            v-model="acct_name"
-            type="number"
-            name="acct_name"
-            placeholder="Enter your account name"
-          />
+        <div class="pin_ctn">
+          <div class="form-group">
+            <label for="email">New PIN</label>
+            <OTPInput inputs="4" @inputs="handleNewPinChange($event)" />
+          </div>
+          <div class="form-group">
+            <label for="email">Confirm PIN</label>
+            <OTPInput inputs="4" @inputs="handleConfirmPinChange($event)" />
+          </div>
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signIn()">
-            Continue
+          <button v-if="!loading" class="action-btn" @click="save()">
+            Create PIN
           </button>
           <button v-else class="action-btn" disabled>
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text">
-          I’ll do this later
+        <p class="link_text" @click="navigateTo('/dashboard')">
+          Skip, continue to dashboard
         </p>
       </div>
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -73,42 +44,56 @@ definePageMeta({
   layout: "authlayout",
 });
 
-const bank = ref("");
-const acct_num = ref("");
-const acct_name = ref("");
-const showPassword = ref(false);
+import axios from "axios";
+
+const newPin = ref("");
+const confirmPin = ref("");
 const loading = ref(false);
 
+const handleNewPinChange = (value) => {
+  newPin.value = value;
+  console.log(value);
+  console.log(newPin.value);
+};
+
+const handleConfirmPinChange = (value) => {
+  confirmPin.value = value;
+  console.log(confirmPin.value);
+};
 
 const save = () => {
-  loading.value = true;
-  console.log(loading.value);
-  const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
-  };
-  console.log(data);
-  axios
-    .post("", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      navigateTo("/auth/user/verify-identity");
-      // }
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        this.$toast.error(errorMsg);
-      } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  if (newPin.value === confirmPin.value) {
+    loading.value = true;
+    console.log(loading.value);
+    newPin.value =
+      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+    console.log(newPin.value);
+    const data = {
+      pin: newPin.value,
+    };
+    console.log(data);
+    axios
+      .post("user/pin/set", data)
+      .then((onfulfilled) => {
+        console.log(onfulfilled);
+        navigateTo("/dashboard");
+        // }
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          this.$toast.error(errorMsg);
+        } else {
+          this.$toast.error(
+            "Oops, something went wrong, please try again later"
+          );
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  } else {
+  }
 };
 </script>
 
@@ -119,9 +104,9 @@ const save = () => {
   min-width: 500px;
   height: auto;
   min-height: fit-content;
-  padding: 40px 30px 50px 50px;
+  padding: 40px 30px 50px 70px;
   border-radius: 10px;
-  margin-top: 5vh;
+  margin-top: 120px;
   /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -226,5 +211,10 @@ a.forgot-text:hover {
   cursor: pointer;
   text-align: center;
   margin-top: 20px;
+}
+
+.pin_ctn {
+  width: 75%;
+  /* margin: auto; */
 }
 </style>
