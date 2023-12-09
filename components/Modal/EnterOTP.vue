@@ -87,7 +87,7 @@ const sendOtp = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo('/auth/user/create-profile')
+      navigateTo('/user/create-profile')
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;

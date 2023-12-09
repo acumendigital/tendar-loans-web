@@ -11,7 +11,7 @@
           <input
             id="otp"
             v-model="otp"
-            type="number"
+            type="password"
             name="otp"
             placeholder="Enter the OTP sent to your email"
           />
@@ -93,12 +93,12 @@ const resetPassword = () => {
     "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
     email: email.value,
-    token: otp.value,
+    token: otp.value.toString(),
     password: password.value,
   };
   console.log(data);
   axios
-    .post("auth/password/reset/send-email", data)
+    .post("auth/password/reset", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
