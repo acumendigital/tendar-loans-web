@@ -11,7 +11,7 @@
         </div>
       </div>
       <p class="welcome_text">Enter verification code</p>
-      <p class="instruction_text">Please enter the code sent to ******re@gmail.com</p>
+      <p class="instruction_text">Please enter the code sent to Please enter the code sent to +234******1234</p>
       <div class="form">
         <div class="pin_ctn">
           <div class="form-group">

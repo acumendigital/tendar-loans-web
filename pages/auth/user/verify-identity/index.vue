@@ -31,7 +31,7 @@
               This field is required
             </div> -->
         </div>
-        <div class="form-group">
+        <div v-if="preference === 'bvn'" class="form-group">
           <label for="acct_num">BVN</label>
           <input
             id="acct_num"
@@ -41,20 +41,15 @@
             placeholder="Enter your BVN"
           />
         </div>
-        <div class="modal-input-field">
-          <label class="form_label" for="gender">How do you want to receive the code?</label>
-          <select id="gender" v-model="codePlatform" name="gender">
-            <option value="">Select</option>
-            <option value="email">Email</option>
-            <option value="phoneNumber">Phone Number</option>
-          </select>
-          <!-- </div> -->
-          <!-- <div
-              :class="submitClicked && !gender ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
+        <div v-if="preference === 'nin'" class="form-group">
+          <label for="acct_num">NIN</label>
+          <input
+            id="acct_num"
+            v-model="nin"
+            type="number"
+            name="acct_num"
+            placeholder="Enter your BVN"
+          />
         </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="signIn()">
@@ -76,9 +71,9 @@ definePageMeta({
   layout: "authlayout",
 });
 
-const bank = ref("");
-const acct_num = ref("");
-const acct_name = ref("");
+const preference = ref("");
+const nin = ref("");
+const bvn = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
 
