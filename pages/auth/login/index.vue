@@ -69,7 +69,7 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
 import axios from "axios";
@@ -195,7 +195,7 @@ const signIn = () => {
 
 // import functions from '~/utils/functions'
 // export default {
-//   layout: 'authlayout',
+//   layout: 'auth-layout',
 //   data() {
 //     return {
 //       encryptData: functions.encryptData,

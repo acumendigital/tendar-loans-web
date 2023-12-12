@@ -43,10 +43,30 @@
           />
         </div>
       </div>
-      <div v-if="activeTab === 'Pin'" class="pin_ctn">
-        <div class="form-group">
-          <label for="sms">Current PIN</label>
-          <!-- <OTPInput inputs="6" @input="handleSMSOTPChange($event)" /> -->
+      <div v-if="activeTab === 'Pin'" class="">
+        <div class="form">
+          <div class="pin_ctn">
+            <div class="form-group">
+              <label for="email">Current PIN</label>
+              <OTPInput inputs="4" @inputs="handleCurrentPinChange($event)" />
+            </div>
+            <div class="form-group">
+              <label for="email">New PIN</label>
+              <OTPInput inputs="4" @inputs="handleNewPinChange($event)" />
+            </div>
+            <div class="form-group">
+              <label for="email">Confirm PIN</label>
+              <OTPInput inputs="4" @inputs="handleConfirmPinChange($event)" />
+            </div>
+          </div>
+          <div class="btn-div">
+            <button v-if="!loading" class="action-btn" @click="save()">
+              Update
+            </button>
+            <button v-else class="action-btn" disabled>
+              <BtnLoader color="#fff" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -58,6 +78,58 @@ const activeTab = ref("Password");
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
+};
+
+const newPin = ref("");
+const confirmPin = ref("");
+const currentPin = ref("");
+const loading = ref(false);
+
+const handleCurrentPinChange = (value) => {
+  currentPin.value = value;
+};
+
+const handleNewPinChange = (value) => {
+  newPin.value = value;
+};
+
+const handleConfirmPinChange = (value) => {
+  confirmPin.value = value;
+};
+
+const save = () => {
+  if (newPin.value === confirmPin.value) {
+    loading.value = true;
+    console.log(loading.value);
+    newPin.value =
+      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+    console.log(newPin.value);
+    const data = {
+      pin: newPin.value,
+    };
+    console.log(data);
+    axios
+      .post("user/pin/set", data)
+      .then((onfulfilled) => {
+        console.log(onfulfilled);
+        navigateTo("/dashboard");
+        // }
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          this.$toast.error(errorMsg);
+        } else {
+          this.$toast.error(
+            "Oops, something went wrong, please try again later"
+          );
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  } else {
+  }
 };
 </script>
 
@@ -85,5 +157,14 @@ const setActiveTab = (tab) => {
 
 .form-group {
   margin-bottom: 20px;
+}
+
+.form {
+  width: 55%;
+}
+
+.pin_ctn {
+  width: 45%;
+  margin-bottom: 40px;
 }
 </style>
