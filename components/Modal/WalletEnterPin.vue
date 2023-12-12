@@ -2,23 +2,25 @@
   <div class="modal-backdrop" @click="$emit('close-modal')">
     <div class="modal reveals" @click.stop>
       <div class="top_section">
-        <h1 class="modal_title">Enter OTP</h1>
+        <h1 class="modal_title">Enter PIN</h1>
         <span
           class="material-icons-outlined close"
-           @click="$emit('close-modal')"
+          @click="$emit('close-modal')"
         >
           close
         </span>
       </div>
       <p class="modal_subtitle">
-        Please enter the verification code we sent to
-        {{ props.email }}
+        Please enter your pin to confirm this transaction
       </p>
       <div class="modal_content">
-        <OTPInput inputs="6" @inputs="handleOTPChange($event)" />
+        <div class="otp_ctn">
+          <OTPInput inputs="4" @inputs="handlePINChange($event)" />
+        </div>
         <div class="bottom_link">
           <p class="bottom_text">
-            Didn’t get a code? <span class="resend_btn" @click="resendOtp()">Resend code</span>
+            Don’t have a pin?
+            <span class="resend_btn" @click="createPin()">Create one</span>
           </p>
         </div>
       </div>
@@ -28,6 +30,7 @@
 
 <script setup>
 import axios from "axios";
+const emit = defineEmits(["proceed"]);
 const props = defineProps({
   email: {
     type: String,
@@ -35,47 +38,26 @@ const props = defineProps({
   },
 });
 
-const otp = ref('');
+const pin = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
 
-const handleOTPChange = (value) => {
-  otp.value = value;
-  if (otp.value.length === 6) {
-    console.log(otp.value);
-    sendOtp()
+const handlePINChange = (value) => {
+  pin.value = value;
+
+  console.log(pin.value);
+  if (pin.value.length === 4) {
+    console.log(pin.value);
+    // sendPin();
+    emit("proceed");
   }
 };
 
-
-const resendOtp = () => {
-  console.log(email.value);
-  resendLoading.value = true;
-  const data = {
-    email: email.value,
-  };
-  console.log(data);
-  // const path = "user/send-verification-email";
-  axios
-    .post('user/send-verification-email', data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        this.$toast.error(errorMsg);
-      } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
-      }
-    })
-    .finally(() => {
-      resendLoading.value = false;
-    });
+const createPin = () => {
+  navigateTo("/settings");
 };
 
-const sendOtp = () => {
+const sendPin = () => {
   loading.value = true;
   const data = {
     email: email.value,
@@ -83,11 +65,11 @@ const sendOtp = () => {
   };
   const path = "user/email/verify";
   axios
-    .post('user/email/verify', data)
+    .post("user/email/verify", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo('/user/create-profile')
+      navigateTo("/user/create-profile");
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -157,13 +139,19 @@ const sendOtp = () => {
 .close {
   position: absolute;
   cursor: pointer;
-  color: #c5c5c5;
+  color: #7a62eb;
   right: 2rem;
   top: 2rem;
 }
 
 .modal_content {
-  margin-top: 10px;
+  width: 70%;
+  margin: auto;
+}
+
+.otp_ctn {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .input_ctn {

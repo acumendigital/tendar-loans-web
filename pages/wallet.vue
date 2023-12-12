@@ -56,7 +56,7 @@
         </svg>
         <p>Top up wallet</p>
       </div>
-      <div class="card_btn">
+      <div class="card_btn" @click="openWithdrawal = true">
         <svg
           width="51"
           height="51"
@@ -88,94 +88,116 @@
         @update:isOpenProp="updateIsOpen"
       />
     </div>
+    <ModalWithdrawal
+      v-if="openWithdrawal"
+      @close-modal="openWithdrawal = false"
+      @proceed="enterPin()"
+    />
+    <ModalWalletEnterPin
+      v-if="openPinModal"
+      @close-modal="openPinModal = false"
+      @proceed="transSuccess()"
+    />
+    <ModalSuccess
+      v-if="openSuccess"
+      :title="'Transaction successful'"
+      :subTitle="'You sent ₦10,000 to Leslie Alexander '"
+      @close-modal="openSuccess = false"
+    />
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      isOpen: false,
-      cardData: [
-        {
-          title: "Next instalment due",
-          text: "₦50,000.00",
-          date: "Aug 30, 2023",
-          active: "",
-        },
-        {
-          title: "Active loan amount",
-          text: "₦300,000.00",
-          date: "",
-          active: "",
-        },
-        {
-          title: "Number of payments",
-          text: "1 of 4",
-          date: "",
-          active: "Active loan",
-        },
-      ],
-      tableData: [
-        {
-          reference: "BN-B1E73DA–0017",
-          transaction_type: "Wallet top-up",
-          name: "Courtney Henry",
-          amount: "30000",
-          date: "Dec 30, 09:42 PM",
-          transaction_status: "Successful",
-        },
-        {
-          reference: "BN-B1E73DA–0017",
-          transaction_type: "Wallet top-up",
-          name: "Courtney Henry",
-          amount: "30000",
-          date: "Dec 30, 09:42 PM",
-          transaction_status: "Unsuccessful",
-        },
-        {
-          reference: "BN-B1E73DA–0017",
-          transaction_type: "Wallet top-up",
-          name: "Courtney Henry",
-          amount: "30000",
-          date: "Dec 30, 09:42 PM",
-          transaction_status: "Successful",
-        },
-        {
-          reference: "BN-B1E73DA–0017",
-          transaction_type: "Wallet top-up",
-          name: "Courtney Henry",
-          amount: "30000",
-          date: "Dec 30, 09:42 PM",
-          transaction_status: "Unsuccessful",
-        },
-        {
-          reference: "BN-B1E73DA–0017",
-          transaction_type: "Wallet top-up",
-          name: "Courtney Henry",
-          amount: "30000",
-          date: "Dec 30, 09:42 PM",
-          transaction_status: "Successful",
-        },
-        {
-          reference: "BN-B1E73DA–0017",
-          transaction_type: "Wallet top-up",
-          name: "Courtney Henry",
-          amount: "30000",
-          date: "Dec 30, 09:42 PM",
-          transaction_status: "Successful",
-        },
-      ],
-    };
+<script setup>
+const openWithdrawal = ref(false);
+const openPinModal = ref(false);
+const openSuccess = ref(false);
+const isOpen = ref(false);
+const cardData = ref([
+  {
+    title: "Next instalment due",
+    text: "₦50,000.00",
+    date: "Aug 30, 2023",
+    active: "",
   },
-  methods: {
-    toggleSidebar() {
-      this.isOpen = !this.isOpen;
-    },
-    updateIsOpen(newVal) {
-      this.isOpen = newVal;
-    },
+  {
+    title: "Active loan amount",
+    text: "₦300,000.00",
+    date: "",
+    active: "",
   },
+  {
+    title: "Number of payments",
+    text: "1 of 4",
+    date: "",
+    active: "Active loan",
+  },
+]);
+const tableData = ref([
+  {
+    reference: "BN-B1E73DA–0017",
+    transaction_type: "Wallet top-up",
+    name: "Courtney Henry",
+    amount: "30000",
+    date: "Dec 30, 09:42 PM",
+    transaction_status: "Successful",
+  },
+  {
+    reference: "BN-B1E73DA–0017",
+    transaction_type: "Wallet top-up",
+    name: "Courtney Henry",
+    amount: "30000",
+    date: "Dec 30, 09:42 PM",
+    transaction_status: "Unsuccessful",
+  },
+  {
+    reference: "BN-B1E73DA–0017",
+    transaction_type: "Wallet top-up",
+    name: "Courtney Henry",
+    amount: "30000",
+    date: "Dec 30, 09:42 PM",
+    transaction_status: "Successful",
+  },
+  {
+    reference: "BN-B1E73DA–0017",
+    transaction_type: "Wallet top-up",
+    name: "Courtney Henry",
+    amount: "30000",
+    date: "Dec 30, 09:42 PM",
+    transaction_status: "Unsuccessful",
+  },
+  {
+    reference: "BN-B1E73DA–0017",
+    transaction_type: "Wallet top-up",
+    name: "Courtney Henry",
+    amount: "30000",
+    date: "Dec 30, 09:42 PM",
+    transaction_status: "Successful",
+  },
+  {
+    reference: "BN-B1E73DA–0017",
+    transaction_type: "Wallet top-up",
+    name: "Courtney Henry",
+    amount: "30000",
+    date: "Dec 30, 09:42 PM",
+    transaction_status: "Successful",
+  },
+]);
+
+const toggleSidebar = () => {
+  isOpen.value = !isOpen.value;
+};
+const updateIsOpen = (newVal) => {
+  isOpen.value = newVal;
+};
+
+const enterPin = () => {
+  openWithdrawal.value = false;
+  openPinModal.value = true;
+};
+
+const transSuccess = () => {
+  openPinModal.value = false;
+  openSuccess.value = true;
 };
 </script>
 

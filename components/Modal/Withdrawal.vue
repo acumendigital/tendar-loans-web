@@ -2,24 +2,60 @@
   <div class="modal-backdrop" @click="$emit('close-modal')">
     <div class="modal reveals" @click.stop>
       <div class="top_section">
-        <h1 class="modal_title">Enter OTP</h1>
+        <h1 class="modal_title">Withdrawal</h1>
         <span
           class="material-icons-outlined close"
-           @click="$emit('close-modal')"
+          @click="$emit('close-modal')"
         >
           close
         </span>
       </div>
-      <p class="modal_subtitle">
-        Please enter the verification code we sent to
-        {{ props.email }}
-      </p>
+      <p class="modal_subtitle">Available balance</p>
+      <p class="amount_balance">₦50,000</p>
       <div class="modal_content">
-        <OTPInput inputs="6" @inputs="handleOTPChange($event)" />
-        <div class="bottom_link">
-          <p class="bottom_text">
-            Didn’t get a code? <span class="resend_btn" @click="resendOtp()">Resend code</span>
-          </p>
+        <div class="form">
+          <div class="form-group">
+            <label for="">Amount</label>
+            <input
+              class="amount_input"
+              id="amount"
+              v-model="amount"
+              type="number"
+              name="amount"
+              placeholder="Enter your Amount"
+            />
+          </div>
+          <div class="modal-input-field">
+            <label class="form_label" for="selectAccount">Select Account</label>
+            <select
+              id="selectAccount"
+              v-model="selectAccount"
+              name="selectAccount"
+            >
+              <option value="">Select</option>
+              <option value="">First Bank</option>
+              <option value="">Zenith Bank</option>
+            </select>
+            <!-- </div> -->
+            <!-- <div
+              :class="submitClicked && !selectAccount ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div> -->
+          </div>
+          <div class="btn-div">
+            <button
+              v-if="!loading"
+              class="action-btn"
+              @click="$emit('proceed')"
+            >
+              Proceed
+            </button>
+            <button v-else class="action-btn" disabled>
+              <BtnLoader color="#fff" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -28,52 +64,10 @@
 
 <script setup>
 import axios from "axios";
-const props = defineProps({
-  email: {
-    type: String,
-    default: () => "",
-  },
-});
 
-const otp = ref('');
+const amount = ref("");
+const selectAccount = ref("");
 const loading = ref(false);
-const resendLoading = ref(false);
-
-const handleOTPChange = (value) => {
-  otp.value = value;
-  if (otp.value.length === 6) {
-    console.log(otp.value);
-    sendOtp()
-  }
-};
-
-
-const resendOtp = () => {
-  console.log(email.value);
-  resendLoading.value = true;
-  const data = {
-    email: email.value,
-  };
-  console.log(data);
-  // const path = "user/send-verification-email";
-  axios
-    .post('user/send-verification-email', data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        this.$toast.error(errorMsg);
-      } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
-      }
-    })
-    .finally(() => {
-      resendLoading.value = false;
-    });
-};
 
 const sendOtp = () => {
   loading.value = true;
@@ -83,11 +77,11 @@ const sendOtp = () => {
   };
   const path = "user/email/verify";
   axios
-    .post('user/email/verify', data)
+    .post("user/email/verify", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo('/user/create-profile')
+      navigateTo("/user/create-profile");
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -129,7 +123,7 @@ const sendOtp = () => {
   align-items: center;
   border-radius: 20px;
   overflow-y: auto;
-  padding: 40px 4rem;
+  padding: 40px 4rem 60px;
 }
 
 .top_section {
@@ -142,22 +136,29 @@ const sendOtp = () => {
 .modal_title {
   color: #021c3e;
   text-align: center;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 700;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .modal_subtitle {
   color: #808d9f;
   text-align: center;
   font-size: 16px;
-  margin-bottom: 2rem;
+}
+
+.amount_balance {
+  color: #464a53;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .close {
   position: absolute;
   cursor: pointer;
-  color: #c5c5c5;
+  color: #7a62eb;
   right: 2rem;
   top: 2rem;
 }

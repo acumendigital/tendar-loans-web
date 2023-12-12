@@ -41,11 +41,9 @@
             </defs>
           </svg>
         </div>
-        <p class="title">
-          Loan Approved!
-        </p>
+        <p class="title">{{ props.title }}</p>
         <p class="sub_title">
-          Congratulations, your loan has been approved and will be transferred to your wallet shortly.
+          {{ props.subTitle }}
         </p>
         <p class="counter">
           Redirecting in <span>0.0{{ countdown }}</span>
@@ -55,44 +53,40 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      error: false,
-      loading: false,
-      email: '',
-      countdown: 5
-    }
+<script setup>
+const props = defineProps({
+  title: {
+    type: String,
+    default: () => ''
   },
-  // created () {
-  //   setTimeout(() => {
-  //     this.$router.push('/')
-  //   }, 3000)
-  // },
+  subTitle: {
+    type: String,
+    default: () => ''
+  },
+})
+const error = ref(false);
+const loading = ref(false);
+const email = ref("");
+const countdown = ref(5);
 
-  mounted () {
-    this.startCountdown()
-  },
-  methods: {
-    startCountdown () {
-      const interval = setInterval(() => {
-        if (this.countdown > 1) {
-          this.countdown--
-        } else {
-          this.countdown = 0
-          clearInterval(interval)
-          // this.$router.push('/')
-        }
-      }, 1000)
+const startCountdown = () => {
+  const interval = setInterval(() => {
+    if (countdown.value > 1) {
+      countdown.value--;
+    } else {
+      countdown.value = 0;
+      clearInterval(interval);
+      navigateTo("/dashboard");
     }
-  }
-}
+  }, 1000);
+};
+
+startCountdown();
 </script>
 
 <style scoped>
 .modal-backdrop {
-  z-index: 3;
+  z-index: 50;
   position: fixed;
   overflow: auto;
   height: 100%;
@@ -157,7 +151,7 @@ export default {
 }
 
 .counter span {
-  color: #7A62EB;
+  color: #7a62eb;
   font-size: 14px;
   font-weight: 400;
 }
@@ -165,7 +159,7 @@ export default {
 .close {
   position: absolute;
   cursor: pointer;
-  color: #7A62EB;
+  color: #7a62eb;
   right: 2rem;
   top: 2rem;
 }
@@ -201,7 +195,7 @@ export default {
 .btn {
   margin-top: 2.5rem;
   border: none;
-  background-color: #7A62EB;
+  background-color: #7a62eb;
   height: 45px;
   border-radius: 100px;
   font-size: 20px;
