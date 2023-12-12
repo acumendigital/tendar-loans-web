@@ -147,6 +147,7 @@ button {
   width: fit-content;
 	/* font-weight: 700; */
 	white-space: nowrap;
+  z-index: 0;
 }
 
 span.material-icons-outlined,
@@ -177,6 +178,10 @@ h1 {
 .small-p {
   font-size: 14px;
   font-weight: 500;
+}
+
+.title {
+  z-index: -1 !important;
 }
 
 .title,

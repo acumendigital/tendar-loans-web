@@ -23,7 +23,7 @@ const showLogout = ref(false)
   padding: 3rem 2vw;
   margin-top: 90px;
   margin-left: 17vw;
-  z-index: 1;
+  /* z-index: 1; */
   width: 83%;
   max-width: 1300px;
 }

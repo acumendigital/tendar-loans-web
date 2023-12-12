@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div class="title">Settings</div>
+      <h1 class="title">Settings</h1>
     </div>
     <div class="settings_section">
       <div class="lhs">

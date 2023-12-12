@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="top_section">
-      <div class="title">Loans</div>
-      <button class="global_btn">Get a Loan</button>
+      <h1 class="title">Loans</h1>
+      <button class="global_btn" @click="navigateTo('/loans/request-loan')">Request a loan</button>
     </div>
     <div class="cards_section">
       <DashboardCard
@@ -118,7 +118,7 @@ export default {
   margin-bottom: 20px;
 }
 .title {
-  color: var(--dark-gray-dark-gray-2, #252c32);
+  color: var(#252c32);
   font-family: Inter;
   font-size: 24px;
   font-weight: 700;

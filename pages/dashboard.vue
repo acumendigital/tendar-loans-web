@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div>
-      <div class="title">Welcome Lanre</div>
+  <div class="main_ctn">
+    <div class="top_section">
+      <h1 class="title">Welcome Lanre</h1>
     </div>
     <div class="cards_section">
       <DashboardCard
@@ -83,6 +83,12 @@ const tableData = ref([
 </script>
 
 <style scoped>
+.top_section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 .title {
   color: var(--dark-gray-dark-gray-2, #252c32);
   font-family: Inter;
