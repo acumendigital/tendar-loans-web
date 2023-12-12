@@ -10,12 +10,34 @@ export default defineNuxtPlugin((NuxtApp) => {
     config.headers["Authorization"] = `Bearer ${token}`;
     config.headers["x-api-token"] = `${apiToken}`;
     console.log(config);
-    return config
-  })
+    return config;
+  });
+  axios.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      console.log(error);
+      const parsedError = error.response?.data?.message || error.message;
+      const status = error.response?.data?.code;
+      if (
+        parsedError?.toLowerCase().includes("session expired") ||
+        parsedError?.toLowerCase().includes("invalid signature") ||
+        parsedError?.toLowerCase().includes("Invalid api token") ||
+        status === 401
+      ) {
+        if (!window.location.pathname.includes("/auth/login")) {
+          console.log(parsedError);
+          navigateTo('/auth/login')
+          // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
   return {
     provide: {
       axios: axios,
     },
   };
 });
-

@@ -2,7 +2,7 @@
   <div class="ctn">
     <p class="welcome_text">Review loan details</p>
     <p class="instruction_text">
-      Discover tailored loan solutions for your every need
+      A comprehensive overview of your loan request.
     </p>
     <div class="form">
 

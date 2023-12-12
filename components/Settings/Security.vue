@@ -1,6 +1,6 @@
 <template>
   <div class="section_ctn">
-    <p class="section_title">Security</p>
+    <p class="section_title">Pin Management</p>
     <TabHeaders
       v-if="true"
       :tabs="['Password', 'Pin']"
