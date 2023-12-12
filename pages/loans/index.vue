@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top_section">
-      <div class="title">Loans</div>
+      <h1 class="title">Loans</h1>
       <button class="global_btn" @click="navigateTo('/loans/request-loan')">Request a loan</button>
     </div>
     <div class="cards_section">

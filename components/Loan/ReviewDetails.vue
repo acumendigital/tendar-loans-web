@@ -1,34 +1,57 @@
 <template>
-  <div>
-    <div class="top_section">
-      <h1 class="title">Request a loan</h1>
+  <div class="ctn">
+    <p class="welcome_text">Review loan details</p>
+    <p class="instruction_text">
+      Discover tailored loan solutions for your every need
+    </p>
+    <div class="form">
+
+    <div class="contents">
+      <div class="content">
+        <p class="content_title">Loan Amount</p>
+        <p class="content_value bold_text">₦50,000</p>
+      </div>
+      <div class="content">
+        <p class="content_title">Amount to be repaid</p>
+        <p class="content_value bold_text">₦65,000</p>
+      </div>
+      <div class="content">
+        <p class="content_title">Frequency</p>
+        <p class="content_value">Monthly</p>
+      </div>
+      <div class="content">
+        <p class="content_title">Interest rate</p>
+        <p class="content_value">5%</p>
+      </div>
+      <div class="content">
+        <p class="content_title">Duration</p>
+        <p class="content_value">6 months</p>
+      </div>
     </div>
-    <div class="form-content">
-      <LoanRequestALoan v-if="activeSection === 'Request Loan'" @continue="activeSection = 'Loan Details'" />
-      <LoanDetails v-if="activeSection === 'Loan Details'" @continue="activeSection = 'Repayment Plan'"/>
-      <LoanRepaymentPlan v-if="activeSection === 'Repayment Plan'" @continue="activeSection = 'Review Details'" />
-      <LoanReviewDetails v-if="activeSection === 'Review Details'" @continue="loanApproved = true" />
+      <div class="btn-div">
+        <button v-if="!loading" class="action-btn" @click="$emit('continue')">
+          Continue
+        </button>
+        <button v-else class="action-btn" disabled>
+          <BtnLoader color="#fff" />
+        </button>
+      </div>
     </div>
-    <LoanApproved v-if="loanApproved" @close-modal="loanApproved = false" />
   </div>
 </template>
 
 <script setup>
+// import { Money } from "v-money";
 import axios from "axios";
 
-const activeSection = ref('Request Loan')
-// const firstName = ref("");
-// const lastName = ref("");
-// const dob = ref("");
-// const formattedDob = ref("");
-// const gender = ref("");
-// const employmentStatus = ref("");
-// const jobTitle = ref("");
-// const address = ref("");
-// const city = ref("");
-// const state = ref("");
-// const country = ref("");
-const loanApproved = ref(false);
+const money = ref({
+  prefix: "₦ ",
+  precision: 0,
+  masked: false,
+});
+const amount = ref("");
+const reasonForLoan = ref("");
+const showOtpModal = ref(false);
 const loading = ref(false);
 
 const tokenStore = useStore();
@@ -92,19 +115,9 @@ const save = () => {
 </script>
 
 <style scoped>
-.top_section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+.ctn {
+  padding: 0 4rem;
 }
-.title {
-  color: var(#252c32);
-  font-family: Inter;
-  font-size: 24px;
-  font-weight: 700;
-}
-
 .form-content {
   background: #fff;
   width: 38vw;
@@ -122,6 +135,7 @@ const save = () => {
   align-items: center; */
   z-index: 1;
 }
+
 .welcome_text {
   color: #021c3e;
   font-size: 26px;
@@ -136,32 +150,34 @@ const save = () => {
   margin-top: 3vh;
   padding-right: 30px;
 }
-.form_group_flex {
+
+.contents {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-wrap: wrap;
 }
 
-.form_group_flex div {
-  flex-basis: 48%;
-  margin-top: 0;
-}
-.form-group {
-  margin-top: 0;
+.content {
+  flex-basis: 45%;
+  margin-bottom: 25px;
 }
 
-.form_label {
-  margin-bottom: 10px;
-  color: #464a53 !important;
-  font-size: 14px;
-  font-weight: 400;
-}
-.link_text {
-  color: var(--primary-purple);
-  font-size: 14px;
+.content_title {
+  color: #021C3E;
+  font-size: 16px;
   font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-  margin-top: 20px;
+  margin-bottom: 7px;
 }
+
+.content_value {
+  color: #6a707e;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.bold_text {
+color: #10253E;
+font-size: 19px;
+font-weight: 700;
+}
+
 </style>

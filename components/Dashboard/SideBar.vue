@@ -66,7 +66,7 @@ const nav = ref([
   position: fixed;
   margin-top: 90px;
   background-color: #F5F8F9;
-  z-index: 2;
+  /* z-index: 2; */
   width: 17%;
 }
 .sidebar_title {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="top_section">
-      <div class="title">Wallet</div>
+      <h1 class="title">Wallet</h1>
       <!-- <button class="global_btn">Get a Loan</button> -->
     </div>
     <div class="cards_section">

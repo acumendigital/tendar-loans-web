@@ -1,45 +1,69 @@
+
+import type { duration } from 'moment';
 <template>
-  <div class="ctn">
-    <p class="welcome_text">Loan details</p>
+  <div>
+    <p class="welcome_text">Repayment plan</p>
     <p class="instruction_text">
       Discover tailored loan solutions for your every need
     </p>
-    <div class="info_box">
-      <p>
-        Based on our assessment, this is the highest amount we can offer you for
-        now
-      </p>
-      <div class="amount_box"><p>N50,000</p></div>
-    </div>
     <div class="form">
-      <div class="form-group">
-        <label for="">Minimum Amount</label>
-        <Money
-          v-bind="money"
-          v-model="amount"
-          placeholder="Please enter"
-        />
-      </div>
-      <div class="modal-input-field">
-        <label class="form_label" for="reasonForLoan">Reason for loan</label>
-        <select id="reasonForLoan" v-model="reasonForLoan" name="reasonForLoan">
-          <option value="">Select</option>
-          <option value="schoolFees">School Fees</option>
-          <option value="insurance">Insurance</option>
-          <option value="health">Health</option>
-          <option value="realEstate">Real Estate</option>
-          <option value="rent">Rent</option>
-          <option value="car">Car</option>
-          <option value="land">Land</option>
-          <option value="other">Other</option>
-        </select>
-        <!-- </div> -->
-        <!-- <div
-              :class="submitClicked && !reasonForLoan ? '' : 'not-vis'"
+      <div class="form_group_flex">
+        <div class="form-group">
+          <label class="form_label" for="firstName">Amount</label>
+          <input
+            id="amount"
+            v-model="amount"
+            type="number"
+            name="amount"
+            placeholder="Enter your Amount"
+          />
+        </div>
+        <div class="modal-input-field">
+          <label class="form_label" for="duration">Duration</label>
+          <select id="duration" v-model="duration" name="duration">
+            <option value="">Select</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+          <!-- </div> -->
+          <!-- <div
+              :class="submitClicked && !duration ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
             </div> -->
+        </div>
+      </div>
+      <div class="form_group_flex">
+        <div class="modal-input-field">
+          <label class="form_label" for="frequency">Frequency</label>
+          <select id="frequency" v-model="frequency" name="frequency">
+            <option value="">Select</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+          <!-- </div> -->
+          <!-- <div
+              :class="submitClicked && !frequency ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div> -->
+        </div>
+        <div class="form-group">
+          <label class="form_label" for="interestRate">Interest Rate</label>
+          <input
+            id="interestRate"
+            v-model="interestRate"
+            type="number"
+            name="interestRate"
+            placeholder="Enter your Interest Rate"
+          />
+        </div>
       </div>
       <div class="btn-div">
         <button v-if="!loading" class="action-btn" @click="$emit('continue')">
@@ -49,21 +73,17 @@
           <BtnLoader color="#fff" />
         </button>
       </div>
+      <!-- <p class="link_text">Cancel</p> -->
     </div>
   </div>
 </template>
 
 <script setup>
-// import { Money } from "v-money";
 import axios from "axios";
 
-const money = ref({
-  prefix: "₦ ",
-  precision: 0,
-  masked: false,
-});
 const amount = ref("");
-const reasonForLoan = ref("");
+const duration = ref("");
+const frequency = ref("");
 const showOtpModal = ref(false);
 const loading = ref(false);
 
@@ -128,9 +148,6 @@ const save = () => {
 </script>
 
 <style scoped>
-.ctn {
-  padding: 0 4rem;
-}
 .form-content {
   background: #fff;
   width: 38vw;
@@ -148,7 +165,6 @@ const save = () => {
   align-items: center; */
   z-index: 1;
 }
-
 .welcome_text {
   color: #021c3e;
   font-size: 26px;
@@ -159,34 +175,6 @@ const save = () => {
   color: #021c3e73;
 }
 
-.info_box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 10px;
-  background-color: #f2effd;
-  padding: 20px;
-  margin-top: 30px;
-}
-
-.info_box > p {
-  color: #464a53;
-  font-size: 13px;
-  flex-basis: 65%;
-}
-
-.amount_box {
-  border-radius: 5px;
-  background: #7a62eb;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.amount_box > p {
-  color: #fff;
-  font-size: 12px;
-  font-weight: 500;
-}
 .form {
   margin-top: 3vh;
   padding-right: 30px;
@@ -210,5 +198,13 @@ const save = () => {
   color: #464a53 !important;
   font-size: 14px;
   font-weight: 400;
+}
+.link_text {
+  color: var(--primary-purple);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>
