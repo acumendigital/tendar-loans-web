@@ -28,7 +28,7 @@
 
 <script>
     export default {
-        layout: 'authLayout',
+        layout: 'auth-layout',
         data() {
             return {
                 email_name: '',

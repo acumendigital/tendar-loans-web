@@ -7,7 +7,7 @@
     <div :class="{ 'sidebar-open': isOpen }" class="sidebar">
       <!-- Your sidebar content goes here -->
       <div class="sidebar-content">
-        <div class="back_btn">
+        <div class="back_btn" @click="closeSidebar">
           <svg
             width="25"
             height="25"
@@ -33,28 +33,56 @@
           <p>Back</p>
         </div>
         <div class="main_content">
-          <div class="title">Loan Details</div>
-          <div class="content">
-            <p class="content_title main_title">Loan ID</p>
-            <p class="content_value">BN-B1E73DA–0017</p>
+          <div  v-if="$route.name === 'loans'">
+            <div class="title">Loan Details</div>
+            <div class="content">
+              <p class="content_title main_title">Loan ID</p>
+              <p class="content_value">BN-B1E73DA–0017</p>
+            </div>
+            <p class="other_details_head">Other details</p>
+            <div class="contents">
+              <div class="content">
+                <p class="content_title">Amount borrowed</p>
+                <p class="content_value text-bold">₦300,000</p>
+              </div>
+              <div class="content">
+                <p class="content_title">Date disbursed</p>
+                <p class="content_value">Dec 30, 2022</p>
+              </div>
+              <div class="content">
+                <p class="content_title">Interest rate</p>
+                <p class="content_value">5%</p>
+              </div>
+              <div class="content">
+                <p class="content_title">Loan Status</p>
+                <Badge :type="'Ongoing'" />
+              </div>
+            </div>
           </div>
-          <p class="other_details_head">Other details</p>
-          <div class="contents">
+          <div v-else>
+            <div class="title">Transaction Details</div>
             <div class="content">
-              <p class="content_title">Amount borrowed</p>
-              <p class="content_value text-bold">₦300,000</p>
+              <p class="content_title main_title">Transaction ID</p>
+              <p class="content_value">BN-B1E73DA–0017</p>
             </div>
-            <div class="content">
-              <p class="content_title">Date disbursed</p>
-              <p class="content_value">Dec 30, 2022</p>
-            </div>
-            <div class="content">
-              <p class="content_title">Interest rate</p>
-              <p class="content_value">5%</p>
-            </div>
-            <div class="content">
-              <p class="content_title">Loan Status</p>
-              <Badge :type="'Ongoing'" />
+            <p class="other_details_head">Other details</p>
+            <div class="contents">
+              <div class="content">
+                <p class="content_title">Amount borrowed</p>
+                <p class="content_value text-bold">₦300,000</p>
+              </div>
+              <div class="content">
+                <p class="content_title">Date disbursed</p>
+                <p class="content_value">Dec 30, 2022</p>
+              </div>
+              <div class="content">
+                <p class="content_title">Interest rate</p>
+                <p class="content_value">5%</p>
+              </div>
+              <div class="content">
+                <p class="content_title">Loan Status</p>
+                <Badge :type="'Ongoing'" />
+              </div>
             </div>
           </div>
           <div class="table_section" v-if="$route.name === 'loans'">
@@ -183,13 +211,15 @@ export default {
 }
 
 .sidebar-content {
-  padding: 100px 50px;
+  padding: 50px 50px;
+  height: 100%;
   color: white;
 }
 
 .back_btn {
   display: flex;
   margin-bottom: 30px;
+  cursor: pointer;
 }
 
 .back_btn svg {
@@ -207,7 +237,6 @@ export default {
   width: 700px;
   position: fixed;
   overflow: auto;
-
 }
 
 .title {

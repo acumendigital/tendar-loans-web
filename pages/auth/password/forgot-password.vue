@@ -35,7 +35,7 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
 import axios from "axios";

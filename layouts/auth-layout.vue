@@ -1,8 +1,5 @@
 <template>
   <div class="form-ctn">
-    <!-- <div class="form-content">
-      
-    </div> -->
     <slot />
     <div class="bottom_links">
       <p class="text_link">Powered by Tendar</p>
@@ -15,7 +12,7 @@
 </template>
 <script>
 export default {
-  name: 'authlayout'
+  name: 'auth-layout'
 }
 </script>
 

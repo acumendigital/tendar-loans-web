@@ -40,7 +40,7 @@ import functions from '@/utils/functions'
 // import VOtpInput from '~/components/Vuetify/VOtpInput.vue'
 export default {
   // components: { VOtpInput },
-  layout: 'authLayout',
+  layout: 'auth-layout',
   data() {
     return {
       hideEmail: functions.hideEmail,
