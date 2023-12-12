@@ -16,6 +16,8 @@
 </template>
 
 <script setup>
+import axios from "axios";
+const toast = useToast();
 const cardData = ref([
   {
     title: "Wallet balance",
@@ -80,6 +82,26 @@ const tableData = ref([
     transaction_status: "Successful",
   },
 ]);
+
+const loading = ref(false);
+
+const getTransactions = () => {
+  loading.value = true;
+  axios
+    .get('dashboard/transaction/list')
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+getTransactions();
 </script>
 
 <style scoped>
