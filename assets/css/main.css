@@ -482,6 +482,13 @@ input[type="file"] {
   align-items: bottom;
 }
 
+.form_label {
+  margin-bottom: 10px;
+  color: #464a53 !important;
+  font-size: 14px;
+  font-weight: 400;
+}
+
 select {
   appearance: none;
   -moz-appearance: none;
