@@ -1,7 +1,7 @@
 <template>
   <div class="section_ctn">
     <p class="section_title">Bank Account Management</p>
-    <p class="add_new">Add new bank account</p>
+    <p class="add_new" @click="$emit('addBank')">Add new bank account</p>
     <div class="management_content">
       <div class="bank_ctn">
         <div class="bank_box">
