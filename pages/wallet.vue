@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="card_btn">
+      <div class="card_btn" @click="openTopup = true">
         <svg
           width="51"
           height="51"
@@ -88,6 +88,11 @@
         @update:isOpenProp="updateIsOpen"
       />
     </div>
+    <ModalWalletTopup
+      v-if="openTopup"
+      @close-modal="openTopup = false"
+      @proceed="openTopup = false"
+    />
     <ModalWithdrawal
       v-if="openWithdrawal"
       @close-modal="openWithdrawal = false"
@@ -108,6 +113,7 @@
 </template>
 
 <script setup>
+const openTopup = ref(false);
 const openWithdrawal = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
