@@ -1,3 +1,7 @@
+// import CryptoJS from "crypto-js";
+import crypto from "crypto";
+import { Buffer } from "buffer";
+
 function number(num) {
   if (num !== undefined) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
@@ -70,7 +74,7 @@ function lastFourDigits(number) {
   const ccNumberWithoutFirstNumber = stringify.slice(12, stringify.length);
   const maskedNumber = ccNumberWithoutFirstNumber.padStart(
     stringify.length,
-    "*",
+    "*"
   );
   return maskedNumber;
 }
@@ -183,11 +187,41 @@ function sortArrayOfDates(arr) {
   });
 }
 
+// function encryptData(data, key) {
+//   data = JSON.stringify(data);
+//   const encrypted = CryptoJS.AES.encrypt(data, key);
+//   return encrypted.toString();
+// }
 
-function encryptData(data, key) {
-  data = JSON.stringify(data);
-  const encrypted = CryptoJS.AES.encrypt(data, key);
-  return encrypted.toString();
+function encryptData(data, channel = "internal") {
+  const config = useRuntimeConfig();
+  const secret =
+    channel === "internal"
+      ? config.public.ENCRYPTION_KEY
+      : config.public.ENCRYPTION_KEY;
+  console.log(secret);
+  const myBuffer = Buffer.from("Hello, Node.js");
+  console.log(myBuffer.toString());
+
+  const str = JSON.stringify(data);
+  const key = Buffer.from(secret, "hex");
+  const plainText = Buffer.from(str, "utf8");
+
+  // The nonce is a random 12 byte buffer
+  const nonce = crypto.randomBytes(12);
+
+  // Since we don't want to save the nonce somewhere else in this case, we add it as a prefix to the encrypted data. The first nonce argument in Seal is the prefix.
+  const cipher = crypto.createCipheriv("aes-256-gcm", key, nonce);
+
+  // Encrypt the plain text
+  const cipherText = Buffer.concat([cipher.update(plainText), cipher.final()]);
+
+  // Get the authentication tag
+
+  const tag = cipher.getAuthTag();
+
+  // Concatenate the nonce + encrypted data + tag
+  return Buffer.concat([nonce, cipherText, tag]).toString("hex");
 }
 
 function decryptData(data, key) {
