@@ -1,7 +1,7 @@
 <template>
   <div class="section_ctn">
     <p class="section_title">Cards</p>
-    <p class="add_new">Add new card</p>
+    <p class="add_new" @click="$emit('addCard')">Add new card</p>
     <div class="management_content">
       <div v-for="(card, index) in cards" :key="index" class="bank_ctn">
         <div class="bank_box">

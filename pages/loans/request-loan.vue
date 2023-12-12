@@ -99,7 +99,7 @@ const save = () => {
   margin-bottom: 20px;
 }
 .title {
-  color: var(#252c32);
+  color: #252c32;
   font-family: Inter;
   font-size: 24px;
   font-weight: 700;

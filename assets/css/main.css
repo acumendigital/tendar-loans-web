@@ -183,9 +183,9 @@ h1 {
   font-weight: 500;
 }
 
-.title {
+/* .title {
   z-index: -1 !important;
-}
+} */
 
 .title,
 .modal-header .lhs {
