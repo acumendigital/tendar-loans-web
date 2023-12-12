@@ -1,7 +1,7 @@
 <template>
   <div class="section_ctn">
-    <p class="section_title">Bank Account Management</p>
-    <p class="add_new">Add new bank account</p>
+    <p class="section_title">Cards</p>
+    <p class="add_new">Add new card</p>
     <div class="management_content">
       <div v-for="(card, index) in cards" :key="index" class="bank_ctn">
         <div class="bank_box">

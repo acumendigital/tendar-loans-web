@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css", "~/assets/css/table.css"],
   modules: [
+    "@nuxt/ui",
     "@nuxtjs/tailwindcss",
     "maz-ui/nuxt",
     [
@@ -34,7 +35,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       BASE_URL: process.env.BASE_URL || "https://low-code-api.fly.dev/api/v1/",
-      ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+      ENCRYPTION_KEY:
+        process.env.ENCRYPTION_KEY ||
+        "0dab2cbffc8dcf5425912baa52de7c529c67e44255f71e4b5b3c6417787a0adb",
     },
     private: {
       ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,

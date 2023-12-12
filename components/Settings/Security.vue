@@ -9,42 +9,44 @@
     />
     <div class="security_content">
       <div v-if="activeTab === 'Password'" class="password_ctn">
-        <div class="form-group">
-          <label for="password">Current Password</label>
-          <SecretKeyInput
-            id="password"
-            placeholder=""
-            :copy-needed="false"
-            :current-key="currentPassword"
-            @keyup.enter="signIn()"
-            @update-value="updateValue($event)"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">New Password</label>
-          <SecretKeyInput
-            id="password"
-            placeholder=""
-            :copy-needed="false"
-            :current-key="newPassword"
-            @keyup.enter="signIn()"
-            @update-value="updateValue($event)"
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Current Password</label>
-          <SecretKeyInput
-            id="password"
-            placeholder=""
-            :copy-needed="false"
-            :current-key="password"
-            @keyup.enter="signIn()"
-            @update-value="updateValue($event)"
-          />
+        <div class="form">
+          <div class="form-group">
+            <label for="password">Current Password</label>
+            <SecretKeyInput
+              id="password"
+              placeholder=""
+              :copy-needed="false"
+              :current-key="currentPassword"
+              @keyup.enter="signIn()"
+              @update-value="updateValue($event)"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">New Password</label>
+            <SecretKeyInput
+              id="password"
+              placeholder=""
+              :copy-needed="false"
+              :current-key="newPassword"
+              @keyup.enter="signIn()"
+              @update-value="updateValue($event)"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Current Password</label>
+            <SecretKeyInput
+              id="password"
+              placeholder=""
+              :copy-needed="false"
+              :current-key="password"
+              @keyup.enter="signIn()"
+              @update-value="updateValue($event)"
+            />
+          </div>
         </div>
       </div>
       <div v-if="activeTab === 'Pin'" class="">
-        <div class="form">
+        <div class="pin_form">
           <div class="pin_ctn">
             <div class="form-group">
               <label for="email">Current PIN</label>
@@ -159,7 +161,7 @@ const save = () => {
   margin-bottom: 20px;
 }
 
-.form {
+.pin_form {
   width: 55%;
 }
 

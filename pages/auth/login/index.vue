@@ -74,6 +74,7 @@ definePageMeta({
 
 import axios from "axios";
 const config = useRuntimeConfig();
+// const toast = useToast()
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const email = ref("");
@@ -115,15 +116,17 @@ const updateValue = (e) => {
 };
 
 const signIn = () => {
+  toast.add({ title: 'Hello world!', color: 'red' })
   loading.value = true;
-  // const encrptedPassword = functions.encryptData(password.value, encryptionKey.value)
-  // console.log(email.value.trim());
-  // console.log(encrptedPassword)
+  // console.log(encryptionKey);
+  console.log(password.value);
+  const encrptedPassword = functions.encryptData(password.value)
+  console.log(encrptedPassword)
   password.value =
     "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
     email: email.value.trim(),
-    password: password.value,
+    password: password,
   };
   const path = "auth/login";
   axios

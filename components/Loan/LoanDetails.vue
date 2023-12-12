@@ -9,15 +9,18 @@
         Based on our assessment, this is the highest amount we can offer you for
         now
       </p>
-      <div class="amount_box"><p>N50,000</p></div>
+      <div class="amount_box" @click="amount = '50000'"><p>N50,000</p></div>
     </div>
     <div class="form">
       <div class="form-group">
-        <label for="">Minimum Amount</label>
-        <Money
-          v-bind="money"
+        <label for="">How much do you want to borrow?</label>
+        <input
+          class="amount_input"
+          id="amount"
           v-model="amount"
-          placeholder="Please enter"
+          type="number"
+          name="amount"
+          placeholder="Enter your Amount"
         />
       </div>
       <div class="modal-input-field">
@@ -210,5 +213,9 @@ const save = () => {
   color: #464a53 !important;
   font-size: 14px;
   font-weight: 400;
+}
+
+.amount_input {
+  width: 75%;
 }
 </style>
