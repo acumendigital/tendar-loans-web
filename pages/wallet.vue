@@ -113,6 +113,8 @@
 </template>
 
 <script setup>
+import axios from "axios";
+const toast = useToast();
 const openTopup = ref(false);
 const openWithdrawal = ref(false);
 const openPinModal = ref(false);
@@ -205,6 +207,26 @@ const transSuccess = () => {
   openPinModal.value = false;
   openSuccess.value = true;
 };
+
+const loading = ref(false);
+
+const getTransactions = () => {
+  loading.value = true;
+  axios
+    .get(`wallet/transaction/list?currency&status=&reference&type&search&sort_created_at=dsc`)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+getTransactions();
 </script>
 
 <style scoped>

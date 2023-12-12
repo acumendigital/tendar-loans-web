@@ -75,6 +75,7 @@ definePageMeta({
 import axios from "axios";
 const config = useRuntimeConfig();
 const toast = useToast();
+const route = useRoute();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const email = ref("");
@@ -126,7 +127,6 @@ const signIn = () => {
     email: email.value.trim(),
     password: password.value,
   };
-  const path = "auth/login";
   axios
     .post("auth/login", data)
     .then((onfulfilled) => {
@@ -137,7 +137,9 @@ const signIn = () => {
       tokenStore.token = token;
       tokenStore.apiToken = api_token;
       toast.add({ title: "Login Successfull!", color: "green" });
-      navigateTo("/dashboard");
+      const url = route.query.fallBackUrl || "/dashboard";
+      navigateTo(`${url}`);
+      // navigateTo("/dashboard");
       // this.$store.commit('setLoggedInState', true)
       //   this.$store.commit('saveUserDetails', data)
       //   this.$store.commit('saveToken', data.token)
@@ -151,7 +153,10 @@ const signIn = () => {
       if (errorMsg) {
         toast.add({ title: errorMsg, color: "red" });
       } else {
-        toast.add({ title: "Oops, something went wrong, please try again later", color: "red" });
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {

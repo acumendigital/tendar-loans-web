@@ -9,7 +9,7 @@ export default defineNuxtPlugin((NuxtApp) => {
   axios.interceptors.request.use((config) => {
     config.headers["Authorization"] = `Bearer ${token}`;
     config.headers["x-api-token"] = `${apiToken}`;
-    console.log(config);
+    // console.log(config);
     return config;
   });
   axios.interceptors.response.use(
@@ -17,7 +17,7 @@ export default defineNuxtPlugin((NuxtApp) => {
       return response;
     },
     (error) => {
-      console.log(error);
+      // console.log(error);
       const parsedError = error.response?.data?.message || error.message;
       const status = error.response?.data?.code;
       if (
@@ -28,7 +28,7 @@ export default defineNuxtPlugin((NuxtApp) => {
       ) {
         if (!window.location.pathname.includes("/auth/login")) {
           console.log(parsedError);
-          navigateTo('/auth/login')
+          navigateTo(`/auth/login?fallBackUrl=${window.location.pathname}`);
           // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
         }
       }
