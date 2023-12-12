@@ -36,30 +36,29 @@ const emit = defineEmits(["open-modal"]);
 
 import axios from "axios";
 const config = useRuntimeConfig();
-const baseUrl = config.public.BASE_URL;
+const toast = useToast();
 const dropDownShow = ref(false);
 const loading = ref(false);
 
 const handleLogout = () => {
-  // emit('open-modal')
   loading.value = true;
-  const path = "auth/logout";
   axios
-    .get(`${baseUrl}${path}`)
+    .get('auth/logout')
     .then((onfulfilled) => {
       console.log(onfulfilled);
-      // const logoutResponse = onfulfilled.data.code
-      // if (logoutResponse === 200) {
-      //   this.$router.push('/auth/login')
-      //   setTimeout(() => {
-      //     this.$store.commit('setLoggedInState', false)
-      //     this.$store.commit('setToDefault')
-      //   }, 200)
-      // }
+      toast.add({ title: "Logged out!", color: "green" });
+      const logoutResponse = onfulfilled.data.code
+      if (logoutResponse === 200) {
+        navigateTo('/auth/login')
+        // setTimeout(() => {
+        //   this.$store.commit('setLoggedInState', false)
+        //   this.$store.commit('setToDefault')
+        // }, 200)
+      }
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
-      this.$toast.error(errorMsg);
+      toast.add({ title: errorMsg, color: "red" });
     })
     .finally(() => {
       loading.value = false;

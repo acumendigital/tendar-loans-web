@@ -46,7 +46,7 @@
           Loan Approved!
         </p>
         <p class="sub_title">
-          Your loan has been approved and will be sent to your wallet in few minutes. Have fun!
+          Congratulations, your loan has been approved and will be transferred to your wallet shortly.
         </p>
         <p class="counter">
           Redirecting in <span>0.0{{ countdown }}</span>

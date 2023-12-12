@@ -74,7 +74,7 @@ definePageMeta({
 
 import axios from "axios";
 const config = useRuntimeConfig();
-// const toast = useToast()
+const toast = useToast();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const email = ref("");
@@ -85,110 +85,73 @@ const loading = ref(false);
 
 const tokenStore = useStore();
 
-
-const fetchCars = () => {
-  fetchCarsLoading.value = true;
-  // console.log(baseUrl);
-  const path = "api/sell";
-  axios
-    .get(`${baseUrl}${path}`)
-    .then((response) => {
-      console.log(response);
-      const updatedCars = response.data.docs;
-      let limitedCars = updatedCars;
-      if (updatedCars.length > 6) {
-        limitedCars = updatedCars.slice(0, 6);
-      }
-      cars.value = limitedCars;
-      // console.log(cars);
-    })
-    .catch((error) => {
-      const { message } = error?.response?.data;
-      apiErrorMessage.value = message;
-    })
-    .finally(() => {
-      fetchCarsLoading.value = false;
-    });
-};
+// const fetchCars = () => {
+//   fetchCarsLoading.value = true;
+//   // console.log(baseUrl);
+//   const path = "api/sell";
+//   axios
+//     .get(`${baseUrl}${path}`)
+//     .then((response) => {
+//       console.log(response);
+//       const updatedCars = response.data.docs;
+//       let limitedCars = updatedCars;
+//       if (updatedCars.length > 6) {
+//         limitedCars = updatedCars.slice(0, 6);
+//       }
+//       cars.value = limitedCars;
+//       // console.log(cars);
+//     })
+//     .catch((error) => {
+//       const { message } = error?.response?.data;
+//       apiErrorMessage.value = message;
+//     })
+//     .finally(() => {
+//       fetchCarsLoading.value = false;
+//     });
+// };
 
 const updateValue = (e) => {
   password.value = e;
 };
 
 const signIn = () => {
-  toast.add({ title: 'Hello world!', color: 'red' })
   loading.value = true;
   // console.log(encryptionKey);
   console.log(password.value);
-  const encrptedPassword = functions.encryptData(password.value)
-  console.log(encrptedPassword)
+  // const encrptedPassword = functions.encryptData(password.value);
+  // console.log(encrptedPassword);
   password.value =
     "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
     email: email.value.trim(),
-    password: password,
+    password: password.value,
   };
   const path = "auth/login";
   axios
-    .post('auth/login', data)
+    .post("auth/login", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      const token = onfulfilled.data.data.token
-      const api_token = onfulfilled.data.data.api_token
-      tokenStore.token = token
-      tokenStore.apiToken = api_token
-      navigateTo('/dashboard')
-      // if (
-      //   onfulfilled.data.message ===
-      //     'A one time token has been sent to your email address' ||
-      //   onfulfilled.data.message ===
-      //     'A one time token has been sent to your phone number'
-      // ) {
-      //   this.$store.commit('saveEmailForOTP', this.email)
-      //   this.$toast.success(onfulfilled.data.message, {
-      //     duration: 4000,
-      //     action: {
-      //       icon: 'check',
-      //       onClick: (e, toastObject) => {
-      //         toastObject.goAway(0)
-      //       },
-      //     },
-      //   })
-      //   let otpAuth = ""
-      //   if (data.email_authentication) {
-      //     otpAuth = "email"
-      //   } else if (data.sms_authentication) {
-      //     otpAuth = "sms"
-      //   }
-      //   // console.log("david", otpAuth)
-      //   this.$router.push(`/auth/login/security?authType=${otpAuth}`)
-      // } else if (
-      //   onfulfilled.data.message === 'user signed in successfully'
-      // ) {
-      //   this.$store.commit('setLoggedInState', true)
+      const token = onfulfilled.data.data.token;
+      const api_token = onfulfilled.data.data.api_token;
+      tokenStore.token = token;
+      tokenStore.apiToken = api_token;
+      toast.add({ title: "Login Successfull!", color: "green" });
+      navigateTo("/dashboard");
+      // this.$store.commit('setLoggedInState', true)
       //   this.$store.commit('saveUserDetails', data)
       //   this.$store.commit('saveToken', data.token)
       //   this.$store.commit('saveXApiKey', data.api_token)
       //   this.$store.commit('saveAdminDetails', data.admin)
       //   const url = this.$route.query.fallBackUrl || '/'
       //   this.$router.push(`${url}`)
-      // } else {
-      //   this.$store.commit('setLoggedInState', true)
-      //   this.$store.commit('saveUserDetails', data)
-      //   this.$store.commit('saveToken', data.token)
-      //   this.$store.commit('saveXApiKey', data.api_token)
-      //   this.$store.commit('saveAdminDetails', data.admin)
-      //   const url = this.$route.query.fallBackUrl || '/'
-      //   this.$router.push(`${url}`)
-      // }
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({ title: "Oops, something went wrong, please try again later", color: "red" });
       }
     })
     .finally(() => {
