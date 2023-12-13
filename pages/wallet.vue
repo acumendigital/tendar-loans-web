@@ -81,7 +81,7 @@
         <p>Send money</p>
       </div>
     </div>
-    <TableWallet :tableData="tableData" @openSidebar="toggleSidebar" />
+    <TableWallet @openSidebar="toggleSidebar" />
     <div class="sidebar_ctn">
       <DashboardTableDetails
         :isOpenProp="isOpen"
@@ -126,76 +126,6 @@ const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
 const isOpen = ref(false);
-const cardData = ref([
-  {
-    title: "Next instalment due",
-    text: "₦50,000.00",
-    date: "Aug 30, 2023",
-    active: "",
-  },
-  {
-    title: "Active loan amount",
-    text: "₦300,000.00",
-    date: "",
-    active: "",
-  },
-  {
-    title: "Number of payments",
-    text: "1 of 4",
-    date: "",
-    active: "Active loan",
-  },
-]);
-const tableData = ref([
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    name: "Courtney Henry",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    name: "Courtney Henry",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Unsuccessful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    name: "Courtney Henry",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    name: "Courtney Henry",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Unsuccessful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    name: "Courtney Henry",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    name: "Courtney Henry",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-]);
 
 const toggleSidebar = () => {
   isOpen.value = !isOpen.value;
@@ -224,7 +154,7 @@ const loading = ref(false);
 const getTransactions = () => {
   loading.value = true;
   axios
-    .get(`wallet/transaction/list?currency&status=&reference&type&search&sort_created_at=dsc`)
+    .get('wallet/balance')
     .then((onfulfilled) => {
       console.log(onfulfilled);
     })
@@ -237,7 +167,7 @@ const getTransactions = () => {
     });
 };
 
-getTransactions();
+// getTransactions();
 </script>
 
 <style scoped>
