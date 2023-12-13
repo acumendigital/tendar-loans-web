@@ -136,7 +136,7 @@ label .loader {
   display: grid;
   place-items: center;
   position: absolute;
-  right: 0;
+  right: 8px;
 }
 
 input[type="search"]::-webkit-search-decoration,

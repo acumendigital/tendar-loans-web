@@ -1,7 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ["~/assets/css/main.css", "~/assets/css/table.css"],
+  css: [
+    "~/assets/css/main.css",
+    "~/assets/css/table.css",
+    "~/assets/css/loaders.css",
+  ],
   modules: [
     "@nuxt/ui",
     "@nuxtjs/tailwindcss",
