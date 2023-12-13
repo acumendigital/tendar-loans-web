@@ -318,7 +318,6 @@ export default {
           //       : "All";
           this.transactionData = success.data.data.transactions;
           this.tableData = this.transactionData.data;
-          console.log(this.tableData);
           this.totalPages = this.transactionData.totalPages;
           this.totalData = this.transactionData.totalDocs;
           this.currentPage = this.transactionData.page;
