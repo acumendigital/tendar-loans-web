@@ -115,6 +115,15 @@ const updateValue = (e) => {
   password.value = e;
 };
 
+// const reloadPage = () => {
+//   window.location.reload();
+//   // route.app.
+// }
+
+// onMounted(() => {
+//   reloadPage();
+// })
+
 const signIn = () => {
   loading.value = true;
   // console.log(encryptionKey);
@@ -134,8 +143,11 @@ const signIn = () => {
       console.log(onfulfilled);
       const token = onfulfilled.data.data.token;
       const api_token = onfulfilled.data.data.api_token;
+      console.log('L-Token', token);
+      console.log('L-APIToken', api_token);
       tokenStore.token = token;
       tokenStore.apiToken = api_token;
+      console.log(tokenStore.token);
       toast.add({ title: "Login Successfull!", color: "green" });
       const url = route.query.fallBackUrl || "/dashboard";
       navigateTo(`${url}`);

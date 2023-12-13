@@ -83,6 +83,7 @@ export default {
           this.countdown = 0
           clearInterval(interval)
           // this.$router.push('/')
+          navigateTo('/dashboard')
         }
       }, 1000)
     }
@@ -92,7 +93,7 @@ export default {
 
 <style scoped>
 .modal-backdrop {
-  z-index: 3;
+  z-index: 50;
   position: fixed;
   overflow: auto;
   height: 100%;

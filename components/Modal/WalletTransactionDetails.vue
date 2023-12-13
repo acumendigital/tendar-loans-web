@@ -2,7 +2,7 @@
   <div class="modal-backdrop" @click="$emit('close-modal')">
     <div class="modal reveals" @click.stop>
       <div class="top_section">
-        <h1 class="modal_title">Enter PIN</h1>
+        <h1 class="modal_title">Transaction details</h1>
         <span
           class="material-icons-outlined close"
           @click="$emit('close-modal')"
@@ -11,18 +11,10 @@
         </span>
       </div>
       <p class="modal_subtitle">
-        Please enter your pin to confirm this transaction
+        Please confirm the transaction details before payment
       </p>
       <div class="modal_content">
-        <div class="otp_ctn">
-          <OTPInput inputs="4" @inputs="handlePINChange($event)" />
-        </div>
-        <div class="bottom_link">
-          <p class="bottom_text">
-            Don’t have a pin?
-            <span class="resend_btn" @click="createPin()">Create one</span>
-          </p>
-        </div>
+        
       </div>
     </div>
   </div>
