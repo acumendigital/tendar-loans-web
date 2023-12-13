@@ -11,12 +11,12 @@ export default defineNuxtPlugin((NuxtApp) => {
     console.log("APIToken", apiToken);
     config.headers["Authorization"] = `Bearer ${token}`;
     config.headers["x-api-token"] = `${apiToken}`;
-    console.log(config);
+    // console.log(config);
     return config;
   });
   axios.interceptors.response.use(
     (response) => {
-      console.log(response);
+      // console.log(response);
       return response;
     },
     (error) => {
@@ -35,7 +35,7 @@ export default defineNuxtPlugin((NuxtApp) => {
           // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
         }
       }
-      console.log(error);
+      // console.log(error);
       return Promise.reject(error);
     }
   );
