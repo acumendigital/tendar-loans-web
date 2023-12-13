@@ -34,22 +34,21 @@
 
 <script setup>
 const route = useRoute();
-console.log(route);
 
-// const updateRoute = (val) => {
-//   navigateTo({
-//     path: '/settings',
-//     query: {
-//       tab: val,
-//     },
-//   });
-// };
+const updateRoute = (val) => {
+  navigateTo({
+    path: '/settings',
+    query: {
+      tab: val,
+    },
+  });
+};
 
 // updateRoute('Personal Details');
 // console.log(route.params.tab);
 const addBank = ref(false);
 const addCard = ref(false);
-const activeTab = ref(route.params.tab || "Personal Details");
+const activeTab = ref(route.query?.tab || "Personal Details");
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;

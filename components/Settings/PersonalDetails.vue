@@ -1,11 +1,14 @@
 <template>
   <div class="section_ctn">
     <p class="section_title">Personal Details</p>
-    <div class="profile_image_ctn">
-      <div class="profile_image">
-        <img src="~assets/images/Ellipse 45.png" alt="" />
+    <div class="profile_top_section">
+      <div class="profile_image_ctn">
+        <div class="profile_image">
+          <img src="~assets/images/Ellipse 45.png" alt="" />
+        </div>
+        <p class="edit_image">Edit profile image</p>
       </div>
-      <p class="edit_image">Edit profile image</p>
+      <button class="edit_profile">Edit Profile</button>
     </div>
     <div class="contents">
       <div class="content">
@@ -84,7 +87,7 @@
 }
 
 .content_title {
-  color: #021C3E;
+  color: #021c3e;
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 7px;
@@ -94,5 +97,20 @@
   color: #6a707e;
   font-size: 16px;
   font-weight: 500;
+}
+
+.profile_top_section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.edit_profile {
+  color: #252c32;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #dde2e4;
+  background-color: #fff;
+  padding: 10px 20px;
 }
 </style>

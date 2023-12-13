@@ -76,10 +76,19 @@
 </template>
 
 <script setup>
-const activeTab = ref("Password");
+const route = useRoute();
+const activeTab = ref(route.query?.type || "Password");
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
+  const query = {
+    ...route.query,
+    type: tab
+  }
+  navigateTo({
+    path: '/settings',
+    query: query
+  });
 };
 
 const newPin = ref("");
