@@ -292,6 +292,7 @@ export default {
       // }
 
       const toast = useToast();
+      // console.log(search);
       this.loading = loading;
       this.$axios({
         url: "dashboard/transaction/list",
@@ -302,6 +303,10 @@ export default {
           page: currentPage,
           search,
           active: tab,
+          currency: '',
+          status: '',
+          reference: '',
+          type: ''
         },
       })
         .then((success) => {
@@ -313,6 +318,7 @@ export default {
           //       : "All";
           this.transactionData = success.data.data.transactions;
           this.tableData = this.transactionData.data;
+          console.log(this.tableData);
           this.totalPages = this.transactionData.totalPages;
           this.totalData = this.transactionData.totalDocs;
           this.currentPage = this.transactionData.page;
