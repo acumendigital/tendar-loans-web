@@ -8,7 +8,7 @@
       class="table-main-heading"
       :style="!paginated ? 'padding-top: 0' : ''"
     >
-      <div class="top flex">
+      <!-- <div class="top flex">
         <div class="lhs">
           <div :class="[subTitle ? 'title' : 'sm-title']">{{ title }}</div>
           <div class="sub-title">{{ subTitle }}</div>
@@ -16,7 +16,7 @@
         <div class="rhs">
           <div class="skeleton card" style="width: 140px; height: 45px" />
         </div>
-      </div>
+      </div> -->
       <LoadersTabHeaders
         v-if="tabHeadersLoader"
         :loader-length="tabHeadersLoaderLength"
@@ -140,5 +140,9 @@ tr {
 
 .table-header {
   border: none;
+}
+
+.search-filter-row {
+  margin-top: 0 !important;
 }
 </style>

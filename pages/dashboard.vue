@@ -11,7 +11,7 @@
         :cardData="data"
       />
     </div>
-    <TableTransactions :tableData="tableData" />
+    <TableTransactions />
   </div>
 </template>
 
@@ -38,70 +38,29 @@ const cardData = ref([
     active: "Active loan",
   },
 ]);
-const tableData = ref([
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Unsuccessful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Unsuccessful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-  {
-    reference: "BN-B1E73DA–0017",
-    transaction_type: "Wallet top-up",
-    amount: "30000",
-    date: "Dec 30, 09:42 PM",
-    transaction_status: "Successful",
-  },
-]);
 
 const loading = ref(false);
+// const transactions = ref([]);
 
-const getTransactions = () => {
-  loading.value = true;
-  axios
-    .get('dashboard/transaction/list')
-    .then((onfulfilled) => {
-      console.log(onfulfilled);
-    })
-    .catch((err) => {
-      const errorMsg = err.response?.data?.message || err.message;
-      toast.add({ title: errorMsg, color: "red" });
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-};
+// const getTransactions = () => {
+//   loading.value = true;
+//   axios
+//     .get('dashboard/transaction/list')
+//     .then((onfulfilled) => {
+//       console.log(onfulfilled);
+//       transactions.value = onfulfilled.data.data.transactions.data
+//       console.log(transactions.value);
+//     })
+//     .catch((err) => {
+//       const errorMsg = err.response?.data?.message || err.message;
+//       toast.add({ title: errorMsg, color: "red" });
+//     })
+//     .finally(() => {
+//       loading.value = false;
+//     });
+// };
 
-getTransactions();
+// getTransactions();
 </script>
 
 <style scoped>
