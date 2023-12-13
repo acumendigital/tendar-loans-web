@@ -10,9 +10,9 @@
           <div class="lhs">
             <p class="card_title">Wallet balance</p>
             <p class="card_subtitle">
-              ₦50,000
-              <span class="material-icons-outlined visibility">
-                visibility_off
+              {{ showAmount ? functions.formatMoney(walletData.available_balance, walletData.currency) : '*******' }}
+              <span class="material-icons-outlined visibility" @click="showAmount = !showAmount">
+                {{ showAmount ? 'visibility_off' : 'visibility_on' }}
               </span>
             </p>
             <p class="card_text">
@@ -126,6 +126,8 @@ const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
 const isOpen = ref(false);
+const showAmount = ref(true);
+const walletData = ref({});
 
 const toggleSidebar = () => {
   isOpen.value = !isOpen.value;
@@ -154,9 +156,10 @@ const loading = ref(false);
 const getTransactions = () => {
   loading.value = true;
   axios
-    .get('wallet/balance')
+    .get("wallet/balance")
     .then((onfulfilled) => {
       console.log(onfulfilled);
+      walletData.value = onfulfilled.data.data.balance;
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -167,7 +170,7 @@ const getTransactions = () => {
     });
 };
 
-// getTransactions();
+getTransactions();
 </script>
 
 <style scoped>
@@ -178,7 +181,7 @@ const getTransactions = () => {
   margin-bottom: 20px;
 }
 .title {
-  color:#252c32;
+  color: #252c32;
   font-family: Inter;
   font-size: 24px;
   font-weight: 700;
@@ -221,6 +224,7 @@ const getTransactions = () => {
 .visibility {
   margin-left: 20px;
   color: white;
+  cursor: pointer;
 }
 
 .card_text {
