@@ -2,8 +2,8 @@
   <div class="card_ctn" :class="cardLength == 2 ? 'last_card' : ''">
     <div class="card_inner">
       <div class="lhs">
-        <p class="card_title">{{ cardData.title }}</p>
-        <p class="card_subtitle">{{ cardData.text }}</p>
+        <p class="card_title">{{ title }}</p>
+        <p class="card_subtitle">{{ cardData.available_balance || cardData.next_due_amount }}</p>
         <p v-if="cardData.date" class="card_text">{{ cardData.date }}</p>
       </div>
       <div v-if="cardData.active" class="rhs">
@@ -23,6 +23,10 @@ export default {
     cardData: {
       type: Object,
       default: () => {}
+    },
+    title: {
+      type: String,
+      default: () => ''
     }
   },
 };
