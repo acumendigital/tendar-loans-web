@@ -297,9 +297,9 @@ export default {
       this.$axios({
         url: "dashboard/transaction/list",
         params: {
-          count: limit,
-          start_date: fromDate,
-          end_date: toDate,
+          limit: limit,
+          // start_date: fromDate,
+          // end_date: toDate,
           page: currentPage,
           search,
           active: tab,

@@ -1,74 +1,78 @@
 <template>
   <TableLoader
     v-if="loading"
-    title="Customers"
-    :top-rhs-btn="true"
+    :top-rhs-btn="false"
     :tab-headers-loader="tabHeadersLoader"
     :tab-headers-loader-length="3"
-    sub-title="View all user activities and transactions in one place."
   />
   <TableContainer v-else>
     <template #table>
       <div class="table-main-heading">
-        <div class="search-filter-row">
-          <TableSearch />
-          <!--<div class="filters">
-            <FilterCustomersTable
-              @filter-data="filterData"
-              @clear-filter="clearFilter"
-            />
-          </div> -->
+        <!-- <div class="top flex">
+          <div class="lhs">
+            <div class="title">Transactions</div>
+            <div class="sub-title">
+              View all user activities and transactions in one place.
+            </div>
+          </div>
+          <div class="rhs"></div>
+        </div> -->
+        <div class="search_filter">
+          <div class="search-filter-row">
+            <TableSearch @search="searchTransaction($event)" />
+            <div class="filters">
+              <FilterTransactionsTable
+                @filter-data="filterData"
+                @clear-filter="clearFilter"
+              />
+            </div>
+          </div>
+          <div v-if="filterDisplayActive" class="filters-display">
+            <div class="lhs">
+              <span
+                ><b>{{ transactionData.totalDocs }}</b> results</span
+              >
+              <span>
+                for <b>{{ activeTab.toLowerCase() }}</b>
+                {{ activeTab.toLowerCase() === "all" ? "customers" : "" }}</span
+              >
+              <span v-if="search"
+                >matching <b>{{ search }}</b></span
+              >
+              <span v-if="filterFromDate"
+                >from <b>{{ detailedDate(filterFromDate) }}</b></span
+              >
+              <span v-if="filterToDate"
+                >to <b>{{ detailedDate(filterToDate) }}</b></span
+              >
+            </div>
+            <div class="rhs">
+              <button
+                v-if="filterFromDate || filterToDate"
+                class="default-input"
+                @click="clearFilter"
+              >
+                <span class="cancel-btn material-icons-round"> close </span>
+                Clear filter
+              </button>
+            </div>
+          </div>
         </div>
         <TabHeaders
           v-if="true"
-          :tabs="['All Transactions', 'Wallet Top-up', 'Withdrawals']"
+          :tabs="['All Transactions', 'Wallet top-up', 'Withdrawals']"
           :active-tab="activeTab"
           @set-active-tab="setActiveTab"
         />
-        <!-- <div v-if="filterDisplayActive" class="filters-display">
-          <div class="lhs">
-            <span
-              ><b>{{ customersData.totalDocs }}</b> results</span
-            >
-            <span>
-              for <b>{{ activeTab.toLowerCase() }}</b>
-              {{ activeTab.toLowerCase() === 'all' ? 'customers' : '' }}</span
-            >
-            <span>
-              {{ filterLoanStatus ? ' with' : '' }}
-            <b>{{ filterLoanStatus ? `${filterLoanStatus.toLowerCase()} loans` : '' }}</b>
-              </span
-            >
-            <span v-if="search"
-              >matching <b>{{ search }}</b></span
-            >
-            <span v-if="filterFromDate"
-              >from <b>{{ detailedDate(filterFromDate) }}</b></span
-            >
-            <span v-if="filterToDate"
-              >to <b>{{ detailedDate(filterToDate) }}</b></span
-            >
-          </div>
-          <div class="rhs">
-            <button
-              v-if="filterFromDate || filterToDate || filterLoanStatus"
-              class="default-input"
-              @click="clearFilter"
-            >
-              <span class="cancel-btn material-icons-round"> close </span>
-              Clear filter
-            </button>
-          </div>
-        </div> -->
       </div>
       <div class="table-wrapper">
-        <table>
+        <table v-if="dataItems && dataItems.length">
           <thead>
             <tr class="table-header">
               <td class="td-4">
                 <div class="th-content">Reference</div>
               </td>
-              <td class="td-4">
+              <td class="td-3">
                 <div class="th-content">Transaction Type</div>
               </td>
               <td class="td-4">
@@ -87,15 +91,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data, index) in tableData" :key="index" class="table-row" @click="$emit('openSidebar')">
+            <tr
+              v-for="(data, index) in tableData"
+              :key="index"
+              class="table-row"
+            >
               <td class="td-4">
                 <div class="td-content">{{ data.reference }}</div>
               </td>
-              <td class="td-4">
-                <div class="td-content">{{ data.transaction_type }}</div>
+              <td class="td-3">
+                <div class="td-content">
+                  {{ capitalizeFirstLetter(data.type) }}
+                </div>
               </td>
               <td class="td-4">
-                <div class="td-content">{{ data.name }}</div>
+                <div class="td-content">
+                  {{ data.beneficiary ? capitalizeFirstLetter(data.beneficiary) : '--' }}
+                </div>
               </td>
               <td class="td-3">
                 <div class="td-content text-bold">
@@ -103,11 +115,13 @@
                 </div>
               </td>
               <td class="td-4">
-                <div class="td-content">{{ data.date }}</div>
+                <div class="td-content">
+                  {{ detailedDate(data.created_at) }}
+                </div>
               </td>
               <td class="td-4">
                 <div class="td-content">
-                  <Badge :type="data.transaction_status" />
+                  <Badge :type="data.status" />
                   <!-- <Badge type="failed" /> -->
                 </div>
               </td>
@@ -132,7 +146,7 @@
             </tr>
           </tbody>
         </table>
-        <!-- <TableEmpty v-else>
+        <TableEmpty v-else>
           <template #tableHeader>
             <tr class="table-header">
               <td class="td-3">
@@ -151,18 +165,18 @@
                 <div class="th-content">Loan Status</div>
               </td>
               <td class="td-3">
-                <div class="th-content">Customer Status</div>
+                <div class="th-content">Transaction Status</div>
               </td>
             </tr>
           </template>
-        </TableEmpty> -->
+        </TableEmpty>
       </div>
       <TableFooter
         :data-items="dataItems"
         :limit="limit"
         :current-page="currentPage"
-        :next-page="customersData.nextPage"
-        :prev-page="customersData.prevPage"
+        :next-page="transactionData.nextPage"
+        :prev-page="transactionData.prevPage"
         :total-data="totalData"
         :total-pages="totalPages"
         @set-limit="setLimit($event)"
@@ -180,7 +194,7 @@ import { detailedDate } from "@/utils/date-formats.js";
 import functions from "@/utils/functions.js";
 // const controller = new AbortController();
 export default {
-  name: "CustomersTable",
+  name: "TransactionsTable",
   props: {
     showTabs: {
       type: Boolean,
@@ -190,14 +204,15 @@ export default {
       type: Boolean,
       default: () => true,
     },
-    tableData: {
-      type: Array,
-      default: () => []
-    },
+    // tableData: {
+    //   type: Array,
+    //   default: () => []
+    // },
   },
   data() {
     return {
-      customersData: {},
+      transactionData: {},
+      tableData: [],
       activeTab: this.$route.query?.type || "All Transactions",
       limit:
         (this.$route.query?.perPage > 30
@@ -207,7 +222,6 @@ export default {
             : this.$route.query?.perPage) || 10,
       filterFromDate: this.$route.query.from || "",
       filterToDate: this.$route.query.to || "",
-      filterLoanStatus: this.$route.query.loanStatus || "",
       search: this.$route.query.q || "",
       currentPage: this.$route.query.page || 1,
       loading: false,
@@ -215,6 +229,7 @@ export default {
       formatPhone: functions.formatPhoneNumber,
       truncateString: functions.truncateString,
       formatMoney: functions.formatMoney,
+      capitalizeFirstLetter: functions.capitalizeFirstLetter,
       allChecked: false,
       totalPages: 10,
       totalData: 57,
@@ -222,29 +237,24 @@ export default {
   },
   computed: {
     filterDisplayActive() {
-      if (
-        this.filterFromDate ||
-        this.filterToDate ||
-        this.search.length ||
-        this.filterLoanStatus
-      ) {
+      if (this.filterFromDate || this.filterToDate || this.search.length) {
         return true;
       }
       return false;
     },
-    computedCompanies() {
-      if (this.activeTab.toLowerCase() === "inactive customers") {
-        return this.dataItems.filter((c) => c.loanStatus === "Inactive");
-      } else if (this.activeTab.toLowerCase() === "active customers") {
-        return this.dataItems.filter((c) => c.loanStatus === "Active");
-      } else if (this.activeTab.toLowerCase() === "owing") {
-        return this.dataItems.filter((c) => c.loanStatus === "Owing");
-      }
-      return this.dataItems;
-    },
+    // computedCompanies() {
+    //   if (this.activeTab.toLowerCase() === "inactive customers") {
+    //     return this.dataItems.filter((c) => c.loanStatus === "Inactive");
+    //   } else if (this.activeTab.toLowerCase() === "active customers") {
+    //     return this.dataItems.filter((c) => c.loanStatus === "Active");
+    //   } else if (this.activeTab.toLowerCase() === "owing") {
+    //     return this.dataItems.filter((c) => c.loanStatus === "Owing");
+    //   }
+    //   return this.dataItems;
+    // },
     dataItems: {
       get() {
-        return this.customersData?.docs?.map((c) => {
+        return this.tableData?.map((c) => {
           c.checked = false;
           return c;
         });
@@ -255,69 +265,74 @@ export default {
     },
   },
   created() {
-    // this.getCustomers(
-    //   true,
-    //   this.activeTab,
-    //   this.limit,
-    //   this.currentPage,
-    //   this.filterFromDate,
-    //   this.filterToDate,
-    //   this.search,
-    //   this.filterLoanStatus
-    // )
+    this.getTransactions(
+      true,
+      this.activeTab,
+      this.limit,
+      this.currentPage,
+      this.filterFromDate,
+      this.filterToDate,
+      this.search
+    );
   },
   methods: {
-    getCustomers(
+    getTransactions(
       loading = true,
       tab = "",
       limit,
       currentPage,
       fromDate,
       toDate,
-      search,
-      loanStatus
+      search
     ) {
-      switch (tab.toLowerCase()) {
-        case "all":
-          tab = "";
-          break;
-        case "active customers":
-          tab = true;
-          break;
-        case "inactive customers":
-          tab = false;
-          break;
-        default:
-          tab = "";
-      }
+      // switch (tab.toLowerCase()) {
+      //   case "all":
+      //     tab = "";
+      //     break;
+      //   case "active customers":
+      //     tab = true;
+      //     break;
+      //   case "inactive customers":
+      //     tab = false;
+      //     break;
+      //   default:
+      //     tab = "";
+      // }
+
+      const toast = useToast();
+      // console.log(search);
       this.loading = loading;
       this.$axios({
-        url: "/companyAdmin/user/all",
+        url: "wallet/transaction/list",
         params: {
-          count: limit,
-          start_date: fromDate,
-          end_date: toDate,
+          limit: limit,
+          // start_date: fromDate,
+          // end_date: toDate,
           page: currentPage,
           search,
           active: tab,
-          loan_status: loanStatus,
+          currency: '',
+          status: '',
+          reference: '',
+          type: ''
         },
       })
         .then((success) => {
-          this.activeTab =
-            tab === true
-              ? "Active Customers"
-              : tab === false
-                ? "Inactive Customers"
-                : "All";
-          this.customersData = success.data.data;
-          this.totalPages = this.customersData.totalPages;
-          this.totalData = this.customersData.totalDocs;
-          this.currentPage = this.customersData.page;
+          // this.activeTab =
+          //   tab === true
+          //     ? "Active Transactions"
+          //     : tab === false
+          //       ? "Inactive Transactions"
+          //       : "All";
+          this.transactionData = success.data.data.transactions;
+          this.tableData = this.transactionData.data;
+          console.log(this.tableData);
+          this.totalPages = this.transactionData.totalPages;
+          this.totalData = this.transactionData.totalDocs;
+          this.currentPage = this.transactionData.page;
           this.filterFromDate = fromDate;
           this.filterToDate = toDate;
           this.search = search;
-          this.filterLoanStatus = loanStatus;
           this.limit = Number(limit);
           const query = {
             // ...this.$route.query,
@@ -327,7 +342,6 @@ export default {
             type: this.activeTab.toLowerCase(),
             page: this.currentPage,
             perPage: this.limit,
-            loanStatus: this.filterLoanStatus,
           };
           for (const k of Object.keys(query)) {
             if (!query[k]) {
@@ -342,11 +356,7 @@ export default {
         })
         .catch((_err) => {
           const errorMsg = _err?.response?.data?.message || _err?.message;
-          this.$toaster.showToast({
-            content:
-              errorMsg || "Oops, something went wrong, please try again later",
-            state: "error",
-          });
+          toast.add({ title: errorMsg, color: "red" });
         })
         .finally(() => {
           this.loading = false;
@@ -363,7 +373,7 @@ export default {
       }
     },
     navigate(item) {
-      // this.$store.commit('setCustomerData', item)
+      // this.$store.commit('setTransactionData', item)
       this.$router.push(`/customers/${item._id}`);
     },
     checkAll() {
@@ -382,19 +392,18 @@ export default {
       return this.dataItems;
     },
     filterData(val) {
-      this.getCustomers(
+      this.getTransactions(
         false,
         this.activeTab,
         this.limit,
         this.currentPage,
         val.fromDate,
         val.toDate,
-        this.search,
-        val.loanStatus
+        this.search
       );
     },
     clearFilter() {
-      this.getCustomers(
+      this.getTransactions(
         false,
         this.activeTab,
         this.limit,
@@ -407,7 +416,7 @@ export default {
     },
     setActiveTab(val) {
       this.activeTab = val;
-      // this.getCustomers(
+      // this.getTransactions(
       //   false,
       //   val,
       //   this.limit,
@@ -415,43 +424,39 @@ export default {
       //   this.filterFromDate,
       //   this.filterToDate,
       //   this.search,
-      //   this.filterLoanStatus,
       // );
     },
-    searchCustomer(search) {
-      this.getCustomers(
+    searchTransaction(search) {
+      this.getTransactions(
         false,
         this.activeTab,
         this.limit,
         this.currentPage,
         this.filterFromDate,
         this.filterToDate,
-        search,
-        this.filterLoanStatus
+        search
       );
     },
     setLimit(limit) {
-      this.getCustomers(
+      this.getTransactions(
         false,
         this.activeTab,
         limit,
         1,
         this.filterFromDate,
         this.filterToDate,
-        this.search,
-        this.filterLoanStatus
+        this.search
       );
     },
     setPage(page) {
-      this.getCustomers(
+      this.getTransactions(
         false,
         this.activeTab,
         this.limit,
         page,
         this.filterFromDate,
         this.filterToDate,
-        this.search,
-        this.filterLoanStatus
+        this.search
       );
     },
   },
@@ -459,7 +464,10 @@ export default {
 </script>
 
 <style scoped>
-.search-filter-row {
+.search_filter {
   margin-bottom: 30px;
+}
+.search-filter-row {
+  margin-top: 0 !important;
 }
 </style>
