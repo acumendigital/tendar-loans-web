@@ -7,8 +7,8 @@ export default defineNuxtPlugin((NuxtApp) => {
   const token = tokenStore.token;
   const apiToken = tokenStore.apiToken;
   axios.interceptors.request.use((config) => {
-    console.log("Token", token);
-    console.log("APIToken", apiToken);
+    // console.log("Token", token);
+    // console.log("APIToken", apiToken);
     config.headers["Authorization"] = `Bearer ${token}`;
     config.headers["x-api-token"] = `${apiToken}`;
     // console.log(config);

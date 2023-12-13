@@ -1,7 +1,7 @@
 <template>
   <div :class="`${type.toLowerCase()}-status badge`">
     <svg
-      v-if="type.toLowerCase() === 'successful' || type.toLowerCase() === 'completed'"
+      v-if="type.toLowerCase() === 'success' || type.toLowerCase() === 'completed'"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="25"
@@ -16,7 +16,7 @@
       />
     </svg>
     <svg
-      v-else-if="type.toLowerCase() === 'unsuccessful' || type.toLowerCase() === 'ongoing'"
+      v-else-if="type.toLowerCase() === 'unsuccessful' || type.toLowerCase() === 'ongoing' || type.toLowerCase() === 'pending'"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="25"
