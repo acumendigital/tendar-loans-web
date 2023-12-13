@@ -14,7 +14,34 @@
         Please confirm the transaction details before payment
       </p>
       <div class="modal_content">
-        
+        <div class="content_ctn">
+          <p class="text_content">Amount</p>
+          <p class="value_content text-bold">₦40,000</p>
+        </div>
+        <div class="content_ctn">
+          <p class="text_content">Beneficiary</p>
+          <p class="value_content">Courtney Henry</p>
+        </div>
+        <div class="content_ctn">
+          <p class="text_content">Bank name</p>
+          <p class="value_content">Stanbic IBTC</p>
+        </div>
+        <div class="content_ctn">
+          <p class="text_content">Transaction fee</p>
+          <p class="value_content">N100</p>
+        </div>
+        <div class="content_ctn">
+          <p class="text_content">Account number</p>
+          <p class="value_content">00123456789</p>
+        </div>
+        <div class="btn-div">
+          <button v-if="!loading" class="action-btn" @click="$emit('proceed')">
+            Continue to payment
+          </button>
+          <button v-else class="action-btn" disabled>
+            <BtnLoader color="#fff" />
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -98,7 +125,7 @@ const sendPin = () => {
   position: relative;
   background-color: white;
   max-width: 550px;
-  width: 30%;
+  width: 35%;
   height: fit-content;
   align-items: center;
   border-radius: 20px;
@@ -137,46 +164,32 @@ const sendPin = () => {
 }
 
 .modal_content {
-  width: 70%;
+  width: 100%;
   margin: auto;
 }
 
-.otp_ctn {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.content_ctn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e1e1e1;
+  padding: 20px 0;
 }
 
-.input_ctn {
-  width: 100%;
-  margin-bottom: 20px;
+.text_content {
+  color: #6a707e;
+  font-size: 14px;
 }
 
-.input_flex_item {
-  flex-basis: 48%;
-}
-
-.global_btn {
-  width: 100%;
-  margin-top: 2rem;
-}
-
-.bottom_link {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
-.bottom_text {
-  color: #00000086;
+.value_content {
+  color: #01112c;
   font-size: 16px;
-  font-weight: 300;
-  text-align: center;
 }
 
-.resend_btn {
-  color: #7a62eb;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
+.btn-div {
+  width: 80%;
+  margin: auto;
+  margin-top: 2rem;
 }
 
 @media only screen and (max-width: 1400px) {

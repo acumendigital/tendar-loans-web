@@ -96,6 +96,11 @@
     <ModalWithdrawal
       v-if="openWithdrawal"
       @close-modal="openWithdrawal = false"
+      @proceed="transDetails()"
+    />
+    <ModalWalletTransactionDetails
+      v-if="openTransactionDetails"
+      @close-modal="openTransactionDetails = false"
       @proceed="enterPin()"
     />
     <ModalWalletEnterPin
@@ -117,6 +122,7 @@ import axios from "axios";
 const toast = useToast();
 const openTopup = ref(false);
 const openWithdrawal = ref(false);
+const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
 const isOpen = ref(false);
@@ -198,8 +204,13 @@ const updateIsOpen = (newVal) => {
   isOpen.value = newVal;
 };
 
-const enterPin = () => {
+const transDetails = () => {
   openWithdrawal.value = false;
+  openTransactionDetails.value = true;
+};
+
+const enterPin = () => {
+  openTransactionDetails.value = false;
   openPinModal.value = true;
 };
 
