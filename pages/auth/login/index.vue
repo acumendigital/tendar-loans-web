@@ -73,9 +73,11 @@ definePageMeta({
 });
 
 import axios from "axios";
+import { useUserStore } from "~/stores";
 const config = useRuntimeConfig();
 const toast = useToast();
 const route = useRoute();
+const dataStore = useUserStore();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const email = ref("");
@@ -84,45 +86,9 @@ const showPassword = ref(false);
 const loading = ref(false);
 // const encryptData = functions.encryptData;
 
-const tokenStore = useStore();
-
-// const fetchCars = () => {
-//   fetchCarsLoading.value = true;
-//   // console.log(baseUrl);
-//   const path = "api/sell";
-//   axios
-//     .get(`${baseUrl}${path}`)
-//     .then((response) => {
-//       console.log(response);
-//       const updatedCars = response.data.docs;
-//       let limitedCars = updatedCars;
-//       if (updatedCars.length > 6) {
-//         limitedCars = updatedCars.slice(0, 6);
-//       }
-//       cars.value = limitedCars;
-//       // console.log(cars);
-//     })
-//     .catch((error) => {
-//       const { message } = error?.response?.data;
-//       apiErrorMessage.value = message;
-//     })
-//     .finally(() => {
-//       fetchCarsLoading.value = false;
-//     });
-// };
-
 const updateValue = (e) => {
   password.value = e;
 };
-
-// const reloadPage = () => {
-//   window.location.reload();
-//   // route.app.
-// }
-
-// onMounted(() => {
-//   reloadPage();
-// })
 
 const signIn = () => {
   loading.value = true;
@@ -143,12 +109,14 @@ const signIn = () => {
       console.log(onfulfilled);
       const token = onfulfilled.data.data.token;
       const api_token = onfulfilled.data.data.api_token;
-      console.log('L-Token', token);
-      console.log('L-APIToken', api_token);
-      tokenStore.token = token;
-      tokenStore.apiToken = api_token;
-      console.log(tokenStore.token);
-      toast.add({ title: "Login Successfull!", color: "green" });
+      const user_data = onfulfilled.data.data.user;
+      // console.log('L-Token', token);
+      // console.log('L-APIToken', api_token);
+      dataStore.updateToken(token);
+      dataStore.updateApiToken(api_token);
+      dataStore.updateUserData(user_data);
+      // console.log(dataStore.token);
+      toast.add({ title: "Login Successfull", color: "green" });
       const url = route.query.fallBackUrl || "/dashboard";
       navigateTo(`${url}`);
       // navigateTo("/dashboard");

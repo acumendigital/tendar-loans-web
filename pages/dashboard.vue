@@ -1,7 +1,7 @@
 <template>
   <div class="main_ctn">
     <div class="top_section">
-      <h1 class="title">Welcome Lanre</h1>
+      <h1 class="title">Welcome {{ userProfile?.first_name || 'Lanre' }}</h1>
     </div>
     <div class="cards_section">
       <div class="card_ctn">
@@ -39,28 +39,9 @@
 
 <script setup>
 import axios from "axios";
-import WalletTopup from "~/components/Modal/WalletTopup.vue";
+import { useUserStore } from "~/stores";
 const toast = useToast();
-const cardData = ref([
-  {
-    title: "Wallet balance",
-    text: "₦17,250.00",
-    date: "",
-    active: "",
-  },
-  {
-    title: "Next instalment due",
-    text: "₦15,350.00",
-    date: "Aug 30, 2023",
-    active: "",
-  },
-  {
-    title: "Number of payments",
-    text: "1 of 4",
-    date: "",
-    active: "Active loan",
-  },
-]);
+const dataStore = useUserStore();
 
 const loading = ref(false);
 const analytics = ref({});
@@ -68,6 +49,24 @@ const walletData = ref({});
 const loanData = ref({});
 const repaymentData = ref({});
 
+const getUserProfile = () => {
+  loading.value = true;
+  axios
+    .get("customer/profile")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      const user_profile = onfulfilled.data.customer;
+      dataStore.userProfile = user_profile;
+      console.log(dataStore.userProfile);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 const getAnalytics = () => {
   loading.value = true;
   axios
@@ -78,7 +77,6 @@ const getAnalytics = () => {
       walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
-      console.log(loanData.value);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -90,6 +88,7 @@ const getAnalytics = () => {
 };
 
 getAnalytics();
+getUserProfile();
 </script>
 
 <style scoped>

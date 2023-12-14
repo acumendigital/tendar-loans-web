@@ -68,7 +68,7 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
 const preference = ref("");

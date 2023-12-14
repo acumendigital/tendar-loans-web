@@ -70,7 +70,7 @@ const reasonForLoan = ref("");
 const showOtpModal = ref(false);
 const loading = ref(false);
 
-const tokenStore = useStore();
+const tokenStore = useUserStore();
 
 const formateDate = (e) => {
   // console.log(e.target.value);

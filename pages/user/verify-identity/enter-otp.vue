@@ -11,7 +11,10 @@
         </div>
       </div>
       <p class="welcome_text">Enter verification code</p>
-      <p class="instruction_text">Please enter the code sent to Please enter the code sent to +234******1234</p>
+      <p class="instruction_text">
+        Please enter the code sent to Please enter the code sent to
+        +234******1234
+      </p>
       <div class="form">
         <div class="pin_ctn">
           <div class="form-group">
@@ -37,9 +40,10 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
+const toast = useToast();
 const otp = ref("");
 const loading = ref(false);
 
@@ -62,24 +66,25 @@ const save = () => {
       .post("user/pin/set", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
-        navigateTo("/dashboard");
+        toast.add({ title: "Email Verified", color: "green" });
+        navigateTo("/user/create-profile");
         // }
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
         if (errorMsg) {
-          this.$toast.error(errorMsg);
+          toast.add({ title: errorMsg, color: "red" });
         } else {
-          this.$toast.error(
-            "Oops, something went wrong, please try again later"
-          );
+          toast.add({
+            title: "Oops, something went wrong, please try again later",
+            color: "red",
+          });
         }
       })
       .finally(() => {
         loading.value = false;
       });
   } else {
-    
   }
 };
 </script>

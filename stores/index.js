@@ -11,10 +11,27 @@
 //   return { count, name, doubleCount, increment };
 // });
 
-export const useStore = defineStore("token", {
+export const useUserStore = defineStore("users", {
   state: () => ({
     token: "",
     apiToken: "",
+    userData: {},
+    userProfile: {},
   }),
+  actions: {
+    updateToken(val) {
+      this.token = val;
+      console.log("This Token -", this.token);
+    },
+    updateApiToken(val) {
+      this.apiToken = val;
+    },
+    updateUserData(val) {
+      this.userData = val;
+    },
+    updateUserProfile(val) {
+      this.userProfile = val;
+    },
+  },
   persist: true,
 });
