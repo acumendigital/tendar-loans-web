@@ -1,16 +1,15 @@
 import axios from "axios";
+import { useUserStore } from "@/stores/index";
 
 export default defineNuxtPlugin((NuxtApp) => {
   axios.defaults.baseURL = "https://low-code-api.fly.dev/api/v1/";
   // axios.defaults.withCredentials = true;
-  const tokenStore = useStore();
-  const token = tokenStore.token;
-  const apiToken = tokenStore.apiToken;
+  const dataStore = useUserStore();
   axios.interceptors.request.use((config) => {
-    // console.log("Token", token);
-    // console.log("APIToken", apiToken);
-    config.headers["Authorization"] = `Bearer ${token}`;
-    config.headers["x-api-token"] = `${apiToken}`;
+    console.log("Token", dataStore.token);
+    console.log("APIToken", dataStore.apiToken);
+    config.headers["Authorization"] = `Bearer ${dataStore.token}`;
+    config.headers["x-api-token"] = `${dataStore.apiToken}`;
     // console.log(config);
     return config;
   });
@@ -29,11 +28,12 @@ export default defineNuxtPlugin((NuxtApp) => {
         parsedError?.toLowerCase().includes("Invalid api token") ||
         status === 401
       ) {
-        if (!window.location.pathname.includes("/auth/login")) {
-          console.log(parsedError);
-          location.replace(`/auth/login?fallBackUrl=${window.location.pathname}`);
-          // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
-        }
+        // if (!window.location.pathname.includes("/auth/login")) {
+        //   console.log(parsedError);
+        //   dataStore.$reset();
+        //   location.replace(`/auth/login?fallBackUrl=${window.location.pathname}`);
+        //   // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
+        // }
       }
       // console.log(error);
       return Promise.reject(error);

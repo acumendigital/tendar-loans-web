@@ -31,7 +31,7 @@ const activeSection = ref('Request Loan')
 const loanApproved = ref(false);
 const loading = ref(false);
 
-const tokenStore = useStore();
+const tokenStore = useUserStore();
 
 const formateDate = (e) => {
   // console.log(e.target.value);

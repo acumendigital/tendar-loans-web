@@ -59,9 +59,7 @@
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text">
-          I’ll do this later
-        </p>
+        <p class="link_text">I’ll do this later</p>
       </div>
       <!-- </div> -->
     </div>
@@ -70,24 +68,24 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
+const toast = useToast();
 const bank = ref("");
 const acct_num = ref("");
 const acct_name = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
 
-
 const save = () => {
   loading.value = true;
   console.log(loading.value);
   const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
+    // first_name: firstName.value,
+    // last_name: lastName.value,
+    // date_of_birth: formattedDob.value,
+    // gender: gender.value,
   };
   console.log(data);
   axios
@@ -95,15 +93,19 @@ const save = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
+      toast.add({ title: "Bank Added", color: "green" });
       navigateTo("/user/verify-identity");
       // }
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {

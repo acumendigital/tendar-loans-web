@@ -186,11 +186,12 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
 import axios from "axios";
 
+const toast = useToast();
 const firstName = ref("");
 const lastName = ref("");
 const dob = ref("");
@@ -205,7 +206,7 @@ const country = ref("");
 const showOtpModal = ref(false);
 const loading = ref(false);
 
-const tokenStore = useStore();
+const tokenStore = useUserStore();
 
 const formateDate = (e) => {
   // console.log(e.target.value);
@@ -220,7 +221,7 @@ const formateDate = (e) => {
   if (mm < 10) mm = "0" + mm;
 
   const formattedDate = dd + "/" + mm + "/" + yyyy;
-  formattedDob.value = formattedDate
+  formattedDob.value = formattedDate;
   console.log(formattedDob.value);
 };
 
@@ -248,15 +249,19 @@ const save = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
+      toast.add({ title: "Profile Created", color: "green" });
       navigateTo("/user/verify-identity");
       // }
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {

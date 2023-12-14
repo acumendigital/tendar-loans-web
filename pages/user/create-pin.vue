@@ -41,11 +41,12 @@
 
 <script setup>
 definePageMeta({
-  layout: "authlayout",
+  layout: "auth-layout",
 });
 
 import axios from "axios";
 
+const toast = useToast();
 const newPin = ref("");
 const confirmPin = ref("");
 const loading = ref(false);
@@ -76,17 +77,19 @@ const save = () => {
       .post("user/pin/set", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
+        toast.add({ title: "Pin Created", color: "green" });
         navigateTo("/dashboard");
         // }
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
         if (errorMsg) {
-          this.$toast.error(errorMsg);
+          toast.add({ title: errorMsg, color: "red" });
         } else {
-          this.$toast.error(
-            "Oops, something went wrong, please try again later"
-          );
+          toast.add({
+            title: "Oops, something went wrong, please try again later",
+            color: "red",
+          });
         }
       })
       .finally(() => {
