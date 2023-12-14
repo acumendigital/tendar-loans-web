@@ -28,12 +28,12 @@ export default defineNuxtPlugin((NuxtApp) => {
         parsedError?.toLowerCase().includes("Invalid api token") ||
         status === 401
       ) {
-        // if (!window.location.pathname.includes("/auth/login")) {
-        //   console.log(parsedError);
-        //   dataStore.$reset();
-        //   location.replace(`/auth/login?fallBackUrl=${window.location.pathname}`);
-        //   // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
-        // }
+        if (!window.location.pathname.includes("/auth/login")) {
+          console.log(parsedError);
+          // dataStore.$reset();
+          location.replace(`/auth/login?fallBackUrl=${window.location.pathname}`);
+          // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
+        }
       }
       // console.log(error);
       return Promise.reject(error);

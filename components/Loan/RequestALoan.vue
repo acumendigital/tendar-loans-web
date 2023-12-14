@@ -140,7 +140,7 @@
         </div>
       </div>
       <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="$emit('continue')">
+        <button v-if="!loading" class="action-btn" @click="save()">
           Continue
         </button>
         <button v-else class="action-btn" disabled>
@@ -155,21 +155,22 @@
 <script setup>
 import axios from "axios";
 
-const firstName = ref("");
-const lastName = ref("");
-const dob = ref("");
+const firstName = ref(dataStore.userProfile?.first_name || '');
+const lastName = ref(dataStore.userProfile?.last_name || '');
+const dob = ref(dataStore.userProfile?.date_of_birth || '');
 const formattedDob = ref("");
-const gender = ref("");
-const employmentStatus = ref("");
-const jobTitle = ref("");
-const address = ref("");
-const city = ref("");
-const state = ref("");
-const country = ref("");
+const gender = ref(dataStore.userProfile?.gender || '');
+const employmentStatus = ref(dataStore.userProfile?.employment_status || '');
+const jobTitle = ref(dataStore.userProfile?.job_title || '');
+const address = ref(dataStore.userProfile?.address.address || '');
+const city = ref(dataStore.userProfile?.address.city || '');
+const state = ref(dataStore.userProfile?.address.state || '');
+const country = ref(dataStore.userProfile?.address.country || '');
 const showOtpModal = ref(false);
 const loading = ref(false);
 
 const tokenStore = useUserStore();
+const emit = defineEmits(['continue'])
 
 const formateDate = (e) => {
   // console.log(e.target.value);
@@ -208,19 +209,24 @@ const save = () => {
   console.log(data);
   // const path = "customer/create";
   axios
-    .post("customer/create", data)
+    .put("customer/update", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
+      toast.add({ title: "Profile Updated", color: "green" });
       console.log(onfulfilled);
-      navigateTo("/user/verify-identity");
+      // navigateTo("/user/verify-identity");
       // }
+      emit('continue');
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {

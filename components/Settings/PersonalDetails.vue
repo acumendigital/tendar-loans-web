@@ -8,32 +8,32 @@
         </div>
         <p class="edit_image">Edit profile image</p>
       </div>
-      <button class="edit_profile">Edit Profile</button>
+      <button class="edit_profile" @click="$emit('editProfile')">Edit Profile</button>
     </div>
     <div class="contents">
       <div class="content">
         <p class="content_title">Name</p>
-        <p class="content_value">Lanre Anderson</p>
+        <p class="content_value">{{ dataStore.userProfile?.first_name || '--' }} {{ dataStore.userProfile?.last_name || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">Date of Birth</p>
-        <p class="content_value">14th May, 2000</p>
+        <p class="content_value">{{ dataStore.userProfile?.date_of_birth || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">Email</p>
-        <p class="content_value">courtneyhenry@email.com</p>
+        <p class="content_value">{{ dataStore.userData?.email || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">State</p>
-        <p class="content_value">Lagos</p>
+        <p class="content_value">{{ dataStore.userProfile?.address.state || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">Phone Number</p>
-        <p class="content_value">+2348123456789</p>
+        <p class="content_value">{{ dataStore.userData?.phone || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">Employment status</p>
-        <p class="content_value">Employed</p>
+        <p class="content_value">{{ dataStore.userProfile?.employment_status || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">Employer’s name</p>
@@ -41,13 +41,17 @@
       </div>
       <div class="content">
         <p class="content_title">Home Address</p>
-        <p class="content_value">45, Charles Martins Avenue, Lagos, Nigeria</p>
+        <p class="content_value">{{ dataStore.userProfile?.address.address || '--' }}, {{ functions.capitalizeFirstLetter(dataStore.userProfile?.address.city) || '--' }} {{ functions.capitalizeFirstLetter(dataStore.userProfile?.address.state) || '--' }} {{ functions.capitalizeFirstLetter(dataStore.userProfile?.address.country) || '--' }}</p>
       </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const route = useRoute();
+const dataStore = useUserStore();
+
+</script>
 
 <style scoped>
 .section_ctn {

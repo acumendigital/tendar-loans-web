@@ -1,14 +1,14 @@
 <template>
   <div class="main_ctn">
     <div class="top_section">
-      <h1 class="title">Welcome {{ userProfile?.first_name || 'Lanre' }}</h1>
+      <h1 class="title">Welcome {{ dataStore.userProfile?.first_name}}</h1>
     </div>
     <div class="cards_section">
       <div class="card_ctn">
         <div class="card_inner">
           <div class="lhs">
             <p class="card_title">Wallet balance</p>
-            <p class="card_subtitle">{{ functions.formatMoney(walletData.available_balance, walletData.currency) }}</p>
+            <p class="card_subtitle">{{ functions.formatMoney(walletData.available_balance, walletData.currency || 'NGN') }}</p>
           </div>
         </div>
       </div>
@@ -55,9 +55,9 @@ const getUserProfile = () => {
     .get("customer/profile")
     .then((onfulfilled) => {
       console.log(onfulfilled);
-      const user_profile = onfulfilled.data.customer;
-      dataStore.userProfile = user_profile;
-      console.log(dataStore.userProfile);
+      const user_profile = onfulfilled.data.data.customer;
+      dataStore.updateUserProfile(user_profile);
+      console.log(dataStore.userProfile.first_name);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;

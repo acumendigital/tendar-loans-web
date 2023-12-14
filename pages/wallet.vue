@@ -10,7 +10,7 @@
           <div class="lhs">
             <p class="card_title">Wallet balance</p>
             <p class="card_subtitle">
-              {{ showAmount ? functions.formatMoney(walletData.available_balance, walletData.currency) : '*******' }}
+              {{ showAmount ? functions.formatMoney(walletData.available_balance, walletData.currency || 'NGN') : '*******' }}
               <span class="material-icons-outlined visibility" @click="showAmount = !showAmount">
                 {{ showAmount ? 'visibility_off' : 'visibility_on' }}
               </span>
