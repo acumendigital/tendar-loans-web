@@ -79,6 +79,10 @@
                 <p class="content_title">Transaction Type</p>
                 <p class="content_value">{{ functions.capitalizeFirstLetter(detailsData.type) }}</p>
               </div>
+              <div v-if="detailsData.beneficiary" class="content">
+                <p class="content_title">Beneficiary name</p>
+                <p class="content_value">{{ detailsData.beneficiary ? capitalizeFirstLetter(detailsData.beneficiary) : '--' }}</p>
+              </div>
               <div class="content">
                 <p class="content_title">Loan Status</p>
                 <Badge :type="detailsData.status" />
