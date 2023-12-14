@@ -33,7 +33,7 @@
           <p>Back</p>
         </div>
         <div class="main_content">
-          <div  v-if="$route.name === 'loans'">
+          <div v-if="$route.name === 'loans'">
             <div class="title">Loan Details</div>
             <div class="content">
               <p class="content_title main_title">Loan ID</p>
@@ -63,25 +63,25 @@
             <div class="title">Transaction Details</div>
             <div class="content">
               <p class="content_title main_title">Transaction ID</p>
-              <p class="content_value">BN-B1E73DA–0017</p>
+              <p class="content_value">{{ detailsData.id }}</p>
             </div>
             <p class="other_details_head">Other details</p>
             <div class="contents">
               <div class="content">
-                <p class="content_title">Amount borrowed</p>
-                <p class="content_value text-bold">₦300,000</p>
+                <p class="content_title">Amount</p>
+                <p class="content_value text-bold">{{ functions.formatMoney(detailsData.amount, detailsData.currency || 'NGN') }}</p>
               </div>
               <div class="content">
                 <p class="content_title">Date disbursed</p>
-                <p class="content_value">Dec 30, 2022</p>
+                <p class="content_value">{{ detailedDate(detailsData.created_at) }}</p>
               </div>
               <div class="content">
-                <p class="content_title">Interest rate</p>
-                <p class="content_value">5%</p>
+                <p class="content_title">Transaction Type</p>
+                <p class="content_value">{{ functions.capitalizeFirstLetter(detailsData.type) }}</p>
               </div>
               <div class="content">
                 <p class="content_title">Loan Status</p>
-                <Badge :type="'Ongoing'" />
+                <Badge :type="detailsData.status" />
               </div>
             </div>
           </div>
@@ -95,9 +95,14 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: {
     isOpenProp: Boolean, // Prop to receive the open state from the parent
+    transactionId: {
+      type: String,
+      default: () => "",
+    },
   },
   data() {
     return {
@@ -164,18 +169,41 @@ export default {
           status: "Paid",
         },
       ],
+      detailsData: {},
     };
   },
   watch: {
     isOpenProp(newVal) {
       // Update the local isOpen state when the prop changes
       this.isOpen = newVal;
+      if (this.isOpen) {
+        this.getTransactionData();
+      }
     },
   },
+  // created() {
+  // },
   methods: {
     closeSidebar() {
       this.isOpen = false;
       this.$emit("update:isOpenProp", false); // Emit an event to update the prop in the parent
+    },
+    getTransactionData() {
+      this.loading = true;
+      console.log(this.transactionId);
+      axios
+        .get(`wallet/transaction/fetch/${this.transactionId}`)
+        .then((onfulfilled) => {
+          console.log(onfulfilled);
+          this.detailsData = onfulfilled.data.data.transaction
+        })
+        .catch((err) => {
+          const errorMsg = err.response?.data?.message || err.message;
+          toast.add({ title: errorMsg, color: "red" });
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };

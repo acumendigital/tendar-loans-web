@@ -92,9 +92,10 @@
           </thead>
           <tbody>
             <tr
-              v-for="(data, index) in tableData"
+              v-for="(data, index) in dataItems"
               :key="index"
               class="table-row"
+               @click="$emit('openSidebar', data.id)"
             >
               <td class="td-4">
                 <div class="td-content">{{ data.reference }}</div>

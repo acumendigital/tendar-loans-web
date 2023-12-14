@@ -81,10 +81,11 @@
         <p>Send money</p>
       </div>
     </div>
-    <TableWallet @openSidebar="toggleSidebar" />
+    <TableWallet @openSidebar="toggleSidebar"/>
     <div class="sidebar_ctn">
       <DashboardTableDetails
         :isOpenProp="isOpen"
+        :transactionId="transactionId"
         @update:isOpenProp="updateIsOpen"
       />
     </div>
@@ -128,9 +129,11 @@ const openSuccess = ref(false);
 const isOpen = ref(false);
 const showAmount = ref(true);
 const walletData = ref({});
+const transactionId = ref('');
 
-const toggleSidebar = () => {
+const toggleSidebar = (val) => {
   isOpen.value = !isOpen.value;
+  transactionId.value = val
 };
 const updateIsOpen = (newVal) => {
   isOpen.value = newVal;
@@ -158,7 +161,7 @@ const getTransactions = () => {
   axios
     .get("wallet/balance")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
+      // console.log(onfulfilled);
       walletData.value = onfulfilled.data.data.balance;
     })
     .catch((err) => {

@@ -6,8 +6,6 @@ export default defineNuxtPlugin((NuxtApp) => {
   // axios.defaults.withCredentials = true;
   const dataStore = useUserStore();
   axios.interceptors.request.use((config) => {
-    console.log("Token", dataStore.token);
-    console.log("APIToken", dataStore.apiToken);
     config.headers["Authorization"] = `Bearer ${dataStore.token}`;
     config.headers["x-api-token"] = `${dataStore.apiToken}`;
     // console.log(config);
@@ -29,7 +27,6 @@ export default defineNuxtPlugin((NuxtApp) => {
         status === 401
       ) {
         if (!window.location.pathname.includes("/auth/login")) {
-          console.log(parsedError);
           // dataStore.$reset();
           location.replace(`/auth/login?fallBackUrl=${window.location.pathname}`);
           // redirect(`/auth/login?fallBackUrl=${window.location.pathname}`);
