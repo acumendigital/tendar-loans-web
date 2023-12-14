@@ -4,7 +4,7 @@
       <TendarLogo />
       <div>
         <div class="profile" @click="dropDownShow = !dropDownShow">
-          <p class="username">Lanre Anderson</p>
+          <p class="username">{{ dataStore.userProfile?.first_name }} {{ dataStore.userProfile?.last_name }}</p>
           <img src="~assets/images/Ellipse 45.png" alt="" />
           <!-- <MazDropdown :items="dropDownItems">
         Josh Anaba
@@ -35,6 +35,7 @@
 const emit = defineEmits(["open-modal"]);
 
 import axios from "axios";
+const dataStore = useUserStore();
 const config = useRuntimeConfig();
 const toast = useToast();
 const dropDownShow = ref(false);

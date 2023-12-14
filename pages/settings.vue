@@ -19,7 +19,7 @@
       </div>
       <div class="center_line"></div>
       <div class="rhs">
-        <SettingsPersonalDetails v-if="activeTab === 'Personal Details'" />
+        <SettingsPersonalDetails v-if="activeTab === 'Personal Details'" @editProfile="editProfile = !editProfile" />
         <SettingsCards v-if="activeTab === 'Cards'" @addCard="addCard = true" />
         <SettingsAccountManagement
           v-if="activeTab === 'Bank Account Management'" @addBank="addBank = true"
@@ -29,6 +29,7 @@
     </div>
     <ModalSettingsAddBank v-if="addBank" @close-modal="addBank = false" />
     <ModalSettingsAddCard v-if="addCard" @close-modal="addCard = false" />
+    <ModalEditProfile v-if="editProfile" @close-modal="editProfile = false" @continue="editProfile = false"  />
   </div>
 </template>
 
@@ -46,6 +47,7 @@ const updateRoute = (val) => {
 
 // updateRoute('Personal Details');
 // console.log(route.params.tab);
+const editProfile = ref(false)
 const addBank = ref(false);
 const addCard = ref(false);
 const activeTab = ref(route.query?.tab || "Personal Details");
