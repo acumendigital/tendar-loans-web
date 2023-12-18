@@ -3,18 +3,21 @@
     <p class="section_title">Bank Account Management</p>
     <p class="add_new" @click="$emit('addBank')">Add new bank account</p>
     <div class="management_content">
-      <div class="bank_ctn">
+      <div v-for="(bank, index) in bankAccounts" :key="index" class="bank_ctn">
         <div class="bank_box">
           <div class="box_lhs">
-            <div class="bank_logo">
+            <!-- <div class="bank_logo">
               <img src="~assets/images/stanbic_logo.png" alt="" />
-            </div>
+            </div> -->
             <div>
               <p class="bank_name">
-                Stanbic IBTC <span class="material-icons-outlined info"> info </span>
+                {{ bank.bank_name }}
+                <span class="material-icons-outlined info"> info </span>
               </p>
               <p class="bank_acct_num_title">Account Number</p>
-              <p class="bank_acct_num">*******67890</p>
+              <p class="bank_acct_num">
+                {{ functions.maskNumber(bank.account_number) }}
+              </p>
             </div>
           </div>
           <div class="box_rhs">
@@ -74,22 +77,20 @@
 <script setup>
 import axios from "axios";
 const activeTab = ref("Password");
-const loading = ref("false");
+const loading = ref(false);
+const bankAccounts = ref([]);
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
 };
 
-const getAnalytics = () => {
+const getBankAccounts = () => {
   loading.value = true;
   axios
     .get("bank-account/list")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
-      analytics.value = onfulfilled.data.data;
-      walletData.value = onfulfilled.data.data.wallet;
-      loanData.value = onfulfilled.data.data.loan;
-      repaymentData.value = onfulfilled.data.data.repayment;
+      console.log(onfulfilled);
+      bankAccounts.value = onfulfilled.data.data.bank_accounts;
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -100,7 +101,7 @@ const getAnalytics = () => {
     });
 };
 
-getAnalytics()
+getBankAccounts();
 </script>
 
 <style scoped>
