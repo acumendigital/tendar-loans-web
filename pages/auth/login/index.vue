@@ -92,15 +92,13 @@ const updateValue = (e) => {
 
 const signIn = () => {
   loading.value = true;
-  // console.log(encryptionKey);
-  console.log(password.value);
-  // const encrptedPassword = functions.encryptData(password.value);
-  // console.log(encrptedPassword);
-  password.value =
-    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  const encrptedPassword = functions.encryptData(password.value, encryptionKey);
+  console.log(encrptedPassword);
+  // password.value =
+  //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
     email: email.value.trim(),
-    password: password.value,
+    password: encrptedPassword,
   };
   axios
     .post("auth/login", data)
