@@ -69,7 +69,7 @@
             <div class="contents">
               <div class="content">
                 <p class="content_title">Amount</p>
-                <p class="content_value text-bold">{{ functions.formatMoney(detailsData.amount, detailsData.currency || 'NGN') }}</p>
+                <p class="content_value text-bold">{{ formatMoney(detailsData.amount, detailsData.currency || 'NGN') }}</p>
               </div>
               <div class="content">
                 <p class="content_title">Date disbursed</p>
@@ -77,7 +77,7 @@
               </div>
               <div class="content">
                 <p class="content_title">Transaction Type</p>
-                <p class="content_value">{{ functions.capitalizeFirstLetter(detailsData.type) }}</p>
+                <p class="content_value">{{ detailsData.type ? capitalizeFirstLetter(detailsData.type) : '--' }}</p>
               </div>
               <div v-if="detailsData.beneficiary" class="content">
                 <p class="content_title">Beneficiary name</p>
@@ -99,6 +99,8 @@
 </template>
 
 <script>
+import { detailedDate } from '@/utils/date-formats.js'
+import functions from '@/utils/functions'
 import axios from "axios";
 export default {
   props: {
@@ -110,6 +112,9 @@ export default {
   },
   data() {
     return {
+      detailedDate,
+      formatMoney: functions.formatMoney,
+      capitalizeFirstLetter: functions.capitalizeFirstLetter,
       isOpen: this.isOpenProp || false,
       tableData: [
         {
