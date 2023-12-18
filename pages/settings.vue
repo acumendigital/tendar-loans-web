@@ -27,13 +27,14 @@
         <SettingsSecurity v-if="activeTab === 'Security'" />
       </div>
     </div>
-    <ModalSettingsAddBank v-if="addBank" @close-modal="addBank = false" />
+    <ModalSettingsAddBank v-if="addBank" :banks="banks" @close-modal="addBank = false" />
     <ModalSettingsAddCard v-if="addCard" @close-modal="addCard = false" />
     <ModalEditProfile v-if="editProfile" @close-modal="editProfile = false" @continue="editProfile = false"  />
   </div>
 </template>
 
 <script setup>
+import axios from "axios";
 const route = useRoute();
 
 const updateRoute = (val) => {
@@ -51,11 +52,32 @@ const editProfile = ref(false)
 const addBank = ref(false);
 const addCard = ref(false);
 const activeTab = ref(route.query?.tab || "Personal Details");
+const banksLoading = ref(false);
+const banks = ref([]);
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
   updateRoute(tab);
 };
+
+const getBanks = () => {
+  banksLoading.value = true;
+  axios
+    .get("bank-account/bank/list")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      banks.value = onfulfilled.data.data.banks;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      banksLoading.value = false;
+    });
+};
+
+getBanks();
 </script>
 
 <style scoped>

@@ -198,6 +198,23 @@ function decryptData(data, key) {
   return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
 }
 
+function maskNumber(val, visibleDigits = 5) {
+  // Check if the account number is a valid string
+  const num = val.toString()
+  if (typeof num !== "string") {
+    return "Invalid number";
+  }
+
+  // Calculate the number of characters to hide
+  const hideDigits = Math.max(0, num.length - visibleDigits);
+
+  // Create a masked string with asterisks
+  const maskedString =
+    "*".repeat(hideDigits) + num.slice(-visibleDigits);
+
+  return maskedString;
+}
+
 const functions = {
   lastFourDigits,
   formatNumber: number,
@@ -219,6 +236,7 @@ const functions = {
   sortArrayOfDates,
   encryptData,
   decryptData,
+  maskNumber,
 };
 
 export default functions;

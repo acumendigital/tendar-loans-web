@@ -15,10 +15,15 @@
         <div class="form">
           <div class="modal-input-field">
             <label class="form_label" for="bank">Bank</label>
-            <select id="bank" v-model="bank" name="bank">
+            <select id="bank" v-model="bank" name="bank" @change="selectBankName(bank)">
               <option value="">Select</option>
-              <option value="">First Bank</option>
-              <option value="">Zenith Bank</option>
+              <option
+                v-for="(data, index) in banks"
+                :key="index"
+                :value="data"
+              >
+                {{ data.name }}
+              </option>
             </select>
             <!-- </div> -->
             <!-- <div
@@ -34,27 +39,24 @@
               class="amount_input"
               id="accountNumber"
               v-model="accountNumber"
-              type="number"
+              type="text"
               name="accountNumber"
               placeholder="Enter your Account Number"
+              @input="countAcctNum"
             />
           </div>
           <div class="form-group">
             <label for="">Account holder name</label>
-            <input
-              class="amount_input"
-              id="accountName"
-              v-model="accountName"
-              type="number"
-              name="accountName"
-              placeholder="Holder name"
-            />
+            <div class="holder_input">
+              <p>{{ holderName }}</p>
+              <BtnLoader v-if="accountLoading" color="#7a62eb" size="20" />
+            </div>
           </div>
           <div class="btn-div">
             <button
               v-if="!loading"
               class="action-btn"
-              @click="$emit('proceed')"
+              @click="addBankAccount()"
             >
               Continue
             </button>
@@ -73,25 +75,84 @@
 
 <script setup>
 import axios from "axios";
+const emit = defineEmits(['close-modal'])
 
+const props = defineProps({
+  banks: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const toast = useToast();
+const holderName = ref("");
 const accountNumber = ref("");
-const bank = ref("");
+const bank = ref({});
+const bankCode = ref("");
+const bankName = ref("");
 const accountName = ref("");
+const accountLoading = ref(false);
 const loading = ref(false);
 
-const sendOtp = () => {
-  loading.value = true;
+const countAcctNum = (val) => {
+  if (val.target.value.length === 10) {
+    getAccount();
+  }
+};
+
+const selectBankName = (val) => {
+  console.log(val);
+  bankCode.value = val.code
+  bankName.value = val.name
+};
+
+const getAccount = () => {
+  accountLoading.value = true;
   const data = {
-    email: email.value,
-    token: otp.value,
+    account_number: accountNumber.value,
+    bank_code: bankCode.value,
   };
-  const path = "user/email/verify";
   axios
-    .post("user/email/verify", data)
+    .post("bank-account/account-number/resolve", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo("/user/create-profile");
+      holderName.value = onfulfilled.data.data.account.account_name;
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        toast.add({ title: errorMsg, color: "red" });
+      } else {
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
+      }
+    })
+    .finally(() => {
+      accountLoading.value = false;
+    });
+};
+
+const addBankAccount = () => {
+  loading.value = true;
+  const data = {
+    account_name: holderName.value,
+    bank_name: bankName.value,
+    account_number: accountNumber.value,
+    bank_code: bankCode.value,
+    currency: 'NGN',
+  };
+  axios
+    .post("bank-account/create", data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+      toast.add({ title: "Bank Account Added", color: "green" });
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000);
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -216,6 +277,23 @@ const sendOtp = () => {
   cursor: pointer;
   text-align: center;
   margin-top: 20px;
+}
+
+.holder_input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-radius: var(--input-border-radius);
+  background: var(--input-bg);
+  width: 100%;
+  height: 45px;
+  border: var(--input-border-width) solid var(--border-two);
+}
+
+.holder_input p {
+  font-size: 14px;
+    line-height: 17px;
 }
 
 @media only screen and (max-width: 1400px) {
