@@ -98,7 +98,6 @@ const phone = ref("");
 const password = ref("");
 const showOtpModal = ref(false);
 const loading = ref(false);
-// const encryptData = functions.encryptData;
 
 const tokenStore = useUserStore();
 
@@ -114,14 +113,16 @@ const updateValue = (e) => {
 
 const signUp = () => {
   loading.value = true;
-  password.value =
-    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  const encrptedPassword = functions.encryptData(password.value, encryptionKey);
+  console.log(encrptedPassword);
+  // password.value =
+  //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const phoneNum = `+234${phone.value}`
   console.log(phoneNum);
   const data = {
     email: email.value.trim(),
     phone: phoneNum,
-    password: password.value,
+    password: encrptedPassword,
   };
   // const path = "user/register";
   axios
