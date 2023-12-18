@@ -47,6 +47,8 @@ definePageMeta({
 import axios from "axios";
 
 const toast = useToast();
+const config = useRuntimeConfig();
+const encryptionKey = config.public.ENCRYPTION_KEY;
 const newPin = ref("");
 const confirmPin = ref("");
 const loading = ref(false);
@@ -65,12 +67,12 @@ const handleConfirmPinChange = (value) => {
 const save = () => {
   if (newPin.value === confirmPin.value) {
     loading.value = true;
-    console.log(loading.value);
-    newPin.value =
-      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
-    console.log(newPin.value);
+  const encrptedPin = functions.encryptData(newPin.value, encryptionKey);
+  console.log(encrptedPin);
+    // newPin.value =
+    //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     const data = {
-      pin: newPin.value,
+      pin: encrptedPin,
     };
     console.log(data);
     axios

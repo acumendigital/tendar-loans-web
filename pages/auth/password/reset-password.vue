@@ -67,7 +67,10 @@ definePageMeta({
 });
 
 import axios from "axios";
+const toast = useToast();
 const route = useRoute();
+const config = useRuntimeConfig();
+const encryptionKey = config.public.ENCRYPTION_KEY;
 const email = ref("");
 const otp = ref("");
 const password = ref("");
@@ -89,12 +92,14 @@ const resetPassword = () => {
     email.value = route.query.email;
   console.log(email.value);
   loading.value = true;
-  password.value =
-    "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  const encrptedPassword = functions.encryptData(password.value, encryptionKey);
+  console.log(encrptedPassword);
+  // password.value =
+  //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
     email: email.value,
     token: otp.value.toString(),
-    password: password.value,
+    password: encrptedPassword,
   };
   console.log(data);
   axios
@@ -102,14 +107,18 @@ const resetPassword = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
+      toast.add({ title: "Reset password successful", color: "green" });
       navigateTo("/auth/login");
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {
