@@ -120,6 +120,20 @@ body {
   font-family: var(--HS-Medium), sans-serif;
 }
 
+.error-text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: red;
+  /* position: absolute;
+  bottom: -22px; */
+}
+
+.error-text.not-vis {
+  /* visibility: hidden; */
+  display: none;
+}
+
 *::before,
 *::after {
   -webkit-box-sizing: border-box;
