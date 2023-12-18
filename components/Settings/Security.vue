@@ -18,7 +18,7 @@
               :copy-needed="false"
               :current-key="currentPassword"
               @keyup.enter="signIn()"
-              @update-value="updateValue($event)"
+              @update-value="updateCurrentValue($event)"
             />
           </div>
           <div class="form-group">
@@ -29,19 +29,27 @@
               :copy-needed="false"
               :current-key="newPassword"
               @keyup.enter="signIn()"
-              @update-value="updateValue($event)"
+              @update-value="updateNewValue($event)"
             />
           </div>
           <div class="form-group">
-            <label for="password">Current Password</label>
+            <label for="password">Confirm Password</label>
             <SecretKeyInput
               id="password"
               placeholder=""
               :copy-needed="false"
-              :current-key="password"
+              :current-key="confirmPassword"
               @keyup.enter="signIn()"
-              @update-value="updateValue($event)"
+              @update-value="updateConfirmValue($event)"
             />
+          </div>
+          <div class="btn-div">
+            <button v-if="!loading" class="action-btn" @click="savePassword()">
+              Update
+            </button>
+            <button v-else class="action-btn" disabled>
+              <BtnLoader color="#fff" />
+            </button>
           </div>
         </div>
       </div>
@@ -62,7 +70,7 @@
             </div>
           </div>
           <div class="btn-div">
-            <button v-if="!loading" class="action-btn" @click="save()">
+            <button v-if="!loading" class="action-btn" @click="savePin()">
               Update
             </button>
             <button v-else class="action-btn" disabled>
@@ -76,6 +84,7 @@
 </template>
 
 <script setup>
+import axios from "axios";
 const route = useRoute();
 const activeTab = ref(route.query?.type || "Password");
 
@@ -83,18 +92,34 @@ const setActiveTab = (tab) => {
   activeTab.value = tab;
   const query = {
     ...route.query,
-    type: tab
-  }
+    type: tab,
+  };
   navigateTo({
-    path: '/settings',
-    query: query
+    path: "/settings",
+    query: query,
   });
 };
 
+const newPassword = ref("");
+const confirmPassword = ref("");
+const currentPassword = ref("");
 const newPin = ref("");
 const confirmPin = ref("");
 const currentPin = ref("");
 const loading = ref(false);
+
+
+const updateCurrentValue = (e) => {
+  currentPassword.value = e;
+};
+
+const updateNewValue = (e) => {
+  newPassword.value = e;
+};
+
+const updateConfirmValue = (e) => {
+  confirmPassword.value = e;
+};
 
 const handleCurrentPinChange = (value) => {
   currentPin.value = value;
@@ -108,7 +133,43 @@ const handleConfirmPinChange = (value) => {
   confirmPin.value = value;
 };
 
-const save = () => {
+const savePassword = () => {
+  if (newPassword.value === confirmPassword.value) {
+    loading.value = true;
+    console.log(loading.value);
+    newPassword.value =
+      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+    console.log(newPassword.value);
+    const data = {
+      old_password: currentPassword.value,
+      new_password: newPassword.value,
+    };
+    console.log(data);
+    axios
+      .post("user/password/change", data)
+      .then((onfulfilled) => {
+        console.log(onfulfilled);
+        // navigateTo("/dashboard");
+        // }
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          this.$toast.error(errorMsg);
+        } else {
+          this.$toast.error(
+            "Oops, something went wrong, please try again later"
+          );
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  } else {
+  }
+};
+
+const savePin = () => {
   if (newPin.value === confirmPin.value) {
     loading.value = true;
     console.log(loading.value);
@@ -116,14 +177,15 @@ const save = () => {
       "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     console.log(newPin.value);
     const data = {
-      pin: newPin.value,
+      old_pin: currentPin.value,
+      new_pin: newPin.value,
     };
     console.log(data);
     axios
-      .post("user/pin/set", data)
+      .post("user/pin/change", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
-        navigateTo("/dashboard");
+        // navigateTo("/dashboard");
         // }
       })
       .catch((_err) => {
