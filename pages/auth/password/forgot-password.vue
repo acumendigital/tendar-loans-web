@@ -39,11 +39,10 @@ definePageMeta({
 });
 
 import axios from "axios";
+const toast = useToast();
 const email = ref("");
 const loading = ref(false);
 const sendClicked = ref(false);
-
-
 
 const sendEmail = () => {
   console.log(email.value);
@@ -54,18 +53,22 @@ const sendEmail = () => {
   console.log(data);
   // const path = "user/send-verification-email";
   axios
-    .post('auth/password/reset/send-email', data)
+    .post("auth/password/reset/send-email", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo(`/auth/password/reset-password?email=${email.value}`)
+      toast.add({ title: "Reset password email sent", color: "green" });
+      navigateTo(`/auth/password/reset-password?email=${email.value}`);
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {
