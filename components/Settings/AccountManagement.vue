@@ -72,11 +72,35 @@
 </template>
 
 <script setup>
+import axios from "axios";
 const activeTab = ref("Password");
+const loading = ref("false");
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
 };
+
+const getAnalytics = () => {
+  loading.value = true;
+  axios
+    .get("bank-account/list")
+    .then((onfulfilled) => {
+      // console.log(onfulfilled);
+      analytics.value = onfulfilled.data.data;
+      walletData.value = onfulfilled.data.data.wallet;
+      loanData.value = onfulfilled.data.data.loan;
+      repaymentData.value = onfulfilled.data.data.repayment;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+getAnalytics()
 </script>
 
 <style scoped>
