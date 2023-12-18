@@ -35,6 +35,12 @@
               name="firstName"
               placeholder="Enter your First Name"
             />
+            <div
+              :class="submitClicked && !firstName ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
           <div class="form-group">
             <label class="form_label" for="lastName">Last Name</label>
@@ -45,6 +51,12 @@
               name="lastName"
               placeholder="Enter your Last Name"
             />
+            <div
+              :class="submitClicked && !lastName ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
         </div>
         <div class="form_group_flex">
@@ -58,17 +70,13 @@
               placeholder="Enter your First Name"
               @change="formateDate"
             />
+            <div
+              :class="submitClicked && !dob ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
-          <!-- <div class="form-group">
-            <label class="form_label" for="gender">Gender</label>
-            <input
-              id="gender"
-              v-model="gender"
-              type="text"
-              name="gender"
-              placeholder="Enter your Gender"
-            />
-          </div> -->
           <div class="modal-input-field">
             <label class="form_label" for="gender">Gender</label>
             <select id="gender" v-model="gender" name="gender">
@@ -76,13 +84,12 @@
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
-            <!-- </div> -->
-            <!-- <div
+            <div
               :class="submitClicked && !gender ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
-            </div> -->
+            </div>
           </div>
         </div>
         <div class="form_group_flex">
@@ -103,13 +110,12 @@
               <option value="student">Student</option>
               <option value="unemployed">Unemployed</option>
             </select>
-            <!-- </div> -->
-            <!-- <div
+            <div
               :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
-            </div> -->
+            </div>
           </div>
           <div class="form-group">
             <label class="form_label" for="jobTitle"
@@ -122,6 +128,12 @@
               name="jobTitle"
               placeholder="Enter your Job Title"
             />
+            <div
+              :class="submitClicked && !jobTitle ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
         </div>
         <div class="form_group_flex">
@@ -134,6 +146,12 @@
               name="address"
               placeholder="Enter your Address"
             />
+            <div
+              :class="submitClicked && !address ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
           <div class="form-group">
             <label class="form_label" for="country">Country</label>
@@ -144,6 +162,12 @@
               name="country"
               placeholder="Enter your Country"
             />
+            <div
+              :class="submitClicked && !country ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
         </div>
         <div class="form_group_flex">
@@ -156,6 +180,12 @@
               name="state"
               placeholder="Enter your State"
             />
+            <div
+              :class="submitClicked && !state ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
           <div class="form-group">
             <label class="form_label" for="city">City</label>
@@ -166,6 +196,12 @@
               name="city"
               placeholder="Enter your City"
             />
+            <div
+              :class="submitClicked && !city ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
         </div>
         <div class="btn-div">
@@ -203,6 +239,7 @@ const address = ref("");
 const city = ref("");
 const state = ref("");
 const country = ref("");
+const submitClicked = ref(false);
 const showOtpModal = ref(false);
 const loading = ref(false);
 
@@ -226,6 +263,24 @@ const formateDate = (e) => {
 };
 
 const save = () => {
+  submitClicked.value = true;
+  if (
+    firstName.value &&
+    lastName.value &&
+    dob.value &&
+    gender.value &&
+    employmentStatus.value &&
+    jobTitle.value &&
+    address.value &&
+    city.value &&
+    state.value &&
+    country.value
+  ) {
+    saveProfile();
+  }
+};
+
+const saveProfile = () => {
   loading.value = true;
   console.log(loading.value);
   const data = {
