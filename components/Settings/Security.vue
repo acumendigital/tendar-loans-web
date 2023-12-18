@@ -58,15 +58,15 @@
           <div class="pin_ctn">
             <div class="form-group">
               <label for="email">Current PIN</label>
-              <OTPInput inputs="4" @inputs="handleCurrentPinChange($event)" />
+              <OTPInput inputs="6" @inputs="handleCurrentPinChange($event)" />
             </div>
             <div class="form-group">
               <label for="email">New PIN</label>
-              <OTPInput inputs="4" @inputs="handleNewPinChange($event)" />
+              <OTPInput inputs="6" @inputs="handleNewPinChange($event)" />
             </div>
             <div class="form-group">
               <label for="email">Confirm PIN</label>
-              <OTPInput inputs="4" @inputs="handleConfirmPinChange($event)" />
+              <OTPInput inputs="6" @inputs="handleConfirmPinChange($event)" />
             </div>
           </div>
           <div class="btn-div">
@@ -196,24 +196,78 @@ const savePassword = () => {
   }
 };
 
+// const savePin = () => {
+//   if (newPin.value === confirmPin.value) {
+//     loading.value = true;
+//     console.log(loading.value);
+//     newPin.value =
+//       "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+//     console.log(newPin.value);
+//     const data = {
+//       old_pin: currentPin.value,
+//       new_pin: newPin.value,
+//     };
+//     console.log(data);
+//     axios
+//       .post("user/pin/change", data)
+//       .then((onfulfilled) => {
+//         console.log(onfulfilled);
+//         // navigateTo("/dashboard");
+//         // }
+//       })
+//       .catch((_err) => {
+//         const errorMsg = _err?.response?.data?.message || _err?.message;
+//         if (errorMsg) {
+//           toast.add({ title: errorMsg, color: "red" });
+//         } else {
+//           toast.add({
+//             title: "Oops, something went wrong, please try again later",
+//             color: "red",
+//           });
+//         }
+//       })
+//       .finally(() => {
+//         loading.value = false;
+//       });
+//   }
+// };
+
 const savePin = () => {
-  if (newPin.value === confirmPin.value) {
+  if (
+    currentPin.value === "" ||
+    newPin.value === "" ||
+    confirmPin.value === ""
+  ) {
+    toast.add({
+      title: "Incomplete feilds",
+      color: "red",
+    });
+  } else if (newPin.value !== confirmPin.value) {
+    toast.add({
+      title: "Incorrect confirm pin",
+      color: "red",
+    });
+  } else if (newPin.value === confirmPin.value) {
     loading.value = true;
-    console.log(loading.value);
-    newPin.value =
-      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
-    console.log(newPin.value);
+    const encrptedOldPin = functions.encryptData(
+      currentPin.value,
+      encryptionKey
+    );
+    const encrptedNewPin = functions.encryptData(newPin.value, encryptionKey);
+    console.log(encrptedOldPin);
+    console.log(encrptedNewPin);
+    // newPin.value =
+    //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     const data = {
-      old_pin: currentPin.value,
-      new_pin: newPin.value,
+      old_pin: encrptedOldPin,
+      new_pin: encrptedNewPin,
     };
     console.log(data);
     axios
       .post("user/pin/change", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
-        // navigateTo("/dashboard");
-        // }
+        toast.add({ title: "Pin Changed", color: "green" });
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -229,7 +283,6 @@ const savePin = () => {
       .finally(() => {
         loading.value = false;
       });
-  } else {
   }
 };
 </script>
