@@ -1,24 +1,38 @@
 <template>
-  <div class="modal-backdrop" @click="$emit('close-modal')">
+  <div class="modal-backdrop">
     <div class="modal reveals" @click.stop>
       <div class="top_section">
         <h1 class="modal_title">Enter OTP</h1>
-        <span
+        <!-- <span
           class="material-icons-outlined close"
-           @click="$emit('close-modal')"
+          
         >
           close
-        </span>
+        </span> -->
       </div>
       <p class="modal_subtitle">
         Please enter the verification code we sent to
-        {{ props.email }}
+        {{ props.email || route.query?.emailToVerify }}
       </p>
       <div class="modal_content">
         <OTPInput inputs="6" @inputs="handleOTPChange($event)" />
+        <div class="btn-div">
+          <button v-if="!loading" class="action-btn" @click="sendOtp()">
+            Submit
+          </button>
+          <button v-else class="action-btn" disabled>
+            <BtnLoader color="#fff" />
+          </button>
+        </div>
         <div class="bottom_link">
           <p class="bottom_text">
-            Didn’t get a code? <span class="resend_btn" @click="resendOtp()">Resend code</span>
+            Didn’t get a code?
+            <span v-if="!resendLoading" class="resend_btn" @click="resendOtp()"
+              >Resend code</span
+            >
+            <span v-else class="resend_btn_loader"
+              ><BtnLoader color="#7a62eb" size="20"
+            /></span>
           </p>
         </div>
       </div>
@@ -27,6 +41,7 @@
 </template>
 
 <script setup>
+const route = useRoute();
 import axios from "axios";
 const props = defineProps({
   email: {
@@ -35,7 +50,8 @@ const props = defineProps({
   },
 });
 
-const otp = ref('');
+const toast = useToast();
+const otp = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
 
@@ -43,31 +59,34 @@ const handleOTPChange = (value) => {
   otp.value = value;
   if (otp.value.length === 6) {
     console.log(otp.value);
-    sendOtp()
+    sendOtp();
   }
 };
-
 
 const resendOtp = () => {
   console.log(email.value);
   resendLoading.value = true;
   const data = {
-    email: email.value,
+    email: email.value || route.query?.emailToVerify,
   };
   console.log(data);
   // const path = "user/send-verification-email";
   axios
-    .post('user/send-verification-email', data)
+    .post("user/send-verification-email", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
+      toast.add({ title: "Code resent", color: "green" });
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {
@@ -78,23 +97,27 @@ const resendOtp = () => {
 const sendOtp = () => {
   loading.value = true;
   const data = {
-    email: email.value,
+    email: email.value || route.query?.emailToVerify,
     token: otp.value,
   };
   const path = "user/email/verify";
   axios
-    .post('user/email/verify', data)
+    .post("user/email/verify", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      navigateTo('/user/create-profile')
+      toast.add({ title: "Email Verified", color: "green" });
+      navigateTo("/user/create-profile");
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {
@@ -144,7 +167,7 @@ const sendOtp = () => {
   text-align: center;
   font-size: 24px;
   font-weight: 700;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .modal_subtitle {
@@ -180,16 +203,25 @@ const sendOtp = () => {
   margin-top: 2rem;
 }
 
+.btn-div {
+  width: 80%;
+  margin: auto;
+  margin-top: 40px;
+}
+
 .bottom_link {
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
 .bottom_text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #00000086;
   font-size: 16px;
   font-weight: 300;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .resend_btn {
@@ -197,6 +229,10 @@ const sendOtp = () => {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  margin-left: 5px;
+}
+.resend_btn_loader {
+  margin-left: 15px;
 }
 
 @media only screen and (max-width: 1400px) {

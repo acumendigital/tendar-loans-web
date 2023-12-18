@@ -40,12 +40,12 @@
               <p>+234</p>
             </div>
             <input
-            id="phone"
-            v-model="phone"
-            type="number"
-            name="phone"
-            placeholder="Enter your phone number"
-          />
+              id="phone"
+              v-model="phone"
+              type="number"
+              name="phone"
+              placeholder="Enter your phone number"
+            />
           </div>
         </div>
         <div class="form-group">
@@ -65,11 +65,7 @@
           <span class="link_text">Privacy Policy</span>.
         </p>
         <div class="btn-div">
-          <button
-            v-if="!loading"
-            class="action-btn"
-            @click="signUp()"
-          >
+          <button v-if="!loading" class="action-btn" @click="signUp()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
@@ -79,7 +75,11 @@
       </div>
       <!-- </div> -->
     </div>
-    <ModalEnterOtp v-if="showOtpModal" @close-modal="showOtpModal = false" :email="email" />
+    <ModalEnterOTP
+      v-if="showOtpModal"
+      @close-modal="showOtpModal = false"
+      :email="email"
+    />
   </div>
 </template>
 
@@ -89,6 +89,7 @@ definePageMeta({
 });
 
 import axios from "axios";
+const route = useRoute();
 const config = useRuntimeConfig();
 const toast = useToast();
 const encryptionKey = config.public.ENCRYPTION_KEY;
@@ -96,20 +97,24 @@ const encryptionKey = config.public.ENCRYPTION_KEY;
 const email = ref("");
 const phone = ref("");
 const password = ref("");
-const showOtpModal = ref(false);
+const showOtpModal = ref(route.query?.emailToVerify || false);
 const loading = ref(false);
 
 const tokenStore = useUserStore();
-
 
 const updateValue = (e) => {
   password.value = e;
 };
 
-
 // const signUp = () => {
-//   showOtpModal.value = true
-// }
+//   showOtpModal.value = true;
+//   navigateTo({
+//     path: "/auth/signup",
+//     query: {
+//       emailToVerify: email.value.trim(),
+//     },
+//   });
+// };
 
 const signUp = () => {
   loading.value = true;
@@ -117,7 +122,7 @@ const signUp = () => {
   console.log(encrptedPassword);
   // password.value =
   //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
-  const phoneNum = `+234${phone.value}`
+  const phoneNum = `+234${phone.value}`;
   console.log(phoneNum);
   const data = {
     email: email.value.trim(),
@@ -126,23 +131,32 @@ const signUp = () => {
   };
   // const path = "user/register";
   axios
-    .post('user/register', data)
+    .post("user/register", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      const token = onfulfilled.data.data.token
-      const api_token = onfulfilled.data.data.api_token
-      tokenStore.token = token
-      tokenStore.apiToken = api_token
+      const token = onfulfilled.data.data.token;
+      const api_token = onfulfilled.data.data.api_token;
+      tokenStore.token = token;
+      tokenStore.apiToken = api_token;
       toast.add({ title: "Registration Successfull!", color: "green" });
-      showOtpModal.value = true
+      showOtpModal.value = true;
+      navigateTo({
+        path: "/auth/signup",
+        query: {
+          emailToVerify: email.value.trim(),
+        },
+      });
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {
