@@ -16,11 +16,11 @@
         <div class="pin_ctn">
           <div class="form-group">
             <label for="email">New PIN</label>
-            <OTPInput inputs="4" @inputs="handleNewPinChange($event)" />
+            <OTPInput inputs="6" @inputs="handleNewPinChange($event)" />
           </div>
           <div class="form-group">
             <label for="email">Confirm PIN</label>
-            <OTPInput inputs="4" @inputs="handleConfirmPinChange($event)" />
+            <OTPInput inputs="6" @inputs="handleConfirmPinChange($event)" />
           </div>
         </div>
         <div class="btn-div">
@@ -65,10 +65,20 @@ const handleConfirmPinChange = (value) => {
 };
 
 const save = () => {
-  if (newPin.value === confirmPin.value) {
+  if (newPin.value === "" || confirmPin.value === "") {
+    toast.add({
+      title: "Incomplete feilds",
+      color: "red",
+    });
+  } else if (newPin.value !== confirmPin.value) {
+    toast.add({
+      title: "Incorrect confirm pin",
+      color: "red",
+    });
+  } else if (newPin.value === confirmPin.value) {
     loading.value = true;
-  const encrptedPin = functions.encryptData(newPin.value, encryptionKey);
-  console.log(encrptedPin);
+    const encrptedPin = functions.encryptData(newPin.value, encryptionKey);
+    console.log(encrptedPin);
     // newPin.value =
     //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     const data = {
@@ -97,7 +107,6 @@ const save = () => {
       .finally(() => {
         loading.value = false;
       });
-  } else {
   }
 };
 </script>
