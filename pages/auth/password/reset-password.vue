@@ -49,8 +49,12 @@
         </p>
         <p class="bottom_text">
           Didn’t get a code or expired code?
-          <span v-if="!resendLoading" class="resend_btn" @click="resendOtp()">Resend code</span>
-          <span v-else class="resend_btn_loader"><BtnLoader color="#7a62eb" size="20" /></span>
+          <span v-if="!resendLoading" class="resend_btn" @click="resendOtp()"
+            >Resend code</span
+          >
+          <span v-else class="resend_btn_loader"
+            ><BtnLoader color="#7a62eb" size="20"
+          /></span>
         </p>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="resetPassword()">
@@ -93,7 +97,6 @@ const updateConfirmPasswordValue = (e) => {
   confirm_password.value = e;
 };
 
-
 const resendOtp = () => {
   email.value = route.query.email;
   console.log(email.value);
@@ -127,7 +130,21 @@ const resendOtp = () => {
 };
 
 const resetPassword = () => {
-  if (password.value === confirm_password.value) {
+  if (
+    otp.value === "" ||
+    password.value === "" ||
+    confirm_password.value === ""
+  ) {
+    toast.add({
+      title: "Incomplete feilds",
+      color: "red",
+    });
+  } else if (password.value !== confirm_password.value) {
+    toast.add({
+      title: "Incorrect confirm password",
+      color: "red",
+    });
+  } else if (password.value === confirm_password.value) {
     email.value = route.query.email;
     console.log(email.value);
     loading.value = true;
@@ -166,7 +183,6 @@ const resetPassword = () => {
       .finally(() => {
         loading.value = false;
       });
-  } else {
   }
 };
 </script>

@@ -86,6 +86,9 @@
 <script setup>
 import axios from "axios";
 const route = useRoute();
+const config = useRuntimeConfig();
+const toast = useToast();
+const encryptionKey = config.public.ENCRYPTION_KEY;
 const activeTab = ref(route.query?.type || "Password");
 
 const setActiveTab = (tab) => {
@@ -107,7 +110,6 @@ const newPin = ref("");
 const confirmPin = ref("");
 const currentPin = ref("");
 const loading = ref(false);
-
 
 const updateCurrentValue = (e) => {
   currentPassword.value = e;
@@ -134,32 +136,57 @@ const handleConfirmPinChange = (value) => {
 };
 
 const savePassword = () => {
-  if (newPassword.value === confirmPassword.value) {
+  if (
+    currentPassword.value === "" ||
+    newPassword.value === "" ||
+    confirmPassword.value === ""
+  ) {
+    toast.add({
+      title: "Incomplete feilds",
+      color: "red",
+    });
+  } else if (newPassword.value !== confirmPassword.value) {
+    toast.add({
+      title: "Incorrect confirm password",
+      color: "red",
+    });
+  } else if (newPassword.value === confirmPassword.value) {
     loading.value = true;
-    console.log(loading.value);
-    newPassword.value =
-      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
-    console.log(newPassword.value);
+    const encrptedOldPassword = functions.encryptData(
+      currentPassword.value,
+      encryptionKey
+    );
+    const encrptedNewPassword = functions.encryptData(
+      newPassword.value,
+      encryptionKey
+    );
+    console.log(encrptedOldPassword);
+    console.log(encrptedNewPassword);
+    // newPassword.value =
+    //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
+    // console.log(newPassword.value);
     const data = {
-      old_password: currentPassword.value,
-      new_password: newPassword.value,
+      old_password: encrptedOldPassword,
+      new_password: encrptedNewPassword,
     };
     console.log(data);
     axios
       .post("user/password/change", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
+        toast.add({ title: "Password changed!", color: "green" });
         // navigateTo("/dashboard");
         // }
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
         if (errorMsg) {
-          this.$toast.error(errorMsg);
+          toast.add({ title: errorMsg, color: "red" });
         } else {
-          this.$toast.error(
-            "Oops, something went wrong, please try again later"
-          );
+          toast.add({
+            title: "Oops, something went wrong, please try again later",
+            color: "red",
+          });
         }
       })
       .finally(() => {
@@ -191,11 +218,12 @@ const savePin = () => {
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
         if (errorMsg) {
-          this.$toast.error(errorMsg);
+          toast.add({ title: errorMsg, color: "red" });
         } else {
-          this.$toast.error(
-            "Oops, something went wrong, please try again later"
-          );
+          toast.add({
+            title: "Oops, something went wrong, please try again later",
+            color: "red",
+          });
         }
       })
       .finally(() => {

@@ -114,7 +114,7 @@ const signIn = () => {
       dataStore.updateApiToken(api_token);
       dataStore.updateUserData(user_data);
       // console.log(dataStore.token);
-      toast.add({ title: "Login Successfull", color: "green" });
+      toast.add({ title: "Login Successful", color: "green" });
       const url = route.query.fallBackUrl || "/dashboard";
       navigateTo(`${url}`);
       // navigateTo("/dashboard");
