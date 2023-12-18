@@ -17,7 +17,7 @@
           <div class="lhs">
             <p class="card_title">Next instalment due</p>
             <p class="card_subtitle">{{ functions.formatMoney(repaymentData.next_due_amount, 'NGN') }}</p>
-            <p v-if="repaymentData.next_due_date" class="card_text">{{ repaymentData.next_due_date }}</p>
+            <p v-if="repaymentData.next_due_date" class="card_text">{{ detailedDate(repaymentData.next_due_date) }}</p>
           </div>
         </div>
       </div>
