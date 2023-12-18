@@ -47,6 +47,11 @@
         <p v-if="sendClicked && !confirm_password" class="error-text">
           This field is reqired
         </p>
+        <p class="bottom_text">
+          Didn’t get a code or expired code?
+          <span v-if="!resendLoading" class="resend_btn" @click="resendOtp()">Resend code</span>
+          <span v-else class="resend_btn_loader"><BtnLoader color="#7a62eb" size="20" /></span>
+        </p>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="resetPassword()">
             Create Password
@@ -77,6 +82,7 @@ const password = ref("");
 const confirm_password = ref("");
 const emailError = ref(false);
 const loading = ref(false);
+const resendLoading = ref(false);
 const sendClicked = ref(false);
 
 const updatePasswordValue = (e) => {
@@ -87,28 +93,22 @@ const updateConfirmPasswordValue = (e) => {
   confirm_password.value = e;
 };
 
-const resetPassword = () => {
-  if (password.value === confirm_password.value) {
-    email.value = route.query.email;
+
+const resendOtp = () => {
+  email.value = route.query.email;
   console.log(email.value);
-  loading.value = true;
-  const encrptedPassword = functions.encryptData(password.value, encryptionKey);
-  console.log(encrptedPassword);
-  // password.value =
-  //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+  resendLoading.value = true;
   const data = {
     email: email.value,
-    token: otp.value.toString(),
-    password: encrptedPassword,
   };
   console.log(data);
+  // const path = "user/send-verification-email";
   axios
-    .post("auth/password/reset", data)
+    .post("auth/password/reset/send-email", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      toast.add({ title: "Reset password successful", color: "green" });
-      navigateTo("/auth/login");
+      toast.add({ title: "Code resent", color: "green" });
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -122,10 +122,51 @@ const resetPassword = () => {
       }
     })
     .finally(() => {
-      loading.value = false;
+      resendLoading.value = false;
     });
-  } else {
+};
 
+const resetPassword = () => {
+  if (password.value === confirm_password.value) {
+    email.value = route.query.email;
+    console.log(email.value);
+    loading.value = true;
+    const encrptedPassword = functions.encryptData(
+      password.value,
+      encryptionKey
+    );
+    console.log(encrptedPassword);
+    // password.value =
+    //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
+    const data = {
+      email: email.value,
+      token: otp.value.toString(),
+      password: encrptedPassword,
+    };
+    console.log(data);
+    axios
+      .post("auth/password/reset", data)
+      .then((onfulfilled) => {
+        // const data = onfulfilled?.data?.data
+        console.log(onfulfilled);
+        toast.add({ title: "Reset password successful", color: "green" });
+        navigateTo("/auth/login");
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          toast.add({ title: errorMsg, color: "red" });
+        } else {
+          toast.add({
+            title: "Oops, something went wrong, please try again later",
+            color: "red",
+          });
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  } else {
   }
 };
 </script>
@@ -183,5 +224,26 @@ const resetPassword = () => {
   cursor: pointer;
   text-align: center;
   margin-top: 20px;
+}
+
+.bottom_text {
+  display: flex;
+  align-items: center;
+  color: #00000086;
+  font-size: 16px;
+  font-weight: 300;
+  margin-top: 20px;
+}
+
+.resend_btn {
+  color: #7a62eb;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.resend_btn_loader {
+  margin-left: 15px;
 }
 </style>

@@ -136,9 +136,12 @@ const save = () => {
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
-        this.$toast.error(errorMsg);
+        toast.add({ title: errorMsg, color: "red" });
       } else {
-        this.$toast.error("Oops, something went wrong, please try again later");
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
       }
     })
     .finally(() => {
