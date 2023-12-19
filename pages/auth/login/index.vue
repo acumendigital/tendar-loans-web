@@ -114,8 +114,16 @@ const signIn = () => {
       dataStore.updateApiToken(api_token);
       dataStore.updateUserData(user_data);
       // console.log(dataStore.token);
-      toast.add({ title: "Login Successful", color: "green" });
-      const url = route.query.fallBackUrl || "/dashboard";
+      let url = ''
+      let successMsg = ''
+      if (user_data.email_verified) {
+        successMsg = "Login Successful"
+        url = route.query.fallBackUrl || "/dashboard";
+      } else {
+        successMsg = "Login Successful. Please verify your email"
+        url = `/auth/signup?emailToVerify=${email.value.trim()}&from=login`
+      }
+      toast.add({ title: successMsg, color: "green" });
       navigateTo(`${url}`);
       // navigateTo("/dashboard");
       // this.$store.commit('setLoggedInState', true)

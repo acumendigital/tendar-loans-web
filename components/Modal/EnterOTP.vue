@@ -42,6 +42,7 @@
 
 <script setup>
 const route = useRoute();
+console.log(route);
 import axios from "axios";
 const props = defineProps({
   email: {
@@ -93,6 +94,10 @@ const resendOtp = () => {
       resendLoading.value = false;
     });
 };
+
+if (route.query.from === 'login') {
+  resendOtp()
+}
 
 const sendOtp = () => {
   loading.value = true;
