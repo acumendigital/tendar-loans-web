@@ -49,6 +49,7 @@
             name="dob"
             placeholder="Enter your First Name"
             @change="formateDate"
+            disabled
             
           />
         </div>
@@ -177,13 +178,34 @@ const props = defineProps({
   },
 });
 
+
+const formattedDob = ref("");
+
+const reFormatDate = (e) => {
+  console.log(e);
+  const date = e;
+  console.log(date);
+  const newDate = new Date(date);
+  const yyyy = newDate.getFullYear();
+  let mm = newDate.getMonth() + 1; // Months start at 0!
+  let dd = newDate.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const formattedDate = yyyy + "-" + mm + "-" + dd;
+  formattedDob.value = formattedDate;
+  console.log(formattedDob.value);
+  return formattedDob.value;
+};
+
 const otp = ref('');
 const loading = ref(false);
 const resendLoading = ref(false);
 const firstName = ref(dataStore.userProfile?.first_name || '');
 const lastName = ref(dataStore.userProfile?.last_name || '');
-const dob = ref(new Date(dataStore.userProfile?.date_of_birth) || '');
-const formattedDob = ref("");
+const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || '');
+console.log(dob);
 const gender = ref(dataStore.userProfile?.gender || '');
 const employmentStatus = ref(dataStore.userProfile?.employment_status || '');
 const jobTitle = ref(dataStore.userProfile?.job_title || '');
@@ -193,10 +215,10 @@ const state = ref(dataStore.userProfile?.address.state || '');
 const country = ref(dataStore.userProfile?.address.country || '');
 
 const formateDate = (e) => {
-  console.log(e);
+  // console.log(e);
   // console.log(e.target.value);
-  const date = e.target.value;
-  console.log(date);
+  const date = e;
+  // console.log(date);
   const newDate = new Date(date);
   const yyyy = newDate.getFullYear();
   let mm = newDate.getMonth() + 1; // Months start at 0!
@@ -207,11 +229,11 @@ const formateDate = (e) => {
 
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
+  return formattedDob.value
 };
 
-console.log(dataStore.userProfile?.date_of_birth);
-console.log(new Date(dataStore.userProfile?.date_of_birth));
+console.log('date - ', dataStore.userProfile?.date_of_birth);
+console.log('new date - ', new Date(dataStore.userProfile?.date_of_birth));
 
 const save = () => {
   loading.value = true;
@@ -219,7 +241,7 @@ const save = () => {
   const data = {
     first_name: firstName.value,
     last_name: lastName.value,
-    date_of_birth: formattedDob.value,
+    date_of_birth: formateDate(formattedDob.value),
     gender: gender.value,
     address: {
       address: address.value.toLowerCase(),
