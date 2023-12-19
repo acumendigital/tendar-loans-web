@@ -6,84 +6,87 @@
     </p>
     <div v-else class="add_new"><BtnLoader color="#7a62eb" size="20" /></div>
     <div v-if="!loading" class="management_content">
-      <div v-for="(card, index) in cards" :key="index" class="bank_ctn">
-        <div class="bank_box">
-          <div class="box_lhs">
-            <div class="bank_logo">
-              <img
-                v-if="card.card_type === 'visa'"
-                src="~assets/images/visa_log.png"
-                alt=""
-              />
-              <img
-                v-if="card.card_type === 'mastercard'"
-                src="~assets/images/master-card_logo.png"
-                alt=""
-              />
-              <img
-                v-if="card.card_type === 'verve'"
-                src="~assets/images/verve_logo.png"
-                alt=""
-              />
+      <div v-if="cards.length">
+        <div v-for="(card, index) in cards" :key="index" class="bank_ctn">
+          <div class="bank_box">
+            <div class="box_lhs">
+              <div class="bank_logo">
+                <img
+                  v-if="card.card_type === 'visa'"
+                  src="~assets/images/visa_log.png"
+                  alt=""
+                />
+                <img
+                  v-if="card.card_type === 'mastercard'"
+                  src="~assets/images/master-card_logo.png"
+                  alt=""
+                />
+                <img
+                  v-if="card.card_type === 'verve'"
+                  src="~assets/images/verve_logo.png"
+                  alt=""
+                />
+              </div>
+              <div>
+                <!-- <p class="bank_acct_num_title">Account Number</p> -->
+                <p class="bank_acct_num">******{{ card.last_4_digits }}</p>
+                <p class="bank_exp_date">
+                  Expires: {{ card.exp_month }}/{{ card.exp_year }}
+                </p>
+              </div>
             </div>
-            <div>
-              <!-- <p class="bank_acct_num_title">Account Number</p> -->
-              <p class="bank_acct_num">******{{ card.last_4_digits }}</p>
-              <p class="bank_exp_date">
-                Expires: {{ card.exp_month }}/{{ card.exp_year }}
-              </p>
+            <div class="box_rhs">
+              <p v-if="card.is_default" class="bank_default">Default</p>
             </div>
           </div>
-          <div class="box_rhs">
-            <p v-if="card.is_default" class="bank_default">Default</p>
+          <div v-if="!card.is_default" class="delete_btn" @click="deleteCard(card.id)">
+            <svg
+              width="25"
+              height="25"
+              viewBox="0 0 25 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21.6016 6.16016C18.2716 5.83016 14.9216 5.66016 11.5816 5.66016C9.60156 5.66016 7.62156 5.76016 5.64156 5.96016L3.60156 6.16016"
+                stroke="#888F9B"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9.10156 5.14969L9.32156 3.83969C9.48156 2.88969 9.60156 2.17969 11.2916 2.17969H13.9116C15.6016 2.17969 15.7316 2.92969 15.8816 3.84969L16.1016 5.14969"
+                stroke="#888F9B"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M19.45 9.32031L18.8 19.3903C18.69 20.9603 18.6 22.1803 15.81 22.1803H9.39C6.6 22.1803 6.51 20.9603 6.4 19.3903L5.75 9.32031"
+                stroke="#888F9B"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10.9297 16.6797H14.2597"
+                stroke="#888F9B"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10.1016 12.6797H15.1016"
+                stroke="#888F9B"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
           </div>
-        </div>
-        <div v-if="!card.is_default" class="delete_btn">
-          <svg
-            width="25"
-            height="25"
-            viewBox="0 0 25 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M21.6016 6.16016C18.2716 5.83016 14.9216 5.66016 11.5816 5.66016C9.60156 5.66016 7.62156 5.76016 5.64156 5.96016L3.60156 6.16016"
-              stroke="#888F9B"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M9.10156 5.14969L9.32156 3.83969C9.48156 2.88969 9.60156 2.17969 11.2916 2.17969H13.9116C15.6016 2.17969 15.7316 2.92969 15.8816 3.84969L16.1016 5.14969"
-              stroke="#888F9B"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M19.45 9.32031L18.8 19.3903C18.69 20.9603 18.6 22.1803 15.81 22.1803H9.39C6.6 22.1803 6.51 20.9603 6.4 19.3903L5.75 9.32031"
-              stroke="#888F9B"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M10.9297 16.6797H14.2597"
-              stroke="#888F9B"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M10.1016 12.6797H15.1016"
-              stroke="#888F9B"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
         </div>
       </div>
+      <TableEmpty v-else/>
     </div>
     <div v-else class="account_loader">
       <LoaderBankAccounts />
@@ -135,6 +138,25 @@ const addCard = () => {
     })
     .finally(() => {
       addCardLoading.value = false;
+    });
+};
+
+const deleteCard = (id) => {
+  console.log(id);
+  deleteLoading.value = true;
+  axios
+    .delete(`card/delete/${id}`)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      toast.add({ title: "Card Deleted", color: "green" });
+      getCards();
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      deleteLoading.value = false;
     });
 };
 
