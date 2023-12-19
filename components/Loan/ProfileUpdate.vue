@@ -37,7 +37,6 @@
             v-model="dob"
             type="date"
             name="dob"
-            placeholder="Enter your First Name"
             @change="formateDate"
             disabled
           />
@@ -147,18 +146,51 @@
           <BtnLoader color="#fff" />
         </button>
       </div>
-      <!-- <p class="link_text">Cancel</p> -->
+      <p class="link_text" @click="$emit('continue');">Skip</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
+const toast = useToast();
+const dataStore = useUserStore();
+const emit = defineEmits(['continue'])
+const props = defineProps({
+  email: {
+    type: String,
+    default: () => "",
+  },
+});
 
+
+const formattedDob = ref("");
+
+const reFormatDate = (e) => {
+  console.log(e);
+  const date = e;
+  console.log(date);
+  const newDate = new Date(date);
+  const yyyy = newDate.getFullYear();
+  let mm = newDate.getMonth() + 1; // Months start at 0!
+  let dd = newDate.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const formattedDate = yyyy + "-" + mm + "-" + dd;
+  formattedDob.value = formattedDate;
+  console.log(formattedDob.value);
+  return formattedDob.value;
+};
+
+const otp = ref('');
+const loading = ref(false);
+const resendLoading = ref(false);
 const firstName = ref(dataStore.userProfile?.first_name || '');
 const lastName = ref(dataStore.userProfile?.last_name || '');
-const dob = ref(dataStore.userProfile?.date_of_birth || '');
-const formattedDob = ref("");
+const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || '');
+console.log(dob);
 const gender = ref(dataStore.userProfile?.gender || '');
 const employmentStatus = ref(dataStore.userProfile?.employment_status || '');
 const jobTitle = ref(dataStore.userProfile?.job_title || '');
@@ -166,15 +198,11 @@ const address = ref(dataStore.userProfile?.address.address || '');
 const city = ref(dataStore.userProfile?.address.city || '');
 const state = ref(dataStore.userProfile?.address.state || '');
 const country = ref(dataStore.userProfile?.address.country || '');
-const showOtpModal = ref(false);
-const loading = ref(false);
-
-const tokenStore = useUserStore();
-const emit = defineEmits(['continue'])
 
 const formateDate = (e) => {
+  // console.log(e);
   // console.log(e.target.value);
-  const date = e.target.value;
+  const date = e;
   // console.log(date);
   const newDate = new Date(date);
   const yyyy = newDate.getFullYear();
@@ -186,8 +214,11 @@ const formateDate = (e) => {
 
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
+  return formattedDob.value
 };
+
+console.log('date - ', dataStore.userProfile?.date_of_birth);
+console.log('new date - ', new Date(dataStore.userProfile?.date_of_birth));
 
 const save = () => {
   loading.value = true;
@@ -195,7 +226,7 @@ const save = () => {
   const data = {
     first_name: firstName.value,
     last_name: lastName.value,
-    date_of_birth: formattedDob.value,
+    date_of_birth: formateDate(formattedDob.value),
     gender: gender.value,
     address: {
       address: address.value.toLowerCase(),
@@ -214,6 +245,8 @@ const save = () => {
       // const data = onfulfilled?.data?.data
       toast.add({ title: "Profile Updated", color: "green" });
       console.log(onfulfilled);
+      const user_profile = onfulfilled.data.data.customer;
+      dataStore.updateUserProfile(user_profile);
       // navigateTo("/user/verify-identity");
       // }
       emit('continue');

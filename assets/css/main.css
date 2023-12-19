@@ -197,6 +197,15 @@ h1 {
   font-weight: 500;
 }
 
+.link_text {
+  color: var(--primary-purple);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+}
+
 /* .title {
   z-index: -1 !important;
 } */
