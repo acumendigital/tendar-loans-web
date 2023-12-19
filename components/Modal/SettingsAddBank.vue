@@ -152,7 +152,7 @@ const addBankAccount = () => {
       toast.add({ title: "Bank Account Added", color: "green" });
       setTimeout(() => {
         window.location.reload()
-      }, 3000);
+      }, 1000);
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
