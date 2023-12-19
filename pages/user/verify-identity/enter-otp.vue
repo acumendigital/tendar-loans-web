@@ -12,8 +12,7 @@
       </div>
       <p class="welcome_text">Enter verification code</p>
       <p class="instruction_text">
-        Please enter the code sent to Please enter the code sent to
-        +234******1234
+        Please enter the code sent to Please enter the code sent to {{ route.query?.phone }}
       </p>
       <div class="form">
         <div class="pin_ctn">
@@ -39,6 +38,8 @@
 </template>
 
 <script setup>
+import axios from "axios";
+const route = useRoute();
 definePageMeta({
   layout: "auth-layout",
 });
@@ -49,25 +50,21 @@ const loading = ref(false);
 
 const handleOTPChange = (value) => {
   otp.value = value;
-  console.log(otp.value);
 };
 
 const save = () => {
-  if (otp.value === confirmPin.value) {
-    loading.value = true;
+  loading.value = true;
     console.log(loading.value);
-    otp.value =
-      "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     const data = {
-      pin: otp.value,
+      token: otp.value,
     };
     console.log(data);
     axios
-      .post("user/pin/set", data)
+      .post("identity/verify", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
-        toast.add({ title: "Email Verified", color: "green" });
-        navigateTo("/user/create-profile");
+        toast.add({ title: "Idebtity Verified", color: "green" });
+        navigateTo("/user/add-bank");
         // }
       })
       .catch((_err) => {
@@ -84,8 +81,6 @@ const save = () => {
       .finally(() => {
         loading.value = false;
       });
-  } else {
-  }
 };
 </script>
 
