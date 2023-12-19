@@ -18,7 +18,7 @@
       <div class="form">
         <div class="modal-input-field form-group">
           <label class="form_label" for="gender">Select your preference</label>
-          <select id="gender" v-model="preference" name="gender">
+          <select id="gender" v-model="preference" name="gender" @change="clearInput">
             <option value="">Select</option>
             <option value="bvn">BVN</option>
             <option value="nin">NIN</option>
@@ -36,7 +36,7 @@
           <input
             id="acct_num"
             v-model="bvn"
-            type="number"
+            type="text"
             name="acct_num"
             placeholder="Enter your BVN"
           />
@@ -46,13 +46,13 @@
           <input
             id="acct_num"
             v-model="nin"
-            type="number"
+            type="text"
             name="acct_num"
             placeholder="Enter your NIN"
           />
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signIn()">
+          <button v-if="!loading" class="action-btn" @click="save()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
@@ -71,30 +71,35 @@ definePageMeta({
   layout: "auth-layout",
 });
 
+import axios from "axios";
+const toast = useToast();
 const preference = ref("");
 const nin = ref("");
 const bvn = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
 
-
+const clearInput = () => {
+  nin.value = ''
+  bvn.value = ''
+}
 
 const save = () => {
   loading.value = true;
   console.log(loading.value);
   const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
+    type: preference.value,
+    number: nin.value || bvn.value,
   };
   console.log(data);
   axios
-    .post("", data)
+    .post("identity/create", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
+      const data = onfulfilled?.data?.message
+      toast.add({ title: data, color: "green" });
       console.log(onfulfilled);
-      navigateTo("/user/verify-identity/enter-otp");
+      const phone = onfulfilled.data.data.identity.phone_number
+      navigateTo(`/user/verify-identity/enter-otp?phone=${phone}`);
       // }
     })
     .catch((_err) => {

@@ -94,7 +94,7 @@ const save = () => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
       toast.add({ title: "Bank Added", color: "green" });
-      navigateTo("/user/verify-identity");
+      navigateTo("/user/create-pin");
       // }
     })
     .catch((_err) => {

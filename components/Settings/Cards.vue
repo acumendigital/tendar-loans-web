@@ -1,20 +1,37 @@
 <template>
   <div class="section_ctn">
     <p class="section_title">Cards</p>
-    <p class="add_new" @click="$emit('addCard')">Add new card</p>
+    <p v-if="!addCardLoading" class="add_new" @click="addCard()">
+      Add new card
+    </p>
+    <div v-else class="add_new"><BtnLoader color="#7a62eb" size="20" /></div>
     <div v-if="!loading" class="management_content">
       <div v-for="(card, index) in cards" :key="index" class="bank_ctn">
         <div class="bank_box">
           <div class="box_lhs">
             <div class="bank_logo">
-              <img v-if="card.card_type === 'visa'" src="~assets/images/visa_log.png" alt="" />
-              <img v-if="card.card_type === 'mastercard'" src="~assets/images/master-card_logo.png" alt="" />
-              <img v-if="card.card_type === 'verve'" src="~assets/images/verve_logo.png" alt="" />
+              <img
+                v-if="card.card_type === 'visa'"
+                src="~assets/images/visa_log.png"
+                alt=""
+              />
+              <img
+                v-if="card.card_type === 'mastercard'"
+                src="~assets/images/master-card_logo.png"
+                alt=""
+              />
+              <img
+                v-if="card.card_type === 'verve'"
+                src="~assets/images/verve_logo.png"
+                alt=""
+              />
             </div>
             <div>
               <!-- <p class="bank_acct_num_title">Account Number</p> -->
               <p class="bank_acct_num">******{{ card.last_4_digits }}</p>
-              <p class="bank_exp_date">Expires: {{ card.exp_month }}/{{ card.exp_year }}</p>
+              <p class="bank_exp_date">
+                Expires: {{ card.exp_month }}/{{ card.exp_year }}
+              </p>
             </div>
           </div>
           <div class="box_rhs">
@@ -76,8 +93,10 @@
 
 <script setup>
 import axios from "axios";
+const addCardLoading = ref(false);
 const loading = ref(false);
 const cards = ref([]);
+const toast = useToast();
 
 const getCards = () => {
   loading.value = true;
@@ -93,6 +112,29 @@ const getCards = () => {
     })
     .finally(() => {
       loading.value = false;
+    });
+};
+
+const addCard = () => {
+  addCardLoading.value = true;
+  const data = {
+    currency: "NGN",
+    success_url: "https://tendar-loans-web.vercel.app/settings?tab=Cards",
+    cancel_url: "https://tendar-loans-web.vercel.app/settings?tab=Cards",
+  };
+  axios
+    .post("card/create", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      const checkoutRoute = onfulfilled.data.data.card.checkout_url;
+      window.location.href = checkoutRoute;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      addCardLoading.value = false;
     });
 };
 
