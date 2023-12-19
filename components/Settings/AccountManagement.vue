@@ -79,13 +79,8 @@
 
 <script setup>
 import axios from "axios";
-const activeTab = ref("Password");
 const loading = ref(false);
 const bankAccounts = ref([]);
-
-const setActiveTab = (tab) => {
-  activeTab.value = tab;
-};
 
 const getBankAccounts = () => {
   loading.value = true;

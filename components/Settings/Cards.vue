@@ -2,24 +2,26 @@
   <div class="section_ctn">
     <p class="section_title">Cards</p>
     <p class="add_new" @click="$emit('addCard')">Add new card</p>
-    <div class="management_content">
+    <div v-if="!loading" class="management_content">
       <div v-for="(card, index) in cards" :key="index" class="bank_ctn">
         <div class="bank_box">
           <div class="box_lhs">
             <div class="bank_logo">
-              <img :src="`_nuxt/${card.image}`" alt="" />
+              <img v-if="card.card_type === 'visa'" src="~assets/images/visa_log.png" alt="" />
+              <img v-if="card.card_type === 'mastercard'" src="~assets/images/master-card_logo.png" alt="" />
+              <img v-if="card.card_type === 'verve'" src="~assets/images/verve_logo.png" alt="" />
             </div>
             <div>
               <!-- <p class="bank_acct_num_title">Account Number</p> -->
-              <p class="bank_acct_num">{{ card.acct_num }}</p>
-              <p class="bank_exp_date">{{ card.exp_date }}</p>
+              <p class="bank_acct_num">******{{ card.last_4_digits }}</p>
+              <p class="bank_exp_date">Expires: {{ card.exp_month }}/{{ card.exp_year }}</p>
             </div>
           </div>
           <div class="box_rhs">
-            <p v-if="card.default" class="bank_default">Default</p>
+            <p v-if="card.is_default" class="bank_default">Default</p>
           </div>
         </div>
-        <div v-if="!card.default" class="delete_btn">
+        <div v-if="!card.is_default" class="delete_btn">
           <svg
             width="25"
             height="25"
@@ -66,30 +68,35 @@
         </div>
       </div>
     </div>
+    <div v-else class="account_loader">
+      <LoaderBankAccounts />
+    </div>
   </div>
 </template>
 
 <script setup>
-const cards = ref([
-  {
-    image: "assets/images/visa_log.png",
-    exp_date: "Expires Sep. 2022",
-    acct_num: "**** 7433",
-    default: true,
-  },
-  {
-    image: "assets/images/visa_log.png",
-    exp_date: "Expires May. 2022",
-    acct_num: "**** 3276",
-    default: false,
-  },
-  {
-    image: "assets/images/master-card_logo.png",
-    exp_date: "Expires Dec. 2022",
-    acct_num: "**** 3276",
-    default: false,
-  },
-]);
+import axios from "axios";
+const loading = ref(false);
+const cards = ref([]);
+
+const getCards = () => {
+  loading.value = true;
+  axios
+    .get("card/list")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      cards.value = onfulfilled.data.data.cards;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+getCards();
 </script>
 
 <style scoped>
@@ -172,5 +179,10 @@ const cards = ref([
 
 .delete_btn {
   margin-left: 30px;
+  cursor: pointer;
+}
+
+.account_loader {
+  margin-top: 20px;
 }
 </style>
