@@ -32,6 +32,7 @@
             </div>
             <div class="box_rhs">
               <p v-if="bank.is_default" class="bank_default">Default</p>
+              <p v-else class="set_bank_default" @click="setDefault(bank.id)">Set as Default</p>
             </div>
           </div>
           <div
@@ -124,7 +125,26 @@ const deleteBank = (id) => {
     .delete(`bank-account/delete/${id}`)
     .then((onfulfilled) => {
       console.log(onfulfilled);
-      toast.add({ title: "Account Deleted", color: "green" });
+      toast.add({ title: "Bank Account Deleted", color: "green" });
+      getBankAccounts();
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      deleteLoading.value = false;
+    });
+};
+
+const setDefault = (id) => {
+  console.log(id);
+  deleteLoading.value = true;
+  axios
+    .get(`bank-account/set-default/${id}`)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      toast.add({ title: "Bank Account set as default", color: "green" });
       getBankAccounts();
     })
     .catch((err) => {
@@ -223,6 +243,12 @@ getBankAccounts();
 .bank_default {
   /* color: var(--primary-purple); */
   font-weight: 500;
+}
+
+.set_bank_default {
+  color: var(--primary-purple);
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .delete_btn {
