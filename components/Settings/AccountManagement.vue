@@ -2,7 +2,7 @@
   <div class="section_ctn">
     <p class="section_title">Bank Account Management</p>
     <p class="add_new" @click="$emit('addBank')">Add new bank account</p>
-    <div class="management_content">
+    <div v-if="!loading" class="management_content">
       <div v-for="(bank, index) in bankAccounts" :key="index" class="bank_ctn">
         <div class="bank_box">
           <div class="box_lhs">
@@ -21,10 +21,10 @@
             </div>
           </div>
           <div class="box_rhs">
-            <p class="bank_default">Default</p>
+            <p v-if="bank.is_default" class="bank_default">Default</p>
           </div>
         </div>
-        <div class="delete_btn">
+        <div v-if="!bank.is_default" class="delete_btn">
           <svg
             width="25"
             height="25"
@@ -70,6 +70,9 @@
           </svg>
         </div>
       </div>
+    </div>
+    <div v-else class="account_loader">
+      <LoaderBankAccounts />
     </div>
   </div>
 </template>
@@ -186,5 +189,10 @@ getBankAccounts();
 
 .delete_btn {
   margin-left: 30px;
+  cursor: pointer;
+}
+
+.account_loader {
+  margin-top: 20px;
 }
 </style>
