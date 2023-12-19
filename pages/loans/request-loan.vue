@@ -4,10 +4,25 @@
       <h1 class="title">Request a loan</h1>
     </div>
     <div class="form-content">
-      <LoanRequestALoan v-if="activeSection === 'Request Loan'" @continue="activeSection = 'Loan Details'" />
-      <LoanDetails v-if="activeSection === 'Loan Details'" @continue="activeSection = 'Repayment Plan'"/>
-      <LoanRepaymentPlan v-if="activeSection === 'Repayment Plan'" @continue="activeSection = 'Review Details'" />
-      <LoanReviewDetails v-if="activeSection === 'Review Details'" @continue="loanApproved = true" />
+      <LoanProfileUpdate
+        v-if="activeSection === 'Profile Update'"
+        @continue="profileUpdateDone"
+      />
+      <LoanDetails
+        v-if="activeSection === 'Loan Details'"
+        @continue="LoanDetailsDone"
+        @go-back="LoanDetailsBack"
+      />
+      <LoanRepaymentPlan
+        v-if="activeSection === 'Repayment Plan'"
+        @continue="repaymentPlanDone"
+        @go-back="repaymentPlanBack"
+      />
+      <LoanReviewDetails
+        v-if="activeSection === 'Review Details'"
+        @continue="loanApproved = true"
+        @go-back="reviewDetailsBack"
+      />
     </div>
     <LoanApproved v-if="loanApproved" @close-modal="loanApproved = false" />
   </div>
@@ -15,82 +30,49 @@
 
 <script setup>
 import axios from "axios";
+const route = useRoute();
 
-const activeSection = ref('Request Loan')
-// const firstName = ref("");
-// const lastName = ref("");
-// const dob = ref("");
-// const formattedDob = ref("");
-// const gender = ref("");
-// const employmentStatus = ref("");
-// const jobTitle = ref("");
-// const address = ref("");
-// const city = ref("");
-// const state = ref("");
-// const country = ref("");
+const activeSection = ref(route.query?.section || "Profile Update");
 const loanApproved = ref(false);
 const loading = ref(false);
 
-const tokenStore = useUserStore();
-
-const formateDate = (e) => {
-  // console.log(e.target.value);
-  const date = e.target.value;
-  // console.log(date);
-  const newDate = new Date(date);
-  const yyyy = newDate.getFullYear();
-  let mm = newDate.getMonth() + 1; // Months start at 0!
-  let dd = newDate.getDate();
-
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-
-  const formattedDate = dd + "/" + mm + "/" + yyyy;
-  formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
+const updateRoute = (val) => {
+  navigateTo({
+    path: "/loans/request-loan",
+    query: {
+      section: val,
+    },
+  });
 };
 
-const save = () => {
-  loading.value = true;
-  console.log(loading.value);
-  const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
-    address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
-    },
-    employment_status: employmentStatus.value,
-    job_title: jobTitle.value,
-  };
-  console.log(data);
-  // const path = "customer/create";
-  axios
-    .post("customer/create", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      navigateTo("/user/verify-identity");
-      // }
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        toast.add({ title: errorMsg, color: "red" });
-      } else {
-        toast.add({
-          title: "Oops, something went wrong, please try again later",
-          color: "red",
-        });
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+const profileUpdateDone = () => {
+  activeSection.value = "Loan Details";
+  updateRoute(activeSection.value);
+};
+
+const LoanDetailsDone = () => {
+  activeSection.value = "Repayment Plan";
+  updateRoute(activeSection.value);
+};
+
+const repaymentPlanDone = () => {
+  activeSection.value = "Review Details";
+  updateRoute(activeSection.value);
+};
+
+const LoanDetailsBack = () => {
+  activeSection.value = "Profile Update";
+  updateRoute(activeSection.value);
+};
+
+const repaymentPlanBack = () => {
+  activeSection.value = "Loan Details";
+  updateRoute(activeSection.value);
+};
+
+const reviewDetailsBack = () => {
+  activeSection.value = "Repayment Plan";
+  updateRoute(activeSection.value);
 };
 </script>
 

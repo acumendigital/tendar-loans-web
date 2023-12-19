@@ -69,19 +69,40 @@
             <div class="contents">
               <div class="content">
                 <p class="content_title">Amount</p>
-                <p class="content_value text-bold">{{ formatMoney(detailsData.amount, detailsData.currency || 'NGN') }}</p>
+                <p class="content_value text-bold">
+                  {{
+                    formatMoney(
+                      detailsData.amount,
+                      detailsData.currency || "NGN"
+                    )
+                  }}
+                </p>
               </div>
               <div class="content">
                 <p class="content_title">Date disbursed</p>
-                <p class="content_value">{{ detailedDate(detailsData.created_at) }}</p>
+                <p class="content_value">
+                  {{ detailedDate(detailsData.created_at) }}
+                </p>
               </div>
               <div class="content">
                 <p class="content_title">Transaction Type</p>
-                <p class="content_value">{{ detailsData.type ? capitalizeFirstLetter(detailsData.type) : '--' }}</p>
+                <p class="content_value">
+                  {{
+                    detailsData.type
+                      ? capitalizeFirstLetter(detailsData.type)
+                      : "--"
+                  }}
+                </p>
               </div>
               <div v-if="detailsData.beneficiary" class="content">
                 <p class="content_title">Beneficiary name</p>
-                <p class="content_value">{{ detailsData.beneficiary ? capitalizeFirstLetter(detailsData.beneficiary) : '--' }}</p>
+                <p class="content_value">
+                  {{
+                    detailsData.beneficiary
+                      ? capitalizeFirstLetter(detailsData.beneficiary)
+                      : "--"
+                  }}
+                </p>
               </div>
               <div class="content">
                 <p class="content_title">Loan Status</p>
@@ -99,8 +120,8 @@
 </template>
 
 <script>
-import { detailedDate } from '@/utils/date-formats.js'
-import functions from '@/utils/functions'
+import { detailedDate } from "@/utils/date-formats.js";
+import functions from "@/utils/functions";
 import axios from "axios";
 export default {
   props: {
@@ -179,14 +200,20 @@ export default {
         },
       ],
       detailsData: {},
+      repayments: [],
     };
   },
   watch: {
     isOpenProp(newVal) {
       // Update the local isOpen state when the prop changes
       this.isOpen = newVal;
+      const route = useRoute();
       if (this.isOpen) {
-        this.getTransactionData();
+        if (route.name === "loans") {
+          this.getLoanData();
+        } else {
+          this.getTransactionData();
+        }
       }
     },
   },
@@ -199,12 +226,32 @@ export default {
     },
     getTransactionData() {
       this.loading = true;
+      const toast = useToast();
       console.log(this.transactionId);
       axios
         .get(`wallet/transaction/fetch/${this.transactionId}`)
         .then((onfulfilled) => {
           console.log(onfulfilled);
-          this.detailsData = onfulfilled.data.data.transaction
+          this.detailsData = onfulfilled.data.data.transaction;
+        })
+        .catch((err) => {
+          const errorMsg = err.response?.data?.message || err.message;
+          toast.add({ title: errorMsg, color: "red" });
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    getLoanData() {
+      this.loading = true;
+      const toast = useToast();
+      console.log('loan', this.transactionId);
+      axios
+        .get(`loan/fetch/${this.transactionId}`)
+        .then((onfulfilled) => {
+          console.log(onfulfilled);
+          this.detailsData = onfulfilled.data.data.loan;
+          this.repayments = onfulfilled.data.data.loan.repayments;
         })
         .catch((err) => {
           const errorMsg = err.response?.data?.message || err.message;

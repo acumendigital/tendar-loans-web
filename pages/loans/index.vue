@@ -57,6 +57,7 @@
     <div class="sidebar_ctn">
       <DashboardTableDetails
         :isOpenProp="isOpen"
+        :transactionId="transactionId"
         @update:isOpenProp="updateIsOpen"
       />
     </div>
@@ -73,6 +74,7 @@ const walletData = ref({});
 const loanData = ref({});
 const repaymentData = ref({});
 const isOpen = ref(false);
+const transactionId = ref('');
 const toggleSidebar = (val) => {
   isOpen.value = !isOpen.value;
   transactionId.value = val;

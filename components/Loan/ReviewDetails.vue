@@ -36,6 +36,7 @@
           <BtnLoader color="#fff" />
         </button>
       </div>
+      <p class="link_text" @click="$emit('go-back');">Back</p>
     </div>
   </div>
 </template>

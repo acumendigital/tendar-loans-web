@@ -47,7 +47,6 @@
             v-model="dob"
             type="date"
             name="dob"
-            placeholder="Enter your First Name"
             @change="formateDate"
             disabled
             
