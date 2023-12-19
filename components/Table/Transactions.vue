@@ -89,7 +89,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="(data, index) in tableData"
+              v-for="(data, index) in dataItems"
               :key="index"
               class="table-row"
             >

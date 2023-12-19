@@ -10,7 +10,20 @@
       <div class="card_ctn">
         <div class="card_inner">
           <div class="lhs">
-            <p class="card_title">Wallet balance</p>
+            <p class="card_title">Next instalment due</p>
+            <p class="card_subtitle">
+              {{ functions.formatMoney(repaymentData.next_due_amount, "NGN") }}
+            </p>
+            <p v-if="repaymentData.next_due_date" class="card_text">
+              {{ detailedDate(repaymentData.next_due_date) }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card_ctn">
+        <div class="card_inner">
+          <div class="lhs">
+            <p class="card_title">Active loan amount</p>
             <p class="card_subtitle">
               {{
                 functions.formatMoney(
@@ -22,35 +35,25 @@
           </div>
         </div>
       </div>
-      <div class="card_ctn">
-        <div class="card_inner">
-          <div class="lhs">
-            <p class="card_title">Next instalment due</p>
-            <p class="card_subtitle">
-              {{ functions.formatMoney(repaymentData.next_due_amount, "NGN") }}
-            </p>
-            <p v-if="repaymentData.next_due_date" class="card_text">
-              {{ detailedDate(repaymentData.next_due_date) }}
-            </p>
-          </div>
-        </div>
-      </div>
       <div class="card_ctn last_card">
         <div class="card_inner">
           <div class="lhs">
             <p class="card_title">Number of payments</p>
-            <p class="card_subtitle">
+            <p v-if="repaymentData.no_of_active_repayment === 0" class="card_subtitle">
+              No active loan
+            </p>
+            <p v-else class="card_subtitle">
               {{ repaymentData.no_of_paid_repayment }} of
               {{ repaymentData.no_of_active_repayment }}
             </p>
           </div>
-          <div v-if="!loanData.active" class="rhs">
+          <div v-if="loanData.active" class="rhs">
             <p class="active_badge">Active loan</p>
           </div>
         </div>
       </div>
     </div>
-    <TableLoans :tableData="tableData" @openSidebar="toggleSidebar" />
+    <TableLoans @openSidebar="toggleSidebar" />
     <div class="sidebar_ctn">
       <DashboardTableDetails
         :isOpenProp="isOpen"
@@ -84,8 +87,8 @@ const getAnalytics = () => {
     .get("loan/analytics")
     .then((onfulfilled) => {
       // console.log(onfulfilled);
-      analytics.value = onfulfilled.data.data;
-      walletData.value = onfulfilled.data.data.wallet;
+      // analytics.value = onfulfilled.data.data;
+      // walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
     })
