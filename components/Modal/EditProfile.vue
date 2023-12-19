@@ -260,6 +260,8 @@ const save = () => {
       // const data = onfulfilled?.data?.data
       toast.add({ title: "Profile Updated", color: "green" });
       console.log(onfulfilled);
+      const user_profile = onfulfilled.data.data.customer;
+      dataStore.updateUserProfile(user_profile);
       // navigateTo("/user/verify-identity");
       // }
       emit('continue');
