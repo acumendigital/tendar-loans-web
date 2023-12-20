@@ -48,7 +48,7 @@ button.default-input {
   border: 1px solid rgba(221, 223, 225, 0.5);
   background: #fff;
   transform-origin: top;
-  animation: squeeze-in 0.4s ease-in-out;
+  /* animation: squeeze-in 0.4s ease-in-out; */
   border-radius: 13px;
   z-index: 21;
 }
