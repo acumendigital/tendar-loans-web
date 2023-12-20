@@ -3,6 +3,9 @@
     <p class="section_title">Cards</p>
     <p v-if="!addCardLoading" class="add_new" @click="addCard()">
       Add new card
+      <span v-if="deleteLoading" class="delete_loader"
+        ><BtnLoader color="#7a62eb" size="20"
+      /></span>
     </p>
     <div v-else class="add_new"><BtnLoader color="#7a62eb" size="20" /></div>
     <div v-if="!loading" class="management_content">
@@ -37,6 +40,7 @@
             </div>
             <div class="box_rhs">
               <p v-if="card.is_default" class="bank_default">Default</p>
+              <p v-else class="set_bank_default" @click="setDefault(card.id)">Set as Default</p>
             </div>
           </div>
           <div v-if="!card.is_default" class="delete_btn" @click="deleteCard(card.id)">
@@ -160,6 +164,25 @@ const deleteCard = (id) => {
     });
 };
 
+const setDefault = (id) => {
+  console.log(id);
+  deleteLoading.value = true;
+  axios
+    .delete(`card/set-default/${id}`)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      toast.add({ title: "Card set as default", color: "green" });
+      getCards();
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      deleteLoading.value = false;
+    });
+};
+
 getCards();
 </script>
 
@@ -178,10 +201,16 @@ getCards();
 }
 
 .add_new {
+  display: flex;
+  align-items: center;
   color: #7a62eb;
   cursor: pointer;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.delete_loader {
+  margin-left: 20px;
 }
 
 .bank_ctn {
@@ -240,6 +269,12 @@ getCards();
   /* color: var(--primary-purple); */
   font-weight: 500;
 }
+.set_bank_default {
+  color: var(--primary-purple);
+  font-weight: 500;
+  cursor: pointer;
+}
+
 
 .delete_btn {
   margin-left: 30px;
