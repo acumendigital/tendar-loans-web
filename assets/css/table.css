@@ -58,7 +58,7 @@ td {
 
 .table-main-heading .search-filter-row {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /* margin-top: 40px; */
 }
 
@@ -79,7 +79,7 @@ td {
   align-items: center;
   justify-content: flex-end;
   gap: 15px;
-  min-width: 40%;
+  min-width: 11%;
   z-index: 40;
 }
 
@@ -94,7 +94,7 @@ td {
   gap: 10px;
   border: 1px solid var(--border-two);
   border-radius: 4px;
-  height: 45px;
+  height: 40px;
   min-width: 100px;
   padding: 0 10px;
   font-size: 14px;
