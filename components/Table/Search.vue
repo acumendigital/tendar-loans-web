@@ -10,6 +10,7 @@
     />
     <label :for="`${tableType}-table-search`">
       <svg
+      v-if="!loading"
         width="14"
         height="14"
         viewBox="0 0 20 20"
@@ -27,7 +28,7 @@
           stroke-linecap="round"
         />
       </svg>
-      <!-- <BtnLoader  /> -->
+      <BtnLoader v-else :size="15" :color="'#888F9B'" />
     </label>
     <button
       v-if="search.length"
@@ -48,6 +49,10 @@ export default {
     tableType: {
       type: String,
       default: () => "",
+    },
+    loading: {
+      type: Boolean,
+      default: () => false,
     },
   },
   data() {

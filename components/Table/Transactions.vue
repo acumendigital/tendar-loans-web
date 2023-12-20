@@ -19,7 +19,7 @@
         </div> -->
         <div class="search_filter">
           <div class="search-filter-row">
-            <TableSearch @search="searchTransaction($event)" />
+            <TableSearch :loading="searchLoading" @search="searchTransaction($event)" />
             <div class="filters">
               <FilterTransactionsTable
                 @filter-data="filterData"
@@ -214,9 +214,11 @@ export default {
             : this.$route.query?.perPage) || 10,
       filterFromDate: this.$route.query.from || "",
       filterToDate: this.$route.query.to || "",
+      type: "",
       search: this.$route.query.q || "",
       currentPage: this.$route.query.page || 1,
       loading: false,
+      searchLoading: false,
       detailedDate,
       formatPhone: functions.formatPhoneNumber,
       truncateString: functions.truncateString,
@@ -259,22 +261,26 @@ export default {
   created() {
     this.getTransactions(
       true,
+      false,
       this.activeTab,
       this.limit,
       this.currentPage,
       this.filterFromDate,
       this.filterToDate,
+      this.type,
       this.search
     );
   },
   methods: {
     getTransactions(
       loading = true,
+      searchLoading = false,
       tab = "",
       limit,
       currentPage,
       fromDate,
       toDate,
+      type,
       search
     ) {
       // switch (tab.toLowerCase()) {
@@ -294,6 +300,7 @@ export default {
       const toast = useToast();
       // console.log(search);
       this.loading = loading;
+      this.searchLoading = searchLoading;
       this.$axios({
         url: "dashboard/transaction/list",
         params: {
@@ -303,13 +310,14 @@ export default {
           page: currentPage,
           search,
           active: tab,
-          currency: '',
-          status: '',
-          reference: '',
-          type: ''
+          currency: "",
+          type: type,
+          status: "",
+          // reference: "",
         },
       })
         .then((success) => {
+          console.log(success);
           // this.activeTab =
           //   tab === true
           //     ? "Active Transactions"
@@ -330,7 +338,6 @@ export default {
             from: this.filterFromDate,
             to: this.filterToDate,
             q: this.search,
-            type: this.activeTab.toLowerCase(),
             page: this.currentPage,
             perPage: this.limit,
           };
@@ -351,6 +358,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+          this.searchLoading = false;
         });
     },
     prev() {
@@ -385,20 +393,24 @@ export default {
     filterData(val) {
       this.getTransactions(
         false,
+        true,
         this.activeTab,
         this.limit,
         this.currentPage,
         val.fromDate,
         val.toDate,
+        val.type,
         this.search
       );
     },
     clearFilter() {
       this.getTransactions(
         false,
+        false,
         this.activeTab,
         this.limit,
         1,
+        "",
         "",
         "",
         this.search,
@@ -420,33 +432,39 @@ export default {
     searchTransaction(search) {
       this.getTransactions(
         false,
+        TextTrackCueList,
         this.activeTab,
         this.limit,
         this.currentPage,
         this.filterFromDate,
         this.filterToDate,
+        this.type,
         search
       );
     },
     setLimit(limit) {
       this.getTransactions(
         false,
+        true,
         this.activeTab,
         limit,
         1,
         this.filterFromDate,
         this.filterToDate,
+        this.type,
         this.search
       );
     },
     setPage(page) {
       this.getTransactions(
         false,
+        true,
         this.activeTab,
         this.limit,
         page,
         this.filterFromDate,
         this.filterToDate,
+        this.type,
         this.search
       );
     },

@@ -68,15 +68,15 @@
         <div class="filter-item">
           <div class="top">
             <CustomCheckbox
-              :checked="paytypeFilter"
-              @toggle-check="togglePayType()"
+              :checked="typeFilter"
+              @toggle-check="toggleType()"
             />
-            <label @click="togglePayType()"> Transaction Type </label>
+            <label @click="toggleType()"> Transaction Type </label>
           </div>
-          <div v-if="paytypeFilter" class="bottom">
-            <select v-model="filter.paytype">
-              <option value="deposit">deposit</option>
-              <option value="withdrawal">withdrawal</option>
+          <div v-if="typeFilter" class="bottom">
+            <select v-model="filter.type">
+              <option value="debit">Debit</option>
+              <option value="credit">Credit</option>
             </select>
           </div>
         </div>
@@ -99,13 +99,13 @@ export default {
         fromDate: '',
         toDate: '',
         status: '',
-        paytype: '',
+        type: '',
         paymeth: '',
         id: ''
       },
       dateFilter: false,
       statusFilter: false,
-      paytypeFilter: false,
+      typeFilter: false,
       idFilter: false,
       paymethFilter: false,
     }
@@ -143,8 +143,8 @@ export default {
       if (!this.statusFilter) {
         this.filter.status = ''
       }
-      if (!this.paytypeFilter) {
-        this.filter.paytype = ''
+      if (!this.typeFilter) {
+        this.filter.type = ''
       }
       if (!this.paymethFilter) {
         this.filter.paymeth = ''
@@ -160,8 +160,8 @@ export default {
     toggleStatus() {
       this.statusFilter = !this.statusFilter
     },
-    togglePayType() {
-      this.paytypeFilter = !this.paytypeFilter
+    toggleType() {
+      this.typeFilter = !this.typeFilter
     },
     togglePaymeth() {
       this.paymethFilter = !this.paymethFilter
@@ -174,12 +174,12 @@ export default {
       this.dateFilter = false
       this.statusFilter = false
       this.idFilter = false
-      this.paytypeFilter = false
+      this.typeFilter = false
       this.paymethFilter = false
       this.filter.fromDate = ''
       this.filter.toDate = ''
       this.filter.status = ''
-      this.filter.paytype = ''
+      this.filter.type = ''
       this.filter.paymeth = ''
       this.filter.id = ''
     },
@@ -224,7 +224,7 @@ export default {
   align-items: center;
   justify-content: center;
   transform-origin: top;
-  animation: squeeze-in 0.2s ease-in-out;
+  /* animation: squeeze-in 0.2s ease-in-out; */
   background: rgba(244, 246, 250, 0.7);
   gap: 10px;
 }
@@ -237,5 +237,57 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 0 5px;
   background: #fff;
+}
+
+
+
+.filter-dropdown-ctn {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  width: 250%;
+  min-width: 200px;
+  box-shadow: var(--container-shadow);
+  border: 1px solid rgba(221, 223, 225, 0.5);
+  background: #fff;
+  transform-origin: top;
+  animation: squeeze-in 0.4s ease-in-out;
+  border-radius: 13px;
+  z-index: 21;
+}
+
+.filter-dropdown-ctn > .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  height: 50px;
+  background: #f4f6fa;
+  border-radius: 10px 10px 0 0;
+}
+
+.filter-dropdown-ctn > .filter-dropdown-content {
+  background: #fff;
+  border-radius: 0 0 13px 13px;
+}
+
+.filter-dropdown-ctn > .top .clear-btn,
+.filter-dropdown-ctn > .top .done-btn {
+  border-radius: 7px;
+  padding: 3px 10px;
+  height: 30px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.filter-dropdown-ctn > .top .clear-btn {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #fff;
+}
+
+.filter-dropdown-ctn > .top .done-btn {
+  border: 1px solid var(--primary-purple);
+  background: var(--primary-purple);
+  color: #fff;
 }
 </style>
