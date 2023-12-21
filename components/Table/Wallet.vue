@@ -272,7 +272,6 @@ export default {
     this.getTransactions(
       true,
       false,
-      this.activeTab,
       this.limit,
       this.currentPage,
       this.filterFromDate,
@@ -286,7 +285,6 @@ export default {
     getTransactions(
       loading = true,
       searchLoading = false,
-      tab = "",
       limit,
       currentPage,
       fromDate,
@@ -295,20 +293,6 @@ export default {
       status,
       search
     ) {
-      // switch (tab.toLowerCase()) {
-      //   case "all":
-      //     tab = "";
-      //     break;
-      //   case "active customers":
-      //     tab = true;
-      //     break;
-      //   case "inactive customers":
-      //     tab = false;
-      //     break;
-      //   default:
-      //     tab = "";
-      // }
-
       const toast = useToast();
       // console.log(search);
       this.loading = loading;
@@ -321,7 +305,7 @@ export default {
           // end_date: toDate,
           page: currentPage,
           search,
-          active: tab,
+          // active: tab,
           currency: '',
           type: type,
           status: status,
@@ -405,7 +389,6 @@ export default {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         this.limit,
         this.currentPage,
         val.fromDate,
@@ -419,7 +402,6 @@ export default {
       this.getTransactions(
         false,
         false,
-        this.activeTab,
         this.limit,
         1,
         "",
@@ -432,21 +414,35 @@ export default {
     },
     setActiveTab(val) {
       this.activeTab = val;
-      // this.getTransactions(
-      //   false,
-      //   val,
-      //   this.limit,
-      //   1,
-      //   this.filterFromDate,
-      //   this.filterToDate,
-      //   this.search,
-      // );
+       switch (val) {
+        case "All Transactions":
+          this.type = "";
+          break;
+        case "Wallet top-up":
+          this.type = 'credit';
+          break;
+        case "Withdrawals":
+          this.type = 'debit';
+          break;
+        default:
+          this.type = "";
+      }
+      this.getTransactions(
+        false,
+        true,
+        this.limit,
+        1,
+        this.filterFromDate,
+        this.filterToDate,
+        this.type,
+        this.status,
+        this.search
+      );
     },
     searchTransaction(search) {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         this.limit,
         this.currentPage,
         this.filterFromDate,
@@ -460,7 +456,6 @@ export default {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         limit,
         1,
         this.filterFromDate,
@@ -474,7 +469,6 @@ export default {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         this.limit,
         page,
         this.filterFromDate,
