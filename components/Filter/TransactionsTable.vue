@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="filter-dropdown-content">
-        <div class="filter-item">
+        <!-- <div class="filter-item">
           <div class="top">
             <CustomCheckbox
               :checked="dateFilter"
@@ -20,7 +20,7 @@
             <label @click="toggleDate()"> Date </label>
           </div>
           <div v-if="dateFilter" class="bottom">
-            <!-- <TableDateInput
+            <TableDateInput
               placeholder="FROM"
               :date-props="filter.fromDate"
               @update-date="updateFromDate($event)"
@@ -29,9 +29,9 @@
               placeholder="TO"
               :date-props="filter.toDate"
               @update-date="updateToDate($event)"
-            /> -->
+            />
           </div>
-        </div>
+        </div> -->
         <div class="filter-item">
           <div class="top">
             <CustomCheckbox
