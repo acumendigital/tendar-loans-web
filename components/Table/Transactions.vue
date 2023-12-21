@@ -19,7 +19,10 @@
         </div> -->
         <div class="search_filter">
           <div class="search-filter-row">
-            <TableSearch :loading="searchLoading" @search="searchTransaction($event)" />
+            <TableSearch
+              :loading="searchLoading"
+              @search="searchTransaction($event)"
+            />
             <div class="filters">
               <FilterTransactionsTable
                 @filter-data="filterData"
@@ -215,6 +218,7 @@ export default {
       filterFromDate: this.$route.query.from || "",
       filterToDate: this.$route.query.to || "",
       type: "",
+      status: "",
       search: this.$route.query.q || "",
       currentPage: this.$route.query.page || 1,
       loading: false,
@@ -262,12 +266,12 @@ export default {
     this.getTransactions(
       true,
       false,
-      this.activeTab,
       this.limit,
       this.currentPage,
       this.filterFromDate,
       this.filterToDate,
       this.type,
+      this.status,
       this.search
     );
   },
@@ -275,12 +279,12 @@ export default {
     getTransactions(
       loading = true,
       searchLoading = false,
-      tab = "",
       limit,
       currentPage,
       fromDate,
       toDate,
       type,
+      status,
       search
     ) {
       // switch (tab.toLowerCase()) {
@@ -309,10 +313,10 @@ export default {
           // end_date: toDate,
           page: currentPage,
           search,
-          active: tab,
+          // active: tab,
           currency: "",
           type: type,
-          status: "",
+          status: status,
           // reference: "",
         },
       })
@@ -394,12 +398,12 @@ export default {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         this.limit,
         this.currentPage,
         val.fromDate,
         val.toDate,
         val.type,
+        val.status,
         this.search
       );
     },
@@ -407,9 +411,9 @@ export default {
       this.getTransactions(
         false,
         false,
-        this.activeTab,
         this.limit,
         1,
+        "",
         "",
         "",
         "",
@@ -419,26 +423,41 @@ export default {
     },
     setActiveTab(val) {
       this.activeTab = val;
-      // this.getTransactions(
-      //   false,
-      //   val,
-      //   this.limit,
-      //   1,
-      //   this.filterFromDate,
-      //   this.filterToDate,
-      //   this.search,
-      // );
+      switch (val) {
+        case "All Transactions":
+          this.type = "";
+          break;
+        case "Top-up":
+          this.type = 'credit';
+          break;
+        case "Withdrawals":
+          this.type = 'debit';
+          break;
+        default:
+          this.type = "";
+      }
+      this.getTransactions(
+        false,
+        true,
+        this.limit,
+        1,
+        this.filterFromDate,
+        this.filterToDate,
+        this.type,
+        this.status,
+        this.search
+      );
     },
     searchTransaction(search) {
       this.getTransactions(
         false,
-        TextTrackCueList,
-        this.activeTab,
+        true,
         this.limit,
         this.currentPage,
         this.filterFromDate,
         this.filterToDate,
         this.type,
+        this.status,
         search
       );
     },
@@ -446,12 +465,12 @@ export default {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         limit,
         1,
         this.filterFromDate,
         this.filterToDate,
         this.type,
+        this.status,
         this.search
       );
     },
@@ -459,12 +478,12 @@ export default {
       this.getTransactions(
         false,
         true,
-        this.activeTab,
         this.limit,
         page,
         this.filterFromDate,
         this.filterToDate,
         this.type,
+        this.status,
         this.search
       );
     },
