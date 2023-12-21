@@ -128,12 +128,12 @@
               name="jobTitle"
               placeholder="Enter your Job Title"
             />
-            <div
+            <!-- <div
               :class="submitClicked && !jobTitle ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="form_group_flex">
@@ -270,7 +270,6 @@ const save = () => {
     dob.value &&
     gender.value &&
     employmentStatus.value &&
-    jobTitle.value &&
     address.value &&
     city.value &&
     state.value &&
