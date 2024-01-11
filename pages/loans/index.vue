@@ -9,14 +9,18 @@
     <div class="cards_section">
       <div class="card_ctn">
         <div class="card_inner">
-          <div class="lhs">
+          <div class="lhs next_instalment">
             <p class="card_title">Next instalment due</p>
             <p class="card_subtitle">
               {{ functions.formatMoney(repaymentData.next_due_amount, "NGN") }}
             </p>
-            <p v-if="repaymentData.next_due_date" class="card_text">
-              {{ detailedDate(repaymentData.next_due_date) }}
-            </p>
+            <div class="flex justify-between">
+              <p v-if="repaymentData.next_due_date" class="card_text">
+                {{ detailedDate(repaymentData.next_due_date) }}
+              </p>
+              <p v-if="overdueStatus === 'due'" class="pay_early">Pay early</p>
+              <p v-if="overdueStatus === 'overdue'"  class="pay_early payment_overdue">Payment Overdue</p>
+            </div>
           </div>
         </div>
       </div>
@@ -39,7 +43,10 @@
         <div class="card_inner">
           <div class="lhs">
             <p class="card_title">Number of payments</p>
-            <p v-if="repaymentData.no_of_active_repayment === 0" class="card_subtitle">
+            <p
+              v-if="repaymentData.no_of_active_repayment === 0"
+              class="card_subtitle"
+            >
               No active loan
             </p>
             <p v-else class="card_subtitle">
@@ -53,6 +60,13 @@
         </div>
       </div>
     </div>
+    <OverdueAlert
+      v-if="overdueStatus"
+      :overdueStatus="overdueStatus"
+      :amount="repaymentData.next_due_amount"
+      :dueDate="repaymentData.next_due_date"
+      @close-modal="overdueStatus = ''"
+    />
     <TableLoans @openSidebar="toggleSidebar" />
     <div class="sidebar_ctn">
       <DashboardTableDetails
@@ -68,13 +82,14 @@
 import axios from "axios";
 const toast = useToast();
 
+const overdueStatus = ref('');
 const loading = ref(false);
 const analytics = ref({});
 const walletData = ref({});
 const loanData = ref({});
 const repaymentData = ref({});
 const isOpen = ref(false);
-const transactionId = ref('');
+const transactionId = ref("");
 const toggleSidebar = (val) => {
   isOpen.value = !isOpen.value;
   transactionId.value = val;
@@ -93,6 +108,7 @@ const getAnalytics = () => {
       // walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
+      getDueDate(repaymentData.value.next_due_date);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -103,92 +119,30 @@ const getAnalytics = () => {
     });
 };
 
+const getDueDate = (date) => {
+  let date1 = new Date();
+  let date2 = new Date(date);
+  let difference_in_time = date2.getTime() - date1.getTime();
+
+  let difference_in_days = Math.round(difference_in_time / (1000 * 3600 * 24));
+
+  // console.log(
+  //   "Total number of days between dates:\n" +
+  //     date1.toDateString() +
+  //     " and " +
+  //     date2.toDateString() +
+  //     " is: " +
+  //     difference_in_days +
+  //     " days"
+  // );
+  if (difference_in_days === 7 || difference_in_days === 3) {
+    overdueStatus.value = "due";
+  } else if (difference_in_days <= 0) {
+    overdueStatus.value = "overdue";
+  }
+};
+
 getAnalytics();
-// export default {
-//   data() {
-//     return {
-//       isOpen: false,
-//       cardData: [
-//         {
-//           title: "Next instalment due",
-//           text: "₦50,000.00",
-//           date: "Aug 30, 2023",
-//           active: "",
-//         },
-//         {
-//           title: "Active loan amount",
-//           text: "₦300,000.00",
-//           date: "",
-//           active: "",
-//         },
-//         {
-//           title: "Number of payments",
-//           text: "1 of 4",
-//           date: "",
-//           active: "Active loan",
-//         },
-//       ],
-//       tableData: [
-//         {
-//           reference: "BN-B1E73DA–0017",
-//           amount_borrowed: "23000",
-//           amount_repaid: "30000",
-//           date_disbursed: "Aug 30, 2023",
-//           repayment_date: "Dec 30, 09:42 PM",
-//           transaction_status: "Ongoing",
-//         },
-//         {
-//           reference: "BN-B1E73DA–0017",
-//           amount_borrowed: "23000",
-//           amount_repaid: "30000",
-//           date_disbursed: "Aug 30, 2023",
-//           repayment_date: "Dec 30, 09:42 PM",
-//           transaction_status: "Unsuccessful",
-//         },
-//         {
-//           reference: "BN-B1E73DA–0017",
-//           amount_borrowed: "23000",
-//           amount_repaid: "30000",
-//           date_disbursed: "Aug 30, 2023",
-//           repayment_date: "Dec 30, 09:42 PM",
-//           transaction_status: "Completed",
-//         },
-//         {
-//           reference: "BN-B1E73DA–0017",
-//           amount_borrowed: "23000",
-//           amount_repaid: "30000",
-//           date_disbursed: "Aug 30, 2023",
-//           repayment_date: "Dec 30, 09:42 PM",
-//           transaction_status: "Unsuccessful",
-//         },
-//         {
-//           reference: "BN-B1E73DA–0017",
-//           amount_borrowed: "23000",
-//           amount_repaid: "30000",
-//           date_disbursed: "Aug 30, 2023",
-//           repayment_date: "Dec 30, 09:42 PM",
-//           transaction_status: "Completed",
-//         },
-//         {
-//           reference: "BN-B1E73DA–0017",
-//           amount_borrowed: "23000",
-//           amount_repaid: "30000",
-//           date_disbursed: "Aug 30, 2023",
-//           repayment_date: "Dec 30, 09:42 PM",
-//           transaction_status: "Completed",
-//         },
-//       ],
-//     };
-//   },
-//   methods: {
-//     toggleSidebar() {
-//       this.isOpen = !this.isOpen;
-//     },
-//     updateIsOpen(newVal) {
-//       this.isOpen = newVal;
-//     },
-//   },
-// };
 </script>
 
 <style scoped>
@@ -251,5 +205,20 @@ getAnalytics();
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 14px;
+}
+
+.pay_early {
+  color: var(--primary-purple);
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.payment_overdue {
+  color: #D73C27;
+}
+
+.next_instalment {
+  width: 100%;
 }
 </style>

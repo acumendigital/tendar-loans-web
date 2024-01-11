@@ -28,6 +28,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      title: "Tendar Loans",
       link: [
         {
           rel: "stylesheet",
