@@ -1,23 +1,37 @@
 <template>
   <div class="main_ctn">
     <div class="top_section">
-      <h1 class="title">Welcome {{ dataStore.userProfile?.first_name}}</h1>
+      <h1 class="title">Welcome {{ dataStore.userProfile?.first_name }}</h1>
     </div>
     <div class="cards_section">
       <div class="card_ctn">
         <div class="card_inner">
           <div class="lhs">
             <p class="card_title">Wallet balance</p>
-            <p class="card_subtitle">{{ functions.formatMoney(walletData.available_balance, walletData.currency || 'NGN') }}</p>
+            <p class="card_subtitle">
+              {{
+                functions.formatMoney(
+                  walletData.available_balance,
+                  walletData.currency || "NGN"
+                )
+              }}
+            </p>
           </div>
         </div>
       </div>
       <div class="card_ctn">
         <div class="card_inner">
-          <div class="lhs">
+          <div class="lhs next_instalment">
             <p class="card_title">Next instalment due</p>
-            <p class="card_subtitle">{{ functions.formatMoney(repaymentData.next_due_amount, 'NGN') }}</p>
-            <p v-if="repaymentData.next_due_date" class="card_text">{{ detailedDate(repaymentData.next_due_date) }}</p>
+            <p class="card_subtitle">
+              {{ functions.formatMoney(repaymentData.next_due_amount, "NGN") }}
+            </p>
+            <div class="flex justify-between">
+              <p v-if="repaymentData.next_due_date" class="card_text">
+                {{ detailedDate(repaymentData.next_due_date) }}
+              </p>
+              <p class="pay_early">Pay early</p>
+            </div>
           </div>
         </div>
       </div>
@@ -25,7 +39,10 @@
         <div class="card_inner">
           <div class="lhs">
             <p class="card_title">Number of payments</p>
-            <p class="card_subtitle">{{ repaymentData.no_of_paid_repayment }} of {{ repaymentData.no_of_active_repayment }}</p>
+            <p class="card_subtitle">
+              {{ repaymentData.no_of_paid_repayment }} of
+              {{ repaymentData.no_of_active_repayment }}
+            </p>
           </div>
           <div v-if="!loanData.active" class="rhs">
             <p class="active_badge">Active loan</p>
@@ -33,6 +50,7 @@
         </div>
       </div>
     </div>
+    <OverdueAlert :overdueStatus="'overdue'" />
     <TableTransactions />
   </div>
 </template>
@@ -112,7 +130,7 @@ getUserProfile();
   border-radius: 4px;
   background-color: #7b62eb10;
   padding: 25px 20px 25px 40px;
-  width: 22rem;
+  width: 100%;
   margin-right: 2rem;
 }
 
@@ -149,5 +167,16 @@ getUserProfile();
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 14px;
+}
+
+.pay_early {
+  color: var(--primary-purple);
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.next_instalment {
+  width: 100%;
 }
 </style>
