@@ -30,10 +30,17 @@
               <p v-if="repaymentData.next_due_date" class="card_text">
                 {{ detailedDate(repaymentData.next_due_date) }}
               </p>
-              <p v-if="overdueStatus === 'due'" class="pay_early">Pay early</p>
+              <p
+                v-if="overdueStatus === 'due'"
+                class="pay_early"
+                @click="navigateTo('/loans/repay-loan')"
+              >
+                Pay early
+              </p>
               <p
                 v-if="overdueStatus === 'overdue'"
                 class="pay_early payment_overdue"
+                @click="navigateTo('/loans/repay-loan')"
               >
                 Payment Overdue
               </p>
@@ -62,6 +69,7 @@
       :amount="repaymentData.next_due_amount"
       :dueDate="repaymentData.next_due_date"
       @close-modal="overdueStatus = ''"
+      @payloan="navigateTo('/loans/repay-loan')"
     />
     <TableTransactions />
   </div>
@@ -108,6 +116,8 @@ const getAnalytics = () => {
       walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
+      dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
+      dataStore.updateFullRepayment(loanData.value.loan_amount)
       getDueDate(repaymentData.value.next_due_date);
     })
     .catch((err) => {
@@ -121,20 +131,20 @@ const getAnalytics = () => {
 
 const getDueDate = (date) => {
   let date1 = new Date();
-  let date2 = new Date(date);
+  let date2 = new Date('01/15/2024');
   let difference_in_time = date2.getTime() - date1.getTime();
 
   let difference_in_days = Math.round(difference_in_time / (1000 * 3600 * 24));
 
-  // console.log(
-  //   "Total number of days between dates:\n" +
-  //     date1.toDateString() +
-  //     " and " +
-  //     date2.toDateString() +
-  //     " is: " +
-  //     difference_in_days +
-  //     " days"
-  // );
+  console.log(
+    "Total number of days between dates:\n" +
+      date1.toDateString() +
+      " and " +
+      date2.toDateString() +
+      " is: " +
+      difference_in_days +
+      " days"
+  );
   if (difference_in_days === 7 || difference_in_days === 3) {
     overdueStatus.value = "due";
   } else if (difference_in_days <= 0) {
