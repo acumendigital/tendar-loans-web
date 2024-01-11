@@ -14,8 +14,8 @@
           your account is funded.
         </p>
       </div>
-      <button v-if="props.overdueStatus === 'due'" class="global_btn">Click here to pay early</button>
-      <button v-else-if="props.overdueStatus === 'overdue'" class="global_btn overdue_btn">Click here to pay now</button>
+      <button v-if="props.overdueStatus === 'due'" class="global_btn" @click="$emit('payloan')">Click here to pay early</button>
+      <button v-else-if="props.overdueStatus === 'overdue'" class="global_btn overdue_btn"  @click="$emit('payloan')">Click here to pay now</button>
     </div>
   </div>
 </template>

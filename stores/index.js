@@ -17,6 +17,8 @@ export const useUserStore = defineStore("users", {
     apiToken: "",
     userData: {},
     userProfile: {},
+    nextRepayment: "",
+    fullRepayment: "",
   }),
   actions: {
     updateToken(val) {
@@ -31,6 +33,12 @@ export const useUserStore = defineStore("users", {
     },
     updateUserProfile(val) {
       this.userProfile = val;
+    },
+    updateNextRepayment(val) {
+      this.nextRepayment = val;
+    },
+    updateFullRepayment(val) {
+      this.fullRepayment = val;
     },
   },
   persist: true,

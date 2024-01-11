@@ -81,6 +81,7 @@
 <script setup>
 import axios from "axios";
 const toast = useToast();
+const dataStore = useUserStore();
 
 const overdueStatus = ref('');
 const loading = ref(false);
@@ -108,6 +109,8 @@ const getAnalytics = () => {
       // walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
+      dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
+      dataStore.updateFullRepayment(loanData.value.loan_amount)
       getDueDate(repaymentData.value.next_due_date);
     })
     .catch((err) => {
