@@ -119,6 +119,7 @@
             type="number"
             name="amount"
             placeholder="Enter Amount"
+            @input="payType = ''"
           />
         </div>
         <p class="min_max">

@@ -25,11 +25,17 @@
         @go-back="reviewDetailsBack"
       /> -->
     </div>
+    <LoanTransactionDetails
+      v-if="openTransactionDetails"
+      @close-modal="openTransactionDetails = false"
+      @proceed="enterPin()"
+    />
     <LoanApproved v-if="loanApproved" @close-modal="loanApproved = false" />
   </div>
 </template>
 
 <script setup>
+const openTransactionDetails = ref(true)
 </script>
 
 <style scoped>
@@ -63,5 +69,4 @@
   align-items: center; */
   z-index: 1;
 }
-
 </style>
