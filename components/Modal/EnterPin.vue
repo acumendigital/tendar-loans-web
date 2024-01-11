@@ -2,7 +2,7 @@
   <div class="modal-backdrop" @click="$emit('close-modal')">
     <div class="modal reveals" @click.stop>
       <div class="top_section">
-        <h1 class="modal_title">Transaction details</h1>
+        <h1 class="modal_title">Enter PIN</h1>
         <span
           class="material-icons-outlined close"
           @click="$emit('close-modal')"
@@ -11,40 +11,17 @@
         </span>
       </div>
       <p class="modal_subtitle">
-        You are about to make a loan repayment of <span class="text-bold">{{ functions.formatMoney(props.amount, "NGN") }}</span>
+        Please enter your pin to confirm this transaction
       </p>
       <div class="modal_content">
-        <div class="content_ctn">
-          <p class="text_content">Amount</p>
-          <p class="value_content">
-            {{ functions.formatMoney(props.amount, "NGN") }}
-          </p>
+        <div class="otp_ctn">
+          <OTPInput inputs="4" @inputs="handlePINChange($event)" />
         </div>
-        <div class="content_ctn">
-          <p class="text_content">Service fee</p>
-          <p class="value_content">
-            {{ functions.formatMoney(serviceFee, "NGN") }}
+        <div class="bottom_link">
+          <p class="bottom_text">
+            Don’t have a pin?
+            <span class="resend_btn" @click="createPin()">Create one</span>
           </p>
-        </div>
-        <div class="content_ctn">
-          <p class="text_content">Late repayment fee</p>
-          <p class="value_content">
-            {{ functions.formatMoney(lateRepaymentFee, "NGN") }}
-          </p>
-        </div>
-        <div class="content_ctn">
-          <p class="text_content">Total amount</p>
-          <p class="value_content text-bold">
-            {{ functions.formatMoney(totalAmount, "NGN") }}
-          </p>
-        </div>
-        <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="$emit('proceed')">
-            Continue to payment
-          </button>
-          <button v-else class="action-btn" disabled>
-            <BtnLoader color="#fff" />
-          </button>
         </div>
       </div>
     </div>
@@ -55,24 +32,29 @@
 import axios from "axios";
 const emit = defineEmits(["proceed"]);
 const props = defineProps({
-  amount: {
-    type: Number,
-    default: () => 0,
+  email: {
+    type: String,
+    default: () => "",
   },
 });
 
-const serviceFee = ref(100);
-const lateRepaymentFee = ref(0);
-const totalAmount = ref(0);
 const pin = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
 
-const calculateTotal = () => {
-  totalAmount.value = props.amount + serviceFee.value + lateRepaymentFee.value;
+const handlePINChange = (value) => {
+  pin.value = value;
+
+  console.log(pin.value);
+  if (pin.value.length === 4) {
+    console.log(pin.value);
+    emit("proceed", pin.value);
+  }
 };
 
-calculateTotal();
+const createPin = () => {
+  navigateTo("/settings?tab=Security&type=Pin");
+};
 </script>
 
 <style scoped>
@@ -96,7 +78,7 @@ calculateTotal();
   position: relative;
   background-color: white;
   max-width: 550px;
-  width: 35%;
+  width: 30%;
   height: fit-content;
   align-items: center;
   border-radius: 20px;
@@ -135,32 +117,46 @@ calculateTotal();
 }
 
 .modal_content {
+  width: 70%;
+  margin: auto;
+}
+
+.otp_ctn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.input_ctn {
   width: 100%;
-  margin: auto;
+  margin-bottom: 20px;
 }
 
-.content_ctn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e1e1e1;
-  padding: 20px 0;
+.input_flex_item {
+  flex-basis: 48%;
 }
 
-.text_content {
-  color: #6a707e;
-  font-size: 14px;
-}
-
-.value_content {
-  color: #01112c;
-  font-size: 16px;
-}
-
-.btn-div {
-  width: 80%;
-  margin: auto;
+.global_btn {
+  width: 100%;
   margin-top: 2rem;
+}
+
+.bottom_link {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.bottom_text {
+  color: #00000086;
+  font-size: 16px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.resend_btn {
+  color: #7a62eb;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 1400px) {
