@@ -30,12 +30,36 @@
       @close-modal="openTransactionDetails = false"
       @proceed="enterPin()"
     />
-    <LoanApproved v-if="loanApproved" @close-modal="loanApproved = false" />
+    <ModalWalletEnterPin
+      v-if="openPinModal"
+      @close-modal="openPinModal = false"
+      @proceed="transSuccess()"
+    />
+    <ModalSuccess
+      v-if="openSuccess"
+      :type="'successful'"
+      :title="'Transaction successful'"
+      :subTitle="'Your loan has been repaid. Keep up the good work to get access to better options.'"
+      @close-modal="openSuccess = false"
+    />
   </div>
 </template>
 
 <script setup>
-const openTransactionDetails = ref(true)
+const openTransactionDetails = ref(true);
+const openPinModal = ref(false);
+const openSuccess = ref(false);
+
+const enterPin = () => {
+  openTransactionDetails.value = false;
+  openPinModal.value = true;
+};
+
+const transSuccess = () => {
+  openPinModal.value = false;
+  openSuccess.value = true;
+};
+
 </script>
 
 <style scoped>
