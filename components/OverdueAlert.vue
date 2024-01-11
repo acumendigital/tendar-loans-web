@@ -6,11 +6,11 @@
     <div class="inner">
       <div class="inner_lhs">
         <p v-if="props.overdueStatus === 'due'" class="overdue_text">
-          Your next repayment of <span class="overdue_bold">₦15,350.00</span> is due <span class="overdue_bold">Aug 30, 2023.</span> Please ensure
+          Your next repayment of <span class="overdue_bold">{{ functions.formatMoney(props.amount, "NGN") }}</span> is due <span class="overdue_bold">{{ detailedDate(dueDate) }}</span> Please ensure
           your account is funded.
         </p>
         <p v-if="props.overdueStatus === 'overdue'" class="overdue_text">
-          Your next repayment of <span class="overdue_bold">₦15,350.00</span> is now <span class="overdue_bold">overdue.</span> Please ensure
+          Your next repayment of <span class="overdue_bold">{{ functions.formatMoney(props.amount, "NGN") }}</span> is now <span class="overdue_bold">overdue.</span> Please ensure
           your account is funded.
         </p>
       </div>
@@ -25,6 +25,14 @@ const props = defineProps({
   overdueStatus: {
     type: String,
     default: () => 'due'
+  },
+  amount: {
+    type: String,
+    default: () => ''
+  },
+  dueDate: {
+    type: String,
+    default: () => ''
   }
 })
 </script>

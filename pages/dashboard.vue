@@ -30,7 +30,13 @@
               <p v-if="repaymentData.next_due_date" class="card_text">
                 {{ detailedDate(repaymentData.next_due_date) }}
               </p>
-              <p class="pay_early">Pay early</p>
+              <p v-if="overdueStatus === 'due'" class="pay_early">Pay early</p>
+              <p
+                v-if="overdueStatus === 'overdue'"
+                class="pay_early payment_overdue"
+              >
+                Payment Overdue
+              </p>
             </div>
           </div>
         </div>
@@ -50,7 +56,13 @@
         </div>
       </div>
     </div>
-    <OverdueAlert :overdueStatus="'overdue'" />
+    <OverdueAlert
+      v-if="overdueStatus"
+      :overdueStatus="overdueStatus"
+      :amount="repaymentData.next_due_amount"
+      :dueDate="repaymentData.next_due_date"
+      @close-modal="overdueStatus = ''"
+    />
     <TableTransactions />
   </div>
 </template>
@@ -61,6 +73,7 @@ import { useUserStore } from "~/stores";
 const toast = useToast();
 const dataStore = useUserStore();
 
+const overdueStatus = ref("");
 const loading = ref(false);
 const analytics = ref({});
 const walletData = ref({});
@@ -72,7 +85,7 @@ const getUserProfile = () => {
   axios
     .get("customer/profile")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
+      // console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
       console.log(dataStore.userProfile.first_name);
@@ -90,11 +103,12 @@ const getAnalytics = () => {
   axios
     .get("dashboard/analytics/fetch")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
+      console.log(onfulfilled);
       analytics.value = onfulfilled.data.data;
       walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
+      getDueDate(repaymentData.value.next_due_date);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -103,6 +117,29 @@ const getAnalytics = () => {
     .finally(() => {
       loading.value = false;
     });
+};
+
+const getDueDate = (date) => {
+  let date1 = new Date();
+  let date2 = new Date(date);
+  let difference_in_time = date2.getTime() - date1.getTime();
+
+  let difference_in_days = Math.round(difference_in_time / (1000 * 3600 * 24));
+
+  // console.log(
+  //   "Total number of days between dates:\n" +
+  //     date1.toDateString() +
+  //     " and " +
+  //     date2.toDateString() +
+  //     " is: " +
+  //     difference_in_days +
+  //     " days"
+  // );
+  if (difference_in_days === 7 || difference_in_days === 3) {
+    overdueStatus.value = "due";
+  } else if (difference_in_days <= 0) {
+    overdueStatus.value = "overdue";
+  }
 };
 
 getAnalytics();
@@ -174,6 +211,10 @@ getUserProfile();
   cursor: pointer;
   font-size: 14px;
   margin-right: 10px;
+}
+
+.payment_overdue {
+  color: #d73c27;
 }
 
 .next_instalment {
