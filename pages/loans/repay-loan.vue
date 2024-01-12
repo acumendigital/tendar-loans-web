@@ -4,36 +4,19 @@
       <h1 class="title">Repay loan</h1>
     </div>
     <div class="form-content">
-      <LoanRepayLoan />
-      <!-- <LoanProfileUpdate
-        v-if="activeSection === 'Profile Update'"
-        @continue="profileUpdateDone"
-      />
-      <LoanDetails
-        v-if="activeSection === 'Loan Details'"
-        @continue="LoanDetailsDone"
-        @go-back="LoanDetailsBack"
-      />
-      <LoanRepaymentPlan
-        v-if="activeSection === 'Repayment Plan'"
-        @continue="repaymentPlanDone"
-        @go-back="repaymentPlanBack"
-      />
-      <LoanReviewDetails
-        v-if="activeSection === 'Review Details'"
-        @continue="loanApproved = true"
-        @go-back="reviewDetailsBack"
-      /> -->
+      <LoanRepayLoan @openDetails="openDetails" />
     </div>
     <LoanTransactionDetails
       v-if="openTransactionDetails"
+      :amount="amount_to_pay"
       @close-modal="openTransactionDetails = false"
-      @proceed="enterPin()"
+      @proceed="enterPin"
     />
-    <ModalWalletEnterPin
+    <ModalEnterPin
       v-if="openPinModal"
+      :loading="loading"
       @close-modal="openPinModal = false"
-      @proceed="transSuccess()"
+      @proceed="proceed"
     />
     <ModalSuccess
       v-if="openSuccess"
@@ -46,11 +29,23 @@
 </template>
 
 <script setup>
-const openTransactionDetails = ref(true);
+import axios from "axios";
+const config = useRuntimeConfig();
+const toast = useToast();
+const route = useRoute();
+const dataStore = useUserStore();
+const encryptionKey = config.public.ENCRYPTION_KEY;
+
+const loading = ref(false);
+const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
+const amount_to_pay = ref(0);
+const totalAmount = ref(0);
+const paymentOption = ref("");
 
-const enterPin = () => {
+const enterPin = (data) => {
+  totalAmount.value = data
   openTransactionDetails.value = false;
   openPinModal.value = true;
 };
@@ -60,6 +55,94 @@ const transSuccess = () => {
   openSuccess.value = true;
 };
 
+const openDetails = (amount, option) => {
+  amount_to_pay.value = amount;
+  paymentOption.value = option;
+  openTransactionDetails.value = true;
+};
+
+const proceed = (data) => {
+  const encrptedPin = functions.encryptData(data, encryptionKey);
+  const loanid = route.query.id || dataStore.loanData.id
+  if (paymentOption.value === "wallet") {
+    payWithWallet(encrptedPin, loanid)
+  } else if (paymentOption.value === "card") {
+    payWithCard(encrptedPin, loanid);
+  } else if (paymentOption.value === "online") {
+    payOnline(encrptedPin, loanid);
+  }
+}
+
+const payWithWallet = (pin, id) => {
+  loading.value = true;
+  const data = {
+    pin: pin,
+    loan_id: id,
+    amount: totalAmount.value,
+  };
+  axios
+    .post("loan/recollect/wallet", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      transSuccess();
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const payWithCard = (pin, id) => {
+  loading.value = true;
+  const data = {
+    pin: pin,
+    loan_id: id,
+    amount: totalAmount.value,
+    card_id: ''
+  };
+  axios
+    .post("loan/recollect/card", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      transSuccess();
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const payOnline = (pin, id) => {
+  loading.value = true;
+  console.log(totalAmount.value);
+  const data = {
+    pin: pin,
+    loan_id: id,
+    amount: totalAmount.value,
+    success_url: "https://tendar-loans-web.vercel.app/loans",
+    cancel_url: "https://tendar-loans-web.vercel.app/loans",
+  };
+  axios
+    .post("loan/recollect/initiate", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      const checkoutRoute = onfulfilled.data.data.card.checkout_url;
+      window.location.href = checkoutRoute;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 </script>
 
 <style scoped>
@@ -78,7 +161,7 @@ const transSuccess = () => {
 
 .form-content {
   background: #fff;
-  width: 38vw;
+  width: 45vw;
   min-width: 500px;
   height: auto;
   min-height: fit-content;

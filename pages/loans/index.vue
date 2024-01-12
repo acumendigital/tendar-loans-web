@@ -18,8 +18,8 @@
               <p v-if="repaymentData.next_due_date" class="card_text">
                 {{ detailedDate(repaymentData.next_due_date) }}
               </p>
-              <p v-if="overdueStatus === 'due'" class="pay_early">Pay early</p>
-              <p v-if="overdueStatus === 'overdue'"  class="pay_early payment_overdue">Payment Overdue</p>
+              <p v-if="overdueStatus === 'due'" class="pay_early" @click="navigateTo(`/loans/repay-loan?id=${loanId}`)">Pay early</p>
+              <p v-if="overdueStatus === 'overdue'"  class="pay_early payment_overdue" @click="navigateTo(`/loans/repay-loan?id=${loanId}`)">Payment Overdue</p>
             </div>
           </div>
         </div>
@@ -50,8 +50,8 @@
               No active loan
             </p>
             <p v-else class="card_subtitle">
-              {{ repaymentData.no_of_paid_repayment }} of
-              {{ repaymentData.no_of_active_repayment }}
+              {{ repaymentData.no_of_paid_repayment || 0 }} of
+              {{ repaymentData.no_of_active_repayment || 0 }}
             </p>
           </div>
           <div v-if="loanData.active" class="rhs">
@@ -66,6 +66,7 @@
       :amount="repaymentData.next_due_amount"
       :dueDate="repaymentData.next_due_date"
       @close-modal="overdueStatus = ''"
+      @payloan="navigateTo(`/loans/repay-loan?id=${loanId}`)"
     />
     <TableLoans @openSidebar="toggleSidebar" />
     <div class="sidebar_ctn">
@@ -109,9 +110,28 @@ const getAnalytics = () => {
       // walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
-      dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
-      dataStore.updateFullRepayment(loanData.value.loan_amount)
+      // dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
+      // dataStore.updateFullRepayment(loanData.value.loan_amount)
       getDueDate(repaymentData.value.next_due_date);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const getLoanData = () => {
+  loading.value = true;
+  axios
+    .get("loan/list")
+    .then((onfulfilled) => {
+      // console.log(onfulfilled);
+      const fullLoanData = onfulfilled.data.data.loans.data[0];
+      console.log(fullLoanData);
+      dataStore.updateLoanData(fullLoanData);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -145,6 +165,7 @@ const getDueDate = (date) => {
   }
 };
 
+getLoanData();
 getAnalytics();
 </script>
 

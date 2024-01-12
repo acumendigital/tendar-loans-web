@@ -10,12 +10,12 @@
           >How much are you paying now?</label
         >
         <div class="select_amount_ctn">
-          <div class="card_ctn" :class="payType === 'next-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.nextRepayment, 'next-pay')">
+          <div class="card_ctn" :class="payType === 'next-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.loanData.next_pay_amount, 'next-pay')">
             <div class="card_inner">
               <div class="lhs">
                 <p class="card_title">Next repayment</p>
                 <p class="card_subtitle">
-                  {{ functions.formatMoney(dataStore.nextRepayment, "NGN") }}
+                  {{ functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN") }}
                 </p>
               </div>
               <div class="rhs">
@@ -57,12 +57,12 @@
               </div>
             </div>
           </div>
-          <div class="card_ctn" :class="payType === 'full-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.fullRepayment, 'full-pay')">
+          <div class="card_ctn" :class="payType === 'full-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.loanData.amount_remaining_to_pay, 'full-pay')">
             <div class="card_inner">
               <div class="lhs">
                 <p class="card_title">Full repayment</p>
                 <p class="card_subtitle">
-                  {{ functions.formatMoney(dataStore.fullRepayment, "NGN") }}
+                  {{ functions.formatMoney(dataStore.loanData.amount_remaining_to_pay, "NGN") }}
                 </p>
               </div>
               <div class="rhs">
@@ -123,8 +123,8 @@
           />
         </div>
         <p class="min_max">
-          Min. <span class="min_man_bold">₦15,350</span> - Max.
-          <span class="min_man_bold">₦66,950</span>
+          Min. <span class="min_man_bold">{{ functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN") }}</span> - Max.
+          <span class="min_man_bold">{{ functions.formatMoney(dataStore.loanData.amount_remaining_to_pay, "NGN") }}</span>
         </p>
       </div>
       <div class="form_group_flex">
@@ -146,7 +146,7 @@
         <p class=""></p>
       </div>
       <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="save()">
+        <button v-if="!loading" class="action-btn" @click="$emit('openDetails', amount_to_pay, paymentOption)">
           Securely pay {{ functions.formatMoney(amount_to_pay, "NGN") }}
         </button>
         <button v-else class="action-btn" disabled>
@@ -169,7 +169,6 @@ const props = defineProps({
   },
 });
 
-const formattedDob = ref("");
 const payType = ref("");
 const paymentOption = ref("");
 const amount_to_pay = ref(null);
@@ -181,53 +180,6 @@ const selectPayType = (amount, type) => {
   amount_to_pay.value = amount
   payType.value = type
 }
-
-const save = () => {
-  loading.value = true;
-  console.log(loading.value);
-  const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formateDate(formattedDob.value),
-    gender: gender.value,
-    address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
-    },
-    employment_status: employmentStatus.value,
-    job_title: jobTitle.value,
-  };
-  console.log(data);
-  // const path = "customer/create";
-  axios
-    .put("customer/update", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      toast.add({ title: "Profile Updated", color: "green" });
-      console.log(onfulfilled);
-      const user_profile = onfulfilled.data.data.customer;
-      dataStore.updateUserProfile(user_profile);
-      // navigateTo("/user/verify-identity");
-      // }
-      emit("continue");
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        toast.add({ title: errorMsg, color: "red" });
-      } else {
-        toast.add({
-          title: "Oops, something went wrong, please try again later",
-          color: "red",
-        });
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-};
 </script>
 
 <style scoped>
@@ -309,7 +261,7 @@ const save = () => {
 }
 
 .form_group_flex div {
-  flex-basis: 62%;
+  flex-basis: 60%;
   margin-top: 0;
 }
 .form-group {
@@ -340,5 +292,11 @@ const save = () => {
   color: #464a53;
   font-size: 14px;
   font-weight: 700;
+}
+
+.action-btn {
+  width: 70%;
+  margin: auto;
+  margin-top: 20px;
 }
 </style>

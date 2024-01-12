@@ -33,14 +33,14 @@
               <p
                 v-if="overdueStatus === 'due'"
                 class="pay_early"
-                @click="navigateTo('/loans/repay-loan')"
+                @click="navigateTo(`/loans/repay-loan?id=${loanId}`)"
               >
                 Pay early
               </p>
               <p
                 v-if="overdueStatus === 'overdue'"
                 class="pay_early payment_overdue"
-                @click="navigateTo('/loans/repay-loan')"
+                @click="navigateTo(`/loans/repay-loan?id=${loanId}`)"
               >
                 Payment Overdue
               </p>
@@ -53,8 +53,8 @@
           <div class="lhs">
             <p class="card_title">Number of payments</p>
             <p class="card_subtitle">
-              {{ repaymentData.no_of_paid_repayment }} of
-              {{ repaymentData.no_of_active_repayment }}
+              {{ repaymentData.no_of_paid_repayment || 0 }} of
+              {{ repaymentData.no_of_active_repayment || 0 }}
             </p>
           </div>
           <div v-if="!loanData.active" class="rhs">
@@ -69,7 +69,7 @@
       :amount="repaymentData.next_due_amount"
       :dueDate="repaymentData.next_due_date"
       @close-modal="overdueStatus = ''"
-      @payloan="navigateTo('/loans/repay-loan')"
+      @payloan="navigateTo(`/loans/repay-loan?id=${loanId}`)"
     />
     <TableTransactions />
   </div>
@@ -82,6 +82,7 @@ const toast = useToast();
 const dataStore = useUserStore();
 
 const overdueStatus = ref("");
+const loanId = ref("");
 const loading = ref(false);
 const analytics = ref({});
 const walletData = ref({});
@@ -116,9 +117,29 @@ const getAnalytics = () => {
       walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
-      dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
-      dataStore.updateFullRepayment(loanData.value.loan_amount)
+      // dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
+      // dataStore.updateFullRepayment(loanData.value.loan_amount)
       getDueDate(repaymentData.value.next_due_date);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const getLoanData = () => {
+  loading.value = true;
+  axios
+    .get("loan/list")
+    .then((onfulfilled) => {
+      // console.log(onfulfilled);
+      const fullLoanData = onfulfilled.data.data.loans.data[0];
+      loanId.value = fullLoanData.id
+      console.log(fullLoanData);
+      dataStore.updateLoanData(fullLoanData);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -154,6 +175,7 @@ const getDueDate = (date) => {
 
 getAnalytics();
 getUserProfile();
+getLoanData();
 </script>
 
 <style scoped>

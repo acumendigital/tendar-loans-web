@@ -11,7 +11,7 @@
         </span>
       </div>
       <p class="modal_subtitle">
-        You are about to make a loan repayment of ₦15,350
+        You are about to make a loan repayment of <span class="text-bold">{{ functions.formatMoney(props.amount, "NGN") }}</span>
       </p>
       <div class="modal_content">
         <div class="content_ctn">
@@ -39,7 +39,7 @@
           </p>
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="$emit('proceed')">
+          <button v-if="!loading" class="action-btn" @click="$emit('proceed', totalAmount)">
             Continue to payment
           </button>
           <button v-else class="action-btn" disabled>
@@ -57,7 +57,7 @@ const emit = defineEmits(["proceed"]);
 const props = defineProps({
   amount: {
     type: Number,
-    default: () => 20,
+    default: () => 0,
   },
 });
 
