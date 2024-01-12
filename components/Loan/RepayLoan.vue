@@ -10,12 +10,12 @@
           >How much are you paying now?</label
         >
         <div class="select_amount_ctn">
-          <div class="card_ctn" :class="payType === 'next-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.nextRepayment, 'next-pay')">
+          <div class="card_ctn" :class="payType === 'next-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.loanData.next_pay_amount, 'next-pay')">
             <div class="card_inner">
               <div class="lhs">
                 <p class="card_title">Next repayment</p>
                 <p class="card_subtitle">
-                  {{ functions.formatMoney(dataStore.nextRepayment, "NGN") }}
+                  {{ functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN") }}
                 </p>
               </div>
               <div class="rhs">
@@ -57,12 +57,12 @@
               </div>
             </div>
           </div>
-          <div class="card_ctn" :class="payType === 'full-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.fullRepayment, 'full-pay')">
+          <div class="card_ctn" :class="payType === 'full-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.loanData.amount_remaining_to_pay, 'full-pay')">
             <div class="card_inner">
               <div class="lhs">
                 <p class="card_title">Full repayment</p>
                 <p class="card_subtitle">
-                  {{ functions.formatMoney(dataStore.fullRepayment, "NGN") }}
+                  {{ functions.formatMoney(dataStore.loanData.amount_remaining_to_pay, "NGN") }}
                 </p>
               </div>
               <div class="rhs">
@@ -123,8 +123,8 @@
           />
         </div>
         <p class="min_max">
-          Min. <span class="min_man_bold">{{ functions.formatMoney(dataStore.nextRepayment, "NGN") }}</span> - Max.
-          <span class="min_man_bold">{{ functions.formatMoney(dataStore.fullRepayment, "NGN") }}</span>
+          Min. <span class="min_man_bold">{{ functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN") }}</span> - Max.
+          <span class="min_man_bold">{{ functions.formatMoney(dataStore.loanData.amount_remaining_to_pay, "NGN") }}</span>
         </p>
       </div>
       <div class="form_group_flex">

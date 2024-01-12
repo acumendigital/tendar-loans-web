@@ -39,7 +39,7 @@
           </p>
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="$emit('proceed')">
+          <button v-if="!loading" class="action-btn" @click="$emit('proceed', totalAmount)">
             Continue to payment
           </button>
           <button v-else class="action-btn" disabled>

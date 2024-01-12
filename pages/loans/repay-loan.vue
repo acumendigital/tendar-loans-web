@@ -10,12 +10,13 @@
       v-if="openTransactionDetails"
       :amount="amount_to_pay"
       @close-modal="openTransactionDetails = false"
-      @proceed="enterPin()"
+      @proceed="enterPin"
     />
     <ModalEnterPin
       v-if="openPinModal"
+      :loading="loading"
       @close-modal="openPinModal = false"
-      @proceed="proceed()"
+      @proceed="proceed"
     />
     <ModalSuccess
       v-if="openSuccess"
@@ -31,15 +32,20 @@
 import axios from "axios";
 const config = useRuntimeConfig();
 const toast = useToast();
+const route = useRoute();
+const dataStore = useUserStore();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 
+const loading = ref(false);
 const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
 const amount_to_pay = ref(0);
+const totalAmount = ref(0);
 const paymentOption = ref("");
 
-const enterPin = () => {
+const enterPin = (data) => {
+  totalAmount.value = data
   openTransactionDetails.value = false;
   openPinModal.value = true;
 };
@@ -57,21 +63,22 @@ const openDetails = (amount, option) => {
 
 const proceed = (data) => {
   const encrptedPin = functions.encryptData(data, encryptionKey);
-  if (paymentOption === "wallet") {
-    payWithWallet(encrptedPin)
-  } else if (paymentOption === "card") {
-    payWithCard(encrptedPin);
-  } else if (paymentOption === "online") {
-    payOnline(encrptedPin);
+  const loanid = route.query.id || dataStore.loanData.id
+  if (paymentOption.value === "wallet") {
+    payWithWallet(encrptedPin, loanid)
+  } else if (paymentOption.value === "card") {
+    payWithCard(encrptedPin, loanid);
+  } else if (paymentOption.value === "online") {
+    payOnline(encrptedPin, loanid);
   }
 }
 
-const payWithWallet = (pin) => {
-  addCardLoading.value = true;
+const payWithWallet = (pin, id) => {
+  loading.value = true;
   const data = {
     pin: pin,
-    loan_id: "657ba27c9ea1cc7a95c44e1a",
-    amount: amount_to_pay.value,
+    loan_id: id,
+    amount: totalAmount.value,
   };
   axios
     .post("loan/recollect/wallet", data)
@@ -84,16 +91,16 @@ const payWithWallet = (pin) => {
       toast.add({ title: errorMsg, color: "red" });
     })
     .finally(() => {
-      addCardLoading.value = false;
+      loading.value = false;
     });
 };
 
-const payWithCard = (pin) => {
-  addCardLoading.value = true;
+const payWithCard = (pin, id) => {
+  loading.value = true;
   const data = {
     pin: pin,
-    loan_id: "657ba27c9ea1cc7a95c44e1a",
-    amount: amount_to_pay.value,
+    loan_id: id,
+    amount: totalAmount.value,
     card_id: ''
   };
   axios
@@ -107,16 +114,17 @@ const payWithCard = (pin) => {
       toast.add({ title: errorMsg, color: "red" });
     })
     .finally(() => {
-      addCardLoading.value = false;
+      loading.value = false;
     });
 };
 
-const payOnline = (pin) => {
-  addCardLoading.value = true;
+const payOnline = (pin, id) => {
+  loading.value = true;
+  console.log(totalAmount.value);
   const data = {
     pin: pin,
-    loan_id: "657ba27c9ea1cc7a95c44e1a",
-    amount: amount_to_pay.value,
+    loan_id: id,
+    amount: totalAmount.value,
     success_url: "https://tendar-loans-web.vercel.app/loans",
     cancel_url: "https://tendar-loans-web.vercel.app/loans",
   };
@@ -132,7 +140,7 @@ const payOnline = (pin) => {
       toast.add({ title: errorMsg, color: "red" });
     })
     .finally(() => {
-      addCardLoading.value = false;
+      loading.value = false;
     });
 };
 </script>

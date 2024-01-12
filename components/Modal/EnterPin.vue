@@ -15,10 +15,13 @@
       </p>
       <div class="modal_content">
         <div class="otp_ctn">
-          <OTPInput inputs="4" @inputs="handlePINChange($event)" />
+          <OTPInput inputs="6" @inputs="handlePINChange($event)" />
         </div>
         <div class="bottom_link">
-          <p class="bottom_text">
+          <div v-if="props.loading" class="loader_ctn">
+            <BtnLoader color="#7a62eb" size="20" />
+          </div>
+          <p v-else class="bottom_text">
             Don’t have a pin?
             <span class="resend_btn" @click="createPin()">Create one</span>
           </p>
@@ -36,17 +39,17 @@ const props = defineProps({
     type: String,
     default: () => "",
   },
+  loading: {
+    type: Boolean,
+    default: () => false,
+  },
 });
 
 const pin = ref("");
-const loading = ref(false);
-const resendLoading = ref(false);
 
 const handlePINChange = (value) => {
   pin.value = value;
-
-  console.log(pin.value);
-  if (pin.value.length === 4) {
+  if (pin.value.length === 6) {
     console.log(pin.value);
     emit("proceed", pin.value);
   }
@@ -117,7 +120,7 @@ const createPin = () => {
 }
 
 .modal_content {
-  width: 70%;
+  width: 100%;
   margin: auto;
 }
 
@@ -157,6 +160,11 @@ const createPin = () => {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.loader_ctn {
+  display: flex;
+  justify-content: center;
 }
 
 @media only screen and (max-width: 1400px) {
