@@ -78,7 +78,7 @@
             fill="#7A62EB"
           />
         </svg>
-        <p>Send money</p>
+        <p>Withdrawal</p>
       </div>
     </div>
     <TableWallet @openSidebar="toggleSidebar"/>
@@ -92,22 +92,26 @@
     <ModalWalletTopup
       v-if="openTopup"
       @close-modal="openTopup = false"
-      @proceed="openTopup = false"
+      @proceed="proceed"
     />
     <ModalWithdrawal
       v-if="openWithdrawal"
+      :balance="walletData.available_balance"
       @close-modal="openWithdrawal = false"
-      @proceed="transDetails()"
+      @proceed="transDetails"
     />
     <ModalWalletTransactionDetails
       v-if="openTransactionDetails"
+      :bankData="bankData"
+      :amount="withdrawAmount"
       @close-modal="openTransactionDetails = false"
       @proceed="enterPin()"
     />
-    <ModalWalletEnterPin
+    <ModalEnterPin
       v-if="openPinModal"
+      :loading="loading"
       @close-modal="openPinModal = false"
-      @proceed="transSuccess()"
+      @proceed="transSuccess"
     />
     <ModalSuccess
       v-if="openSuccess"
@@ -120,6 +124,9 @@
 
 <script setup>
 import axios from "axios";
+import LogoVue from "~/components/Tendar/Logo.vue";
+const config = useRuntimeConfig();
+const encryptionKey = config.public.ENCRYPTION_KEY;
 const toast = useToast();
 const openTopup = ref(false);
 const openWithdrawal = ref(false);
@@ -130,6 +137,9 @@ const isOpen = ref(false);
 const showAmount = ref(true);
 const walletData = ref({});
 const transactionId = ref('');
+const amount = ref(null);
+const withdrawAmount = ref(null);
+const bankData = ref('');
 
 const toggleSidebar = (val) => {
   isOpen.value = !isOpen.value;
@@ -139,7 +149,16 @@ const updateIsOpen = (newVal) => {
   isOpen.value = newVal;
 };
 
-const transDetails = () => {
+const proceed = (data) => {
+  amount.value = data
+  openTopup.value = false;
+  openPinModal.value = true;
+};
+
+const transDetails = (data, bank) => {
+  console.log(bank);
+  withdrawAmount.value = data
+  bankData.value = bank
   openWithdrawal.value = false;
   openTransactionDetails.value = true;
 };
@@ -149,9 +168,11 @@ const enterPin = () => {
   openPinModal.value = true;
 };
 
-const transSuccess = () => {
-  openPinModal.value = false;
-  openSuccess.value = true;
+const transSuccess = (data) => {
+  // openPinModal.value = false;
+  // openSuccess.value = true;
+  const encrptedPin = functions.encryptData(data, encryptionKey);
+  topupWallet(encrptedPin)
 };
 
 const loading = ref(false);
@@ -163,6 +184,32 @@ const getTransactions = () => {
     .then((onfulfilled) => {
       // console.log(onfulfilled);
       walletData.value = onfulfilled.data.data.balance;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+
+const topupWallet = (pin) => {
+  loading.value = true;
+  const data = {
+    amount: amount.value,
+    success_url: "https://tendar-loans-web.vercel.app/wallet",
+    cancel_url: "https://tendar-loans-web.vercel.app/wallet",
+    pin: pin,
+  };
+  console.log(data);
+  axios
+    .post("wallet/fund/initialize", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      const checkoutRoute = onfulfilled.data.data.transaction.checkout_url;
+      window.location.href = checkoutRoute;
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;

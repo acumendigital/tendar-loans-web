@@ -32,7 +32,10 @@
           </svg>
           <p>Back</p>
         </div>
-        <div class="main_content">
+        <div v-if="loading">
+          <LoaderSideDetails />
+        </div>
+        <div v-else class="main_content">
           <div v-if="$route.name === 'loans'">
             <div class="title">Loan Details</div>
             <div class="content">
@@ -201,6 +204,7 @@ export default {
       ],
       detailsData: {},
       repayments: [],
+      loading: false,
     };
   },
   watch: {

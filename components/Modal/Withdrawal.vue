@@ -11,7 +11,7 @@
         </span>
       </div>
       <p class="modal_subtitle">Available balance</p>
-      <p class="amount_balance">₦50,000</p>
+      <p class="amount_balance">{{ functions.formatMoney(props.balance, 'NGN')  }}</p>
       <div class="modal_content">
         <div class="form">
           <div class="form-group">
@@ -33,8 +33,7 @@
               name="selectAccount"
             >
               <option value="">Select</option>
-              <option value="">First Bank</option>
-              <option value="">Zenith Bank</option>
+              <option v-for="(bank, index) in bankAccounts" :key="index" :value="bank.id" @click="selectedBank = bank">{{ bank.bank_name }}</option>
             </select>
             <!-- </div> -->
             <!-- <div
@@ -48,7 +47,7 @@
             <button
               v-if="!loading"
               class="action-btn"
-              @click="$emit('proceed')"
+              @click="$emit('proceed', amount, selectedBank)"
             >
               Proceed
             </button>
@@ -64,10 +63,34 @@
 
 <script setup>
 import axios from "axios";
-
+const props = defineProps({
+  balance: {
+    type: Number,
+    default: () => 0
+  }
+})
 const amount = ref("");
 const selectAccount = ref("");
 const loading = ref(false);
+const selectedBank = ref({});
+const bankAccounts = ref([]);
+
+const getSavedBanks = () => {
+  loading.value = true;
+  axios
+    .get("bank-account/list")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      bankAccounts.value = onfulfilled.data.data.bank_accounts;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 
 const sendOtp = () => {
   loading.value = true;
@@ -98,6 +121,8 @@ const sendOtp = () => {
       loading.value = false;
     });
 };
+
+getSavedBanks();
 </script>
 
 <style scoped>
