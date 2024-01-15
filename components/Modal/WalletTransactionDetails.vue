@@ -16,23 +16,23 @@
       <div class="modal_content">
         <div class="content_ctn">
           <p class="text_content">Amount</p>
-          <p class="value_content text-bold">₦40,000</p>
+          <p class="value_content text-bold">{{ functions.formatMoney(props.amount, 'NGN') }}</p>
         </div>
         <div class="content_ctn">
           <p class="text_content">Beneficiary</p>
-          <p class="value_content">Courtney Henry</p>
+          <p class="value_content">{{ props.bankData.account_name }}</p>
         </div>
         <div class="content_ctn">
           <p class="text_content">Bank name</p>
-          <p class="value_content">Stanbic IBTC</p>
+          <p class="value_content">{{ props.bankData.bank_name }}</p>
         </div>
         <div class="content_ctn">
           <p class="text_content">Transaction fee</p>
-          <p class="value_content">N100</p>
+          <p class="value_content">{{ functions.formatMoney(transactionFee, 'NGN') }}</p>
         </div>
         <div class="content_ctn">
           <p class="text_content">Account number</p>
-          <p class="value_content">00123456789</p>
+          <p class="value_content">{{ props.bankData.account_number }}</p>
         </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="$emit('proceed')">
@@ -55,10 +55,19 @@ const props = defineProps({
     type: String,
     default: () => "",
   },
+  bankData: {
+    type: Object,
+    default: () => {},
+  },
+  amount: {
+    type: Number,
+    default: () => 0,
+  },
 });
 
 const pin = ref("");
 const loading = ref(false);
+const transactionFee = ref(100);
 const resendLoading = ref(false);
 
 const handlePINChange = (value) => {

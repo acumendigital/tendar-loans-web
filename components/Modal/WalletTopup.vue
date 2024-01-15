@@ -28,7 +28,7 @@
             <button
               v-if="!loading"
               class="action-btn"
-              @click="$emit('proceed')"
+              @click="$emit('proceed', amount)"
             >
               Continue
             </button>
