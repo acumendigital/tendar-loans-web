@@ -6,115 +6,126 @@
 
     <div :class="{ 'sidebar-open': isOpen }" class="sidebar">
       <!-- Your sidebar content goes here -->
-      <div class="sidebar-content">
-        <div class="back_btn" @click="closeSidebar">
-          <svg
-            width="25"
-            height="25"
-            viewBox="0 0 25 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M9.79688 22.6797H15.7969C20.7969 22.6797 22.7969 20.6797 22.7969 15.6797V9.67969C22.7969 4.67969 20.7969 2.67969 15.7969 2.67969H9.79688C4.79688 2.67969 2.79688 4.67969 2.79688 9.67969V15.6797C2.79688 20.6797 4.79688 22.6797 9.79688 22.6797Z"
-              stroke="#292D32"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M14.0591 16.2084L10.5391 12.6784L14.0591 9.14844"
-              stroke="#292D32"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <p>Back</p>
-        </div>
-        <div v-if="loading">
-          <LoaderSideDetails />
-        </div>
-        <div v-else class="main_content">
-          <div v-if="$route.name === 'loans'">
-            <div class="title">Loan Details</div>
-            <div class="content">
-              <p class="content_title main_title">Loan ID</p>
-              <p class="content_value">BN-B1E73DA–0017</p>
-            </div>
-            <p class="other_details_head">Other details</p>
-            <div class="contents">
-              <div class="content">
-                <p class="content_title">Amount borrowed</p>
-                <p class="content_value text-bold">₦300,000</p>
-              </div>
-              <div class="content">
-                <p class="content_title">Date disbursed</p>
-                <p class="content_value">Dec 30, 2022</p>
-              </div>
-              <div class="content">
-                <p class="content_title">Interest rate</p>
-                <p class="content_value">5%</p>
-              </div>
-              <div class="content">
-                <p class="content_title">Loan Status</p>
-                <Badge :type="'Ongoing'" />
-              </div>
-            </div>
+      <div class="sidebar_main_ctn">
+        <div class="sidebar-content">
+          <div class="back_btn" @click="closeSidebar">
+            <svg
+              width="25"
+              height="25"
+              viewBox="0 0 25 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.79688 22.6797H15.7969C20.7969 22.6797 22.7969 20.6797 22.7969 15.6797V9.67969C22.7969 4.67969 20.7969 2.67969 15.7969 2.67969H9.79688C4.79688 2.67969 2.79688 4.67969 2.79688 9.67969V15.6797C2.79688 20.6797 4.79688 22.6797 9.79688 22.6797Z"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M14.0591 16.2084L10.5391 12.6784L14.0591 9.14844"
+                stroke="#292D32"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <p>Back</p>
           </div>
-          <div v-else>
-            <div class="title">Transaction Details</div>
-            <div class="content">
-              <p class="content_title main_title">Transaction ID</p>
-              <p class="content_value">{{ detailsData.id }}</p>
-            </div>
-            <p class="other_details_head">Other details</p>
-            <div class="contents">
-              <div class="content">
-                <p class="content_title">Amount</p>
-                <p class="content_value text-bold">
-                  {{
-                    formatMoney(
-                      detailsData.amount,
-                      detailsData.currency || "NGN"
-                    )
-                  }}
-                </p>
-              </div>
-              <div class="content">
-                <p class="content_title">Date disbursed</p>
-                <p class="content_value">
-                  {{ detailedDate(detailsData.created_at) }}
-                </p>
-              </div>
-              <div class="content">
-                <p class="content_title">Transaction Type</p>
-                <p class="content_value">
-                  {{
-                    detailsData.type
-                      ? capitalizeFirstLetter(detailsData.type)
-                      : "--"
-                  }}
-                </p>
-              </div>
-              <div v-if="detailsData.beneficiary" class="content">
-                <p class="content_title">Beneficiary name</p>
-                <p class="content_value">
-                  {{
-                    detailsData.beneficiary
-                      ? capitalizeFirstLetter(detailsData.beneficiary)
-                      : "--"
-                  }}
-                </p>
-              </div>
-              <div class="content">
-                <p class="content_title">Loan Status</p>
-                <Badge :type="detailsData.status" />
-              </div>
-            </div>
+          <div v-if="loading">
+            <LoaderSideDetails />
           </div>
-          <div class="table_section" v-if="$route.name === 'loans'">
-            <TableRepaymentHistory :tableData="tableData" />
+          <div v-else class="main_content">
+            <div v-if="$route.name === 'loans'">
+              <div class="title">Loan Details</div>
+              <div class="content">
+                <p class="content_title main_title">Loan ID</p>
+                <p class="content_value">{{ detailsData.id }}</p>
+              </div>
+              <p class="other_details_head">Other details</p>
+              <div class="contents">
+                <div class="content">
+                  <p class="content_title">Amount borrowed</p>
+                  <p class="content_value text-bold">
+                    {{
+                      formatMoney(
+                        detailsData.amount_given,
+                        detailsData.currency || "NGN"
+                      )
+                    }}
+                  </p>
+                </div>
+                <div class="content">
+                  <p class="content_title">Date disbursed</p>
+                  <p class="content_value">
+                    {{ detailedDate(detailsData.date_accepted) }}
+                  </p>
+                </div>
+                <div class="content">
+                  <p class="content_title">Interest rate</p>
+                  <p class="content_value">%{{ detailsData.interest_rate }}</p>
+                </div>
+                <div class="content">
+                  <p class="content_title">Loan Status</p>
+                  <Badge :type="detailsData.status" />
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div class="title">Transaction Details</div>
+              <div class="content">
+                <p class="content_title main_title">Transaction ID</p>
+                <p class="content_value">{{ detailsData.id }}</p>
+              </div>
+              <p class="other_details_head">Other details</p>
+              <div class="contents">
+                <div class="content">
+                  <p class="content_title">Amount</p>
+                  <p class="content_value text-bold">
+                    {{
+                      formatMoney(
+                        detailsData.amount,
+                        detailsData.currency || "NGN"
+                      )
+                    }}
+                  </p>
+                </div>
+                <div class="content">
+                  <p class="content_title">Date disbursed</p>
+                  <p class="content_value">
+                    {{ detailedDate(detailsData.created_at) }}
+                  </p>
+                </div>
+                <div class="content">
+                  <p class="content_title">Transaction Type</p>
+                  <p class="content_value">
+                    {{
+                      detailsData.type
+                        ? capitalizeFirstLetter(detailsData.type)
+                        : "--"
+                    }}
+                  </p>
+                </div>
+                <div v-if="detailsData.beneficiary" class="content">
+                  <p class="content_title">Beneficiary name</p>
+                  <p class="content_value">
+                    {{
+                      detailsData.beneficiary
+                        ? capitalizeFirstLetter(detailsData.beneficiary)
+                        : "--"
+                    }}
+                  </p>
+                </div>
+                <div class="content">
+                  <p class="content_title">Loan Status</p>
+                  <Badge :type="detailsData.status" />
+                </div>
+              </div>
+            </div>
+            <div class="table_section" v-if="$route.name === 'loans'">
+              <TableRepaymentHistory :tableData="repayments" :loading="loading" />
+            </div>
           </div>
         </div>
       </div>
@@ -140,68 +151,6 @@ export default {
       formatMoney: functions.formatMoney,
       capitalizeFirstLetter: functions.capitalizeFirstLetter,
       isOpen: this.isOpenProp || false,
-      tableData: [
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-        {
-          id: "INV-024",
-          amount_paid: "97900",
-          date: "20 April, 2023",
-          status: "Paid",
-        },
-      ],
       detailsData: {},
       repayments: [],
       loading: false,
@@ -249,7 +198,7 @@ export default {
     getLoanData() {
       this.loading = true;
       const toast = useToast();
-      console.log('loan', this.transactionId);
+      console.log("loan", this.transactionId);
       axios
         .get(`loan/fetch/${this.transactionId}`)
         .then((onfulfilled) => {
@@ -298,8 +247,13 @@ export default {
   right: 0;
 }
 
+.sidebar_main_ctn {
+  max-height: 100%;
+  overflow: auto;
+}
+
 .sidebar-content {
-  padding: 50px 50px;
+  padding: 30px 10px 30px 50px;
   height: 100%;
   color: white;
 }
@@ -320,12 +274,10 @@ export default {
   font-weight: 500;
 }
 
-.main_content {
-  height: 100%;
-  width: 700px;
-  position: fixed;
+/* .main_content {
+  max-height: 100%;
   overflow: auto;
-}
+} */
 
 .title {
   font-weight: 700;

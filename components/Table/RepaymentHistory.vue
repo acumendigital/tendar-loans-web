@@ -1,11 +1,11 @@
 <template>
   <TableLoader
     v-if="loading"
-    title="Customers"
+    title="Repayment history"
     :top-rhs-btn="true"
     :tab-headers-loader="tabHeadersLoader"
     :tab-headers-loader-length="3"
-    sub-title="View all user activities and transactions in one place."
+    sub-title=""
   />
   <TableContainer v-else>
     <template #table>
@@ -16,36 +16,36 @@
         <table>
           <thead>
             <tr class="table-header">
-              <td class="td-4">
+              <td class="td-2">
                 <div class="th-content">Transaction ID</div>
               </td>
-              <td class="td-4">
+              <td class="td-2">
                 <div class="th-content">Amount Paid</div>
               </td>
               <td class="td-4">
                 <div class="th-content">Date</div>
               </td>
-              <td class="td-3">
+              <td class="td-2">
                 <div class="th-content">Status</div>
               </td>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(data, index) in tableData" :key="index" class="table-row">
-              <td class="td-4">
+              <td class="td-2">
                 <div class="td-content">{{ data.id }}</div>
               </td>
-              <td class="td-4">
+              <td class="td-2">
                 <div class="td-content text-bold">
                   {{ formatMoney(data.amount_paid, "NGN") }}
                 </div>
               </td>
               <td class="td-4">
-                <div class="td-content">{{ data.date }}</div>
+                <div class="td-content">{{ detailedDate(data.created_at) }}</div>
               </td>
-              <td class="td-3">
+              <td class="td-2">
                 <div class="td-content">
-                  <Badge :type="data.status" />
+                  <Badge :type="data.paid ? 'Paid' : 'Unpaid'" />
                   <!-- <Badge type="failed" /> -->
                 </div>
               </td>
@@ -107,6 +107,10 @@ export default {
       default: () => true,
     },
     tabHeadersLoader: {
+      type: Boolean,
+      default: () => true,
+    },
+    loading: {
       type: Boolean,
       default: () => true,
     },
@@ -381,5 +385,10 @@ export default {
 <style scoped>
 .search-filter-row {
   margin-bottom: 30px;
+}
+
+.table-main-heading {
+  padding-top: 0;
+  margin-bottom: 15px;
 }
 </style>
