@@ -18,8 +18,20 @@
               <p v-if="repaymentData.next_due_date" class="card_text">
                 {{ detailedDate(repaymentData.next_due_date) }}
               </p>
-              <p v-if="overdueStatus === 'due'" class="pay_early" @click="navigateTo(`/loans/repay-loan?id=${loanId}`)">Pay early</p>
-              <p v-if="overdueStatus === 'overdue'"  class="pay_early payment_overdue" @click="navigateTo(`/loans/repay-loan?id=${loanId}`)">Payment Overdue</p>
+              <p
+                v-if="overdueStatus === 'due'"
+                class="pay_early"
+                @click="navigateTo(`/loans/repay-loan?id=${loanId}`)"
+              >
+                Pay early
+              </p>
+              <p
+                v-if="overdueStatus === 'overdue'"
+                class="pay_early payment_overdue"
+                @click="navigateTo(`/loans/repay-loan?id=${loanId}`)"
+              >
+                Payment Overdue
+              </p>
             </div>
           </div>
         </div>
@@ -84,8 +96,9 @@ import axios from "axios";
 const toast = useToast();
 const dataStore = useUserStore();
 
-const overdueStatus = ref('');
+const overdueStatus = ref("");
 const loading = ref(false);
+const showDetails = ref(true);
 const analytics = ref({});
 const walletData = ref({});
 const loanData = ref({});
@@ -239,7 +252,7 @@ getAnalytics();
 }
 
 .payment_overdue {
-  color: #D73C27;
+  color: #d73c27;
 }
 
 .next_instalment {
