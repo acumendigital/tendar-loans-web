@@ -132,7 +132,7 @@ const payOnline = (pin, id) => {
     .post("loan/recollect/initiate", data)
     .then((onfulfilled) => {
       console.log(onfulfilled);
-      const checkoutRoute = onfulfilled.data.data.card.checkout_url;
+      const checkoutRoute = onfulfilled.data.data.recollection.checkout_url;
       window.location.href = checkoutRoute;
     })
     .catch((err) => {

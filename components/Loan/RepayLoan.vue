@@ -10,12 +10,23 @@
           >How much are you paying now?</label
         >
         <div class="select_amount_ctn">
-          <div class="card_ctn" :class="payType === 'next-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.loanData.next_pay_amount, 'next-pay')">
+          <div
+            class="card_ctn"
+            :class="payType === 'next-pay' ? 'active_card' : ''"
+            @click="
+              selectPayType(dataStore.loanData.next_pay_amount, 'next-pay')
+            "
+          >
             <div class="card_inner">
               <div class="lhs">
                 <p class="card_title">Next repayment</p>
                 <p class="card_subtitle">
-                  {{ functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN") }}
+                  {{
+                    functions.formatMoney(
+                      dataStore.loanData.next_pay_amount,
+                      "NGN"
+                    )
+                  }}
                 </p>
               </div>
               <div class="rhs">
@@ -57,12 +68,26 @@
               </div>
             </div>
           </div>
-          <div class="card_ctn" :class="payType === 'full-pay' ? 'active_card' : ''" @click="selectPayType(dataStore.loanData.amount_remaining_to_pay, 'full-pay')">
+          <div
+            class="card_ctn"
+            :class="payType === 'full-pay' ? 'active_card' : ''"
+            @click="
+              selectPayType(
+                dataStore.loanData.amount_remaining_to_pay,
+                'full-pay'
+              )
+            "
+          >
             <div class="card_inner">
               <div class="lhs">
                 <p class="card_title">Full repayment</p>
                 <p class="card_subtitle">
-                  {{ functions.formatMoney(dataStore.loanData.amount_remaining_to_pay, "NGN") }}
+                  {{
+                    functions.formatMoney(
+                      dataStore.loanData.amount_remaining_to_pay,
+                      "NGN"
+                    )
+                  }}
                 </p>
               </div>
               <div class="rhs">
@@ -121,10 +146,25 @@
             placeholder="Enter Amount"
             @input="payType = ''"
           />
+          <div :class="submitClicked && amount_to_pay < dataStore.loanData.next_pay_amount ? '' : 'not-vis'" class="error-text">
+            Minimum amount is
+            {{
+              functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN")
+            }}
+          </div>
         </div>
         <p class="min_max">
-          Min. <span class="min_man_bold">{{ functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN") }}</span> - Max.
-          <span class="min_man_bold">{{ functions.formatMoney(dataStore.loanData.amount_remaining_to_pay, "NGN") }}</span>
+          Min.
+          <span class="min_man_bold">{{
+            functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN")
+          }}</span>
+          - Max.
+          <span class="min_man_bold">{{
+            functions.formatMoney(
+              dataStore.loanData.amount_remaining_to_pay,
+              "NGN"
+            )
+          }}</span>
         </p>
       </div>
       <div class="form_group_flex">
@@ -142,11 +182,17 @@
             <option value="card">Pay with Card</option>
             <option value="online">Pay online</option>
           </select>
+            <div
+              :class="submitClicked && !paymentOption ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
         </div>
         <p class=""></p>
       </div>
       <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="$emit('openDetails', amount_to_pay, paymentOption)">
+        <button v-if="!loading" class="action-btn" @click="pay()">
           Securely pay {{ functions.formatMoney(amount_to_pay, "NGN") }}
         </button>
         <button v-else class="action-btn" disabled>
@@ -161,7 +207,7 @@
 import axios from "axios";
 const toast = useToast();
 const dataStore = useUserStore();
-const emit = defineEmits(["continue"]);
+const emit = defineEmits(["continue", "openDetails"]);
 const props = defineProps({
   email: {
     type: String,
@@ -171,15 +217,28 @@ const props = defineProps({
 
 const payType = ref("");
 const paymentOption = ref("");
-const amount_to_pay = ref(null);
+const amount_to_pay = ref("");
 const loading = ref(false);
+const submitClicked = ref(false);
+const lowAmount = ref(true);
 
 const selectPayType = (amount, type) => {
   console.log(amount);
   console.log(type);
-  amount_to_pay.value = amount
-  payType.value = type
-}
+  amount_to_pay.value = amount;
+  payType.value = type;
+};
+
+const pay = () => {
+  submitClicked.value = true;
+  if (amount_to_pay.value >= dataStore.loanData.next_pay_amount && paymentOption.value) {
+    emit("openDetails", amount_to_pay.value, paymentOption.value);
+  } 
+};
+
+// const lowAmount = computed(() => {
+//   return amount_to_pay.value >= dataStore.loanData.next_pay_amount
+// })
 </script>
 
 <style scoped>
