@@ -10,9 +10,19 @@
           <div class="lhs">
             <p class="card_title">Wallet balance</p>
             <p class="card_subtitle">
-              {{ showAmount ? functions.formatMoney(walletData.available_balance, walletData.currency || 'NGN') : '*******' }}
-              <span class="material-icons-outlined visibility" @click="showAmount = !showAmount">
-                {{ showAmount ? 'visibility_off' : 'visibility_on' }}
+              {{
+                showAmount
+                  ? functions.formatMoney(
+                      walletData.available_balance,
+                      walletData.currency || "NGN"
+                    )
+                  : "*******"
+              }}
+              <span
+                class="material-icons-outlined visibility"
+                @click="showAmount = !showAmount"
+              >
+                {{ showAmount ? "visibility_off" : "visibility_on" }}
               </span>
             </p>
             <p class="card_text">
@@ -24,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="card_btn" @click="openTopup = true">
+      <div class="card_btn" @click="startTopup()">
         <svg
           width="51"
           height="51"
@@ -56,7 +66,7 @@
         </svg>
         <p>Top up wallet</p>
       </div>
-      <div class="card_btn" @click="openWithdrawal = true">
+      <div class="card_btn" @click="startWithdrawal()">
         <svg
           width="51"
           height="51"
@@ -81,7 +91,7 @@
         <p>Withdrawal</p>
       </div>
     </div>
-    <TableWallet @openSidebar="toggleSidebar"/>
+    <TableWallet @openSidebar="toggleSidebar" />
     <div class="sidebar_ctn">
       <DashboardTableDetails
         :isOpenProp="isOpen"
@@ -91,13 +101,19 @@
     </div>
     <ModalWalletTopup
       v-if="openTopup"
-      @close-modal="openTopup = false"
+      @close-modal="
+        openTopup = false;
+        navigateTo('wallet');
+      "
       @proceed="proceed"
     />
     <ModalWithdrawal
       v-if="openWithdrawal"
       :balance="walletData.available_balance"
-      @close-modal="openWithdrawal = false"
+      @close-modal="
+        openWithdrawal = false;
+        navigateTo('wallet');
+      "
       @proceed="transDetails"
     />
     <ModalWalletTransactionDetails
@@ -126,39 +142,60 @@
 import axios from "axios";
 import LogoVue from "~/components/Tendar/Logo.vue";
 const config = useRuntimeConfig();
+const route = useRoute();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 const toast = useToast();
-const openTopup = ref(false);
-const openWithdrawal = ref(false);
+const openTopup = ref(route.query?.action === 'topup' || false);
+const openWithdrawal = ref(route.query?.action === 'withdraw' || false);
 const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
 const isOpen = ref(false);
 const showAmount = ref(true);
 const walletData = ref({});
-const transactionId = ref('');
+const transactionId = ref("");
 const amount = ref(null);
 const withdrawAmount = ref(null);
-const bankData = ref('');
+const bankData = ref("");
 
 const toggleSidebar = (val) => {
   isOpen.value = !isOpen.value;
-  transactionId.value = val
+  transactionId.value = val;
 };
 const updateIsOpen = (newVal) => {
   isOpen.value = newVal;
 };
 
 const proceed = (data) => {
-  amount.value = data
+  amount.value = data;
   openTopup.value = false;
   openPinModal.value = true;
 };
 
+const startTopup = () => {
+  navigateTo({
+    path: "/wallet",
+    query: {
+      action: "topup",
+    },
+  });
+  openTopup.value = true;
+};
+
+const startWithdrawal = () => {
+  navigateTo({
+    path: "/wallet",
+    query: {
+      action: "withdraw",
+    },
+  });
+  openWithdrawal.value = true;
+};
+
 const transDetails = (data, bank) => {
   console.log(bank);
-  withdrawAmount.value = data
-  bankData.value = bank
+  withdrawAmount.value = data;
+  bankData.value = bank;
   openWithdrawal.value = false;
   openTransactionDetails.value = true;
 };
@@ -172,7 +209,11 @@ const transSuccess = (data) => {
   // openPinModal.value = false;
   // openSuccess.value = true;
   const encrptedPin = functions.encryptData(data, encryptionKey);
-  topupWallet(encrptedPin)
+  if (route.query?.action === "topup") {
+    topupWallet(encrptedPin);
+  } else if (route.query?.action === "withdraw") {
+    widthdraw(encrptedPin);
+  }
 };
 
 const loading = ref(false);
@@ -194,7 +235,6 @@ const getTransactions = () => {
     });
 };
 
-
 const topupWallet = (pin) => {
   loading.value = true;
   const data = {
@@ -210,6 +250,28 @@ const topupWallet = (pin) => {
       console.log(onfulfilled);
       const checkoutRoute = onfulfilled.data.data.transaction.checkout_url;
       window.location.href = checkoutRoute;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const widthdraw = (pin) => {
+  loading.value = true;
+  const data = {
+    amount: withdrawAmount.value,
+    beneficiary: bankData.value.id,
+    pin: pin,
+  };
+  console.log(data);
+  axios
+    .post("wallet/transfer/initialize", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;

@@ -19,7 +19,10 @@
         </div> -->
         <div class="search_filter">
           <div class="search-filter-row">
-            <TableSearch :loading="searchLoading" @search="searchTransaction($event)" />
+            <TableSearch
+              :loading="searchLoading"
+              @search="searchTransaction($event)"
+            />
             <div class="filters">
               <FilterTransactionsTable
                 @filter-data="filterData"
@@ -95,7 +98,7 @@
               v-for="(data, index) in dataItems"
               :key="index"
               class="table-row"
-               @click="$emit('openSidebar', data.id)"
+              @click="$emit('openSidebar', data.id)"
             >
               <td class="td-4">
                 <div class="td-content">{{ data.reference }}</div>
@@ -107,7 +110,11 @@
               </td>
               <td class="td-4">
                 <div class="td-content">
-                  {{ data.beneficiary ? capitalizeFirstLetter(data.beneficiary) : '--' }}
+                  {{
+                    data.beneficiary
+                      ? capitalizeFirstLetter(data.beneficiary)
+                      : "--"
+                  }}
                 </div>
               </td>
               <td class="td-3">
@@ -294,7 +301,9 @@ export default {
       search
     ) {
       const toast = useToast();
-      // console.log(search);
+      const route = useRoute();
+      const actionPath = route.query?.action
+      console.log(actionPath);
       this.loading = loading;
       this.searchLoading = searchLoading;
       this.$axios({
@@ -306,7 +315,7 @@ export default {
           page: currentPage,
           search,
           // active: tab,
-          currency: '',
+          currency: "",
           type: type,
           status: status,
         },
@@ -335,6 +344,7 @@ export default {
             q: this.search,
             page: this.currentPage,
             perPage: this.limit,
+            action: actionPath
           };
           for (const k of Object.keys(query)) {
             if (!query[k]) {
@@ -414,15 +424,15 @@ export default {
     },
     setActiveTab(val) {
       this.activeTab = val;
-       switch (val) {
+      switch (val) {
         case "All Transactions":
           this.type = "";
           break;
         case "Wallet top-up":
-          this.type = 'credit';
+          this.type = "credit";
           break;
         case "Withdrawals":
-          this.type = 'debit';
+          this.type = "debit";
           break;
         default:
           this.type = "";

@@ -31,9 +31,10 @@
               id="selectAccount"
               v-model="selectAccount"
               name="selectAccount"
+              @change="selectBank"
             >
               <option value="">Select</option>
-              <option v-for="(bank, index) in bankAccounts" :key="index" :value="bank.id" @click="selectedBank = bank">{{ bank.bank_name }}</option>
+              <option v-for="(bank, index) in bankAccounts" :key="index" :value="bank.id">{{ bank.bank_name }}</option>
             </select>
             <!-- </div> -->
             <!-- <div
@@ -91,6 +92,14 @@ const getSavedBanks = () => {
       loading.value = false;
     });
 };
+
+const selectBank = (data) => {
+  console.log(data.target.value);
+  const id = data.target.value;
+  const bank = bankAccounts.value.find((val) => val.id === id )
+  console.log(bank);
+  selectedBank.value = bank
+}
 
 const sendOtp = () => {
   loading.value = true;
