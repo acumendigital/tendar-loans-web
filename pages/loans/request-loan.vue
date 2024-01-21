@@ -20,8 +20,14 @@
       />
       <LoanReviewDetails
         v-if="activeSection === 'Review Details'"
-        @continue="loanApproved = true"
+        @continue="openPinModal = true"
         @go-back="reviewDetailsBack"
+      />
+      <ModalEnterPin
+        v-if="openPinModal"
+        :loading="loading"
+        @close-modal="openPinModal = false"
+        @proceed="transSuccess"
       />
     </div>
     <LoanApproved v-if="loanApproved" @close-modal="loanApproved = false" />
@@ -31,10 +37,22 @@
 <script setup>
 import axios from "axios";
 const route = useRoute();
+const config = useRuntimeConfig();
+const encryptionKey = config.public.ENCRYPTION_KEY;
 
 const activeSection = ref(route.query?.section || "Profile Update");
+const openPinModal = ref(false);
 const loanApproved = ref(false);
 const loading = ref(false);
+const amount = ref(0);
+const purpose = ref("");
+const repaymentAmount = ref(0);
+const duration = ref("");
+const duration_type = ref("");
+const frequency = ref("");
+const frequency_type = ref("");
+const instrest_rate = ref("");
+const interest_type = ref("");
 
 const updateRoute = (val) => {
   navigateTo({
@@ -73,6 +91,48 @@ const repaymentPlanBack = () => {
 const reviewDetailsBack = () => {
   activeSection.value = "Repayment Plan";
   updateRoute(activeSection.value);
+};
+
+const transSuccess = (data) => {
+  openPinModal.value = false;
+  const encrptedPin = functions.encryptData(data, encryptionKey);
+  requestLoan(encrptedPin);
+};
+
+const requestLoan = (pin) => {
+  loading.value = true;
+  const data = {
+    pin: pin,
+    amount: amount.value,
+    duration_type: duration_type.value,
+    duration: duration.value,
+    frequency_type: frequency_type.value,
+    frequency: frequency.value,
+    interest_rate: instrest_rate.value,
+    interest_type: interest_type.value,
+    purpose: purpose.value,
+  };
+  axios
+    .post("loan/request", data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+      loanApproved.value = true;
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        toast.add({ title: errorMsg, color: "red" });
+      } else {
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 </script>
 

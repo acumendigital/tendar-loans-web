@@ -212,7 +212,7 @@
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text">Cancel</p>
+        <!-- <p class="link_text">Cancel</p> -->
       </div>
       <!-- </div> -->
     </div>
