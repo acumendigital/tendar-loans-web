@@ -43,6 +43,7 @@
           <div v-if="statusFilter" class="bottom">
             <select v-model="filter.status">
               <option value="success" selected>Success</option>
+              <option value="pending" selected>Pending</option>
               <option value="failed">Failed</option>
             </select>
           </div>
