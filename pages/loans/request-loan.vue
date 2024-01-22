@@ -14,6 +14,8 @@
     />
     <LoanRepaymentPlan
       v-if="activeSection === 'Repayment Plan'"
+      :repaymentData="repaymentOption"
+      :loanAmount="highestLoanAmount"
       @continue="repaymentPlanDone"
       @go-back="repaymentPlanBack"
     />
@@ -42,6 +44,8 @@ const activeSection = ref(route.query?.section || "Profile Update");
 const openPinModal = ref(false);
 const loanApproved = ref(false);
 const loading = ref(false);
+const repaymentOption = ref([]);
+const highestLoanAmount = ref(null);
 const amount = ref(0);
 const purpose = ref("");
 const repaymentAmount = ref(0);
@@ -66,7 +70,13 @@ const profileUpdateDone = () => {
   updateRoute(activeSection.value);
 };
 
-const LoanDetailsDone = () => {
+const LoanDetailsDone = (data, reason, loanAmount) => {
+  console.log(data);
+  console.log(reason);
+  console.log(loanAmount);
+  repaymentOption.value = data
+  highestLoanAmount.value = loanAmount.value
+  purpose.value = reason.value
   activeSection.value = "Repayment Plan";
   updateRoute(activeSection.value);
 };

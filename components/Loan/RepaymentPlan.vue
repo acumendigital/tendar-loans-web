@@ -8,12 +8,12 @@ import type { duration } from 'moment';
     <div class="form">
       <div>
         <p class="content_title">Loan Amount</p>
-        <p class="content_value bold_text">₦50,000</p>
+        <p class="content_value bold_text">{{ functions.formatMoney(props.loanAmount, 'NGN') }}</p>
       </div>
       <div class="loan_options">
         <p class="content_title">Select your preferred option below</p>
         <div
-          v-for="(option, index) in 3"
+          v-for="(option, index) in props.repaymentData"
           :key="index"
           class="option flex items-start"
           :class="`${seletedOption === index ? 'active_option' : ''}`"
@@ -58,27 +58,40 @@ import type { duration } from 'moment';
           </div>
           <div class="basis-[85%]">
             <div class="flex items-center mb-[30px]">
-              <p class="text-[#021C3E] text-[21px] font-medium">₦300,000</p>
+              <p class="text-[#021C3E] text-[21px] font-medium">
+                {{ functions.formatMoney(option.amount_per_installment, 'NGN') }}
+              </p>
               <div
                 class="bg-[#7A62EB1A] ml-[10px] flex justify-center items-center gap-2.5 px-2.5 py-[3px] rounded-[10px]"
               >
                 <p class="text-[#7A62EB] text-[15px] font-medium">
-                  for 6 months
+                  for {{ option.duration }}
+                  {{
+                    option.duration_type === "yearly"
+                      ? "year"
+                      : option.duration_type === "monthly"
+                        ? "month"
+                        : option.duration_type === "weekly"
+                          ? "week"
+                          : option.duration_type === "daily"
+                            ? "day"
+                            : ""
+                  }}{{ option.duration > 1 ? "s" : "" }}
                 </p>
               </div>
             </div>
             <div class="w-[100%] flex justify-between">
               <div class="basis-[33%]">
                 <p class="text-[#6A707E] font-[500]">Interest %</p>
-                <p class="text-[#6A707E] font-[700] mt-[10px]">7%</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">{{ option.interest_rate }}%</p>
               </div>
               <div class="basis-[33%]">
                 <p class="text-[#6A707E] font-[500]">Interest Value</p>
-                <p class="text-[#6A707E] font-[700] mt-[10px]">25,000</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">{{ functions.formatMoney(option.interest, 'NGN') }}</p>
               </div>
               <div class="basis-[33%]">
                 <p class="text-[#6A707E] font-[500]">Total payment</p>
-                <p class="text-[#6A707E] font-[700] mt-[10px]">₦525,000</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">{{ functions.formatMoney(option.total_repayment, 'NGN') }}</p>
               </div>
             </div>
           </div>
@@ -99,6 +112,16 @@ import type { duration } from 'moment';
 
 <script setup>
 import axios from "axios";
+const props = defineProps({
+  repaymentData: {
+    type: Array,
+    default: () => [],
+  },
+  loanAmount: {
+    type: Number,
+    default: () => null,
+  },
+});
 
 const amount = ref("");
 const duration = ref("");

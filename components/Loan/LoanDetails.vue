@@ -10,7 +10,12 @@
           Based on our assessment, this is the highest amount we can offer you
           for now
         </p>
-        <div class="amount_box" @click="amount = '50000'"><p>N50,000</p></div>
+        <div v-if="!loanAmountLoading" class="amount_box" @click="amount = highestAmount">
+          <p>{{ functions.formatMoney(highestAmount, "NGN") }}</p>
+        </div>
+        <div v-else class="amount_box">
+          <BtnLoader color="#fff" size="20" />
+        </div>
       </div>
       <div class="form">
         <div class="form-group">
@@ -81,8 +86,10 @@ const money = ref({
 });
 const amount = ref("");
 const reasonForLoan = ref("");
+const highestAmount = ref(null);
 const submitClicked = ref(false);
 const loading = ref(false);
+const loanAmountLoading = ref(false);
 
 const tokenStore = useUserStore();
 
@@ -103,6 +110,30 @@ const formateDate = (e) => {
   console.log(formattedDob.value);
 };
 
+const getLoanAmount = () => {
+  loanAmountLoading.value = true;
+  axios
+    .get("loan/amount")
+    .then((onfulfilled) => {
+      // console.log(onfulfilled);
+      highestAmount.value = onfulfilled?.data?.data.loan_amount.amount;
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        toast.add({ title: errorMsg, color: "red" });
+      } else {
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
+      }
+    })
+    .finally(() => {
+      loanAmountLoading.value = false;
+    });
+};
+
 const save = () => {
   submitClicked.value = true;
   if (amount.value && reasonForLoan.value) {
@@ -115,9 +146,9 @@ const save = () => {
     axios
       .post("loan/repayment-option", data)
       .then((onfulfilled) => {
-        console.log(onfulfilled.data.data.repayment_option);
+        // console.log(onfulfilled.data.data.repayment_option);
         const repaymentOption = onfulfilled?.data?.data.repayment_option;
-        // emit('continue', repaymentOption, reasonForLoan)
+        emit('continue', repaymentOption, reasonForLoan, highestAmount)
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -135,11 +166,13 @@ const save = () => {
       });
   }
 };
+
+getLoanAmount();
 </script>
 
 <style scoped>
 .ctn {
-  padding: 0 4rem;
+  padding: 0 3rem;
 }
 .form-content {
   background: #fff;
@@ -186,15 +219,20 @@ const save = () => {
 }
 
 .amount_box {
+  min-width: 7rem;
+  min-height: 3rem;
   border-radius: 5px;
   background: #7a62eb;
   padding: 10px 20px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .amount_box > p {
   color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
 }
 .form {
