@@ -9,23 +9,34 @@
         <div class="contents">
           <div class="content">
             <p class="content_title">Loan Amount</p>
-            <p class="content_value bold_text">₦50,000</p>
+            <p class="content_value bold_text">{{ functions.formatMoney(loanAmount, 'NGN') }}</p>
           </div>
           <div class="content">
             <p class="content_title">Amount to be repaid</p>
-            <p class="content_value bold_text">₦65,000</p>
+            <p class="content_value bold_text">{{ functions.formatMoney(repaymentData.total_repayment, 'NGN') }}</p>
           </div>
           <div class="content">
             <p class="content_title">Frequency</p>
-            <p class="content_value">Monthly</p>
+            <p class="content_value">{{ functions.capitalizeFirstLetter(repaymentData.frequency_type) }}</p>
           </div>
           <div class="content">
             <p class="content_title">Interest rate</p>
-            <p class="content_value">5%</p>
+            <p class="content_value">{{ repaymentData.interest_rate }}%</p>
           </div>
           <div class="content">
             <p class="content_title">Duration</p>
-            <p class="content_value">6 months</p>
+            <p class="content_value">{{ repaymentData.duration }}
+                  {{
+                    repaymentData.duration_type === "yearly"
+                      ? "year"
+                      : repaymentData.duration_type === "monthly"
+                        ? "month"
+                        : repaymentData.duration_type === "weekly"
+                          ? "week"
+                          : repaymentData.duration_type === "daily"
+                            ? "day"
+                            : ""
+                  }}{{ repaymentData.duration > 1 ? "s" : "" }}</p>
           </div>
         </div>
         <div class="btn-div">
@@ -43,80 +54,12 @@
 </template>
 
 <script setup>
-// import { Money } from "v-money";
-import axios from "axios";
+const dataStore = useUserStore();
 
-const money = ref({
-  prefix: "₦ ",
-  precision: 0,
-  masked: false,
-});
-const amount = ref("");
-const reasonForLoan = ref("");
-const showOtpModal = ref(false);
+const repaymentData = ref(dataStore.selectedRepaymentOption || {});
+const loanAmount = ref(dataStore.loanAmount || 0);
 const loading = ref(false);
 
-const tokenStore = useUserStore();
-
-const formateDate = (e) => {
-  // console.log(e.target.value);
-  const date = e.target.value;
-  // console.log(date);
-  const newDate = new Date(date);
-  const yyyy = newDate.getFullYear();
-  let mm = newDate.getMonth() + 1; // Months start at 0!
-  let dd = newDate.getDate();
-
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-
-  const formattedDate = dd + "/" + mm + "/" + yyyy;
-  formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
-};
-
-const save = () => {
-  loading.value = true;
-  console.log(loading.value);
-  const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
-    address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
-    },
-    employment_status: employmentStatus.value,
-    job_title: jobTitle.value,
-  };
-  console.log(data);
-  // const path = "customer/create";
-  axios
-    .post("customer/create", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      navigateTo("/user/verify-identity");
-      // }
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        toast.add({ title: errorMsg, color: "red" });
-      } else {
-        toast.add({
-          title: "Oops, something went wrong, please try again later",
-          color: "red",
-        });
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-};
 </script>
 
 <style scoped>

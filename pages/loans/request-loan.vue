@@ -14,8 +14,6 @@
     />
     <LoanRepaymentPlan
       v-if="activeSection === 'Repayment Plan'"
-      :repaymentData="repaymentOption"
-      :loanAmount="highestLoanAmount"
       @continue="repaymentPlanDone"
       @go-back="repaymentPlanBack"
     />
@@ -36,25 +34,17 @@
 
 <script setup>
 import axios from "axios";
+const dataStore = useUserStore();
 const route = useRoute();
 const config = useRuntimeConfig();
 const encryptionKey = config.public.ENCRYPTION_KEY;
+const toast = useToast();
 
 const activeSection = ref(route.query?.section || "Profile Update");
 const openPinModal = ref(false);
 const loanApproved = ref(false);
 const loading = ref(false);
-const repaymentOption = ref([]);
-const highestLoanAmount = ref(null);
-const amount = ref(0);
 const purpose = ref("");
-const repaymentAmount = ref(0);
-const duration = ref("");
-const duration_type = ref("");
-const frequency = ref("");
-const frequency_type = ref("");
-const instrest_rate = ref("");
-const interest_type = ref("");
 
 const updateRoute = (val) => {
   navigateTo({
@@ -70,13 +60,9 @@ const profileUpdateDone = () => {
   updateRoute(activeSection.value);
 };
 
-const LoanDetailsDone = (data, reason, loanAmount) => {
-  console.log(data);
+const LoanDetailsDone = (reason) => {
   console.log(reason);
-  console.log(loanAmount);
-  repaymentOption.value = data
-  highestLoanAmount.value = loanAmount.value
-  purpose.value = reason.value
+  purpose.value = reason;
   activeSection.value = "Repayment Plan";
   updateRoute(activeSection.value);
 };
@@ -102,24 +88,26 @@ const reviewDetailsBack = () => {
 };
 
 const transSuccess = (data) => {
-  openPinModal.value = false;
   const encrptedPin = functions.encryptData(data, encryptionKey);
   requestLoan(encrptedPin);
 };
 
 const requestLoan = (pin) => {
+  const loanDetails = dataStore.selectedRepaymentOption;
+  const purpose = dataStore.purposeForLoan;
   loading.value = true;
   const data = {
     pin: pin,
-    amount: amount.value,
-    duration_type: duration_type.value,
-    duration: duration.value,
-    frequency_type: frequency_type.value,
-    frequency: frequency.value,
-    interest_rate: instrest_rate.value,
-    interest_type: interest_type.value,
-    purpose: purpose.value,
+    amount: loanDetails.amount,
+    duration_type: loanDetails.duration_type,
+    duration: loanDetails.duration,
+    frequency_type: loanDetails.frequency_type,
+    frequency: loanDetails.frequency,
+    interest_rate: loanDetails.interest_rate,
+    interest_type: loanDetails.interest_type,
+    purpose: purpose.value || purpose,
   };
+  console.log(data);
   axios
     .post("loan/request", data)
     .then((onfulfilled) => {
@@ -128,6 +116,7 @@ const requestLoan = (pin) => {
       loanApproved.value = true;
     })
     .catch((_err) => {
+      console.log(_err);
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
         toast.add({ title: errorMsg, color: "red" });
@@ -140,6 +129,7 @@ const requestLoan = (pin) => {
     })
     .finally(() => {
       loading.value = false;
+      openPinModal.value = false;
     });
 };
 </script>

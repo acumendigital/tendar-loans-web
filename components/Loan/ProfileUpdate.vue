@@ -194,10 +194,10 @@ console.log(dob);
 const gender = ref(dataStore.userProfile?.gender || '');
 const employmentStatus = ref(dataStore.userProfile?.employment_status || '');
 const jobTitle = ref(dataStore.userProfile?.job_title || '');
-const address = ref(dataStore.userProfile?.address.address || '');
-const city = ref(dataStore.userProfile?.address.city || '');
-const state = ref(dataStore.userProfile?.address.state || '');
-const country = ref(dataStore.userProfile?.address.country || '');
+const address = ref(dataStore.userProfile?.address?.address || '');
+const city = ref(dataStore.userProfile?.address?.city || '');
+const state = ref(dataStore.userProfile?.address?.state || '');
+const country = ref(dataStore.userProfile?.address?.country || '');
 
 const formateDate = (e) => {
   // console.log(e);

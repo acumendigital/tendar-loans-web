@@ -8,20 +8,20 @@ import type { duration } from 'moment';
     <div class="form">
       <div>
         <p class="content_title">Loan Amount</p>
-        <p class="content_value bold_text">{{ functions.formatMoney(props.loanAmount, 'NGN') }}</p>
+        <p class="content_value bold_text">{{ functions.formatMoney(loanAmount, 'NGN') }}</p>
       </div>
       <div class="loan_options">
         <p class="content_title">Select your preferred option below</p>
         <div
-          v-for="(option, index) in props.repaymentData"
+          v-for="(option, index) in repaymentData"
           :key="index"
           class="option flex items-start"
-          :class="`${seletedOption === index ? 'active_option' : ''}`"
-          @click="selctOption(index)"
+          :class="`${seletedOption === option ? 'active_option' : ''}`"
+          @click="selctOption(option)"
         >
           <div class="mr-[30px] mt-[6px]">
             <svg
-              v-if="seletedOption === index"
+              v-if="seletedOption === option"
               width="24"
               height="25"
               viewBox="0 0 24 25"
@@ -98,7 +98,7 @@ import type { duration } from 'moment';
         </div>
       </div>
       <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="$emit('continue')">
+        <button v-if="!loading" class="action-btn" @click="save">
           Continue
         </button>
         <button v-else class="action-btn" disabled>
@@ -112,42 +112,13 @@ import type { duration } from 'moment';
 
 <script setup>
 import axios from "axios";
-const props = defineProps({
-  repaymentData: {
-    type: Array,
-    default: () => [],
-  },
-  loanAmount: {
-    type: Number,
-    default: () => null,
-  },
-});
+const emit = defineEmits(["continue"])
+const dataStore = useUserStore();
 
-const amount = ref("");
-const duration = ref("");
-const frequency = ref("");
-const seletedOption = ref(null);
-const showOtpModal = ref(false);
+const repaymentData = ref(dataStore.repaymentOption || []);
+const loanAmount = ref(dataStore.loanAmount || 0);
+const seletedOption = ref({});
 const loading = ref(false);
-
-const tokenStore = useUserStore();
-
-const formateDate = (e) => {
-  // console.log(e.target.value);
-  const date = e.target.value;
-  // console.log(date);
-  const newDate = new Date(date);
-  const yyyy = newDate.getFullYear();
-  let mm = newDate.getMonth() + 1; // Months start at 0!
-  let dd = newDate.getDate();
-
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-
-  const formattedDate = dd + "/" + mm + "/" + yyyy;
-  formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
-};
 
 const selctOption = (data) => {
   console.log(data);
@@ -155,52 +126,14 @@ const selctOption = (data) => {
 };
 
 const save = () => {
-  loading.value = true;
-  console.log(loading.value);
-  const data = {
-    first_name: firstName.value,
-    last_name: lastName.value,
-    date_of_birth: formattedDob.value,
-    gender: gender.value,
-    address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
-    },
-    employment_status: employmentStatus.value,
-    job_title: jobTitle.value,
-  };
-  console.log(data);
-  // const path = "customer/create";
-  axios
-    .post("customer/create", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      navigateTo("/user/verify-identity");
-      // }
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        toast.add({ title: errorMsg, color: "red" });
-      } else {
-        toast.add({
-          title: "Oops, something went wrong, please try again later",
-          color: "red",
-        });
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  dataStore.updateSelectedRepaymentOption(seletedOption.value)
+  emit('continue')
 };
 </script>
 
 <style scoped>
 .repayment_ctn {
-  width: 45vw;
+  width: 50vw;
   min-width: 500px;
   padding: 50px 30px 50px 50px;
   margin-top: 4vh;

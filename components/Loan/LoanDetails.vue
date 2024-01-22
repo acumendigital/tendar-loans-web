@@ -10,7 +10,11 @@
           Based on our assessment, this is the highest amount we can offer you
           for now
         </p>
-        <div v-if="!loanAmountLoading" class="amount_box" @click="amount = highestAmount">
+        <div
+          v-if="!loanAmountLoading"
+          class="amount_box"
+          @click="amount = highestAmount"
+        >
           <p>{{ functions.formatMoney(highestAmount, "NGN") }}</p>
         </div>
         <div v-else class="amount_box">
@@ -78,6 +82,7 @@
 // import { Money } from "v-money";
 import axios from "axios";
 const emit = defineEmits(["continue"]);
+const dataStore = useUserStore();
 
 const money = ref({
   prefix: "₦ ",
@@ -90,25 +95,6 @@ const highestAmount = ref(null);
 const submitClicked = ref(false);
 const loading = ref(false);
 const loanAmountLoading = ref(false);
-
-const tokenStore = useUserStore();
-
-const formateDate = (e) => {
-  // console.log(e.target.value);
-  const date = e.target.value;
-  // console.log(date);
-  const newDate = new Date(date);
-  const yyyy = newDate.getFullYear();
-  let mm = newDate.getMonth() + 1; // Months start at 0!
-  let dd = newDate.getDate();
-
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
-
-  const formattedDate = dd + "/" + mm + "/" + yyyy;
-  formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
-};
 
 const getLoanAmount = () => {
   loanAmountLoading.value = true;
@@ -148,7 +134,10 @@ const save = () => {
       .then((onfulfilled) => {
         // console.log(onfulfilled.data.data.repayment_option);
         const repaymentOption = onfulfilled?.data?.data.repayment_option;
-        emit('continue', repaymentOption, reasonForLoan, highestAmount)
+        dataStore.updateRepaymentOption(repaymentOption);
+        dataStore.updateLoanAmount(amount.value);
+        dataStore.updatePurposeForLoan(reasonForLoan.value);
+        emit("continue", reasonForLoan.value);
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
