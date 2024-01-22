@@ -61,7 +61,7 @@ const props = defineProps({
   },
 });
 
-const serviceFee = ref(100);
+const serviceFee = ref(0);
 const lateRepaymentFee = ref(0);
 const totalAmount = ref(0);
 const pin = ref("");

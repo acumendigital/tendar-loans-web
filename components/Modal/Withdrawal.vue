@@ -23,7 +23,12 @@
               type="number"
               name="amount"
               placeholder="Enter your Amount"
-            />
+            /><div
+              :class="submitClicked && !amount ? '' : 'not-vis'"
+              class="error-text"
+            >
+              This field is required
+            </div>
           </div>
           <div class="modal-input-field">
             <label class="form_label" for="selectAccount">Select Account</label>
@@ -37,18 +42,18 @@
               <option v-for="(bank, index) in bankAccounts" :key="index" :value="bank.id">{{ bank.bank_name }}</option>
             </select>
             <!-- </div> -->
-            <!-- <div
+            <div
               :class="submitClicked && !selectAccount ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
-            </div> -->
+            </div>
           </div>
           <div class="btn-div">
             <button
               v-if="!loading"
               class="action-btn"
-              @click="$emit('proceed', amount, selectedBank)"
+              @click="save"
             >
               Proceed
             </button>
@@ -70,9 +75,11 @@ const props = defineProps({
     default: () => 0
   }
 })
+const emit = defineEmits(["proceed"])
 const amount = ref("");
 const selectAccount = ref("");
 const loading = ref(false);
+const submitClicked = ref(false);
 const selectedBank = ref({});
 const bankAccounts = ref([]);
 
@@ -101,34 +108,11 @@ const selectBank = (data) => {
   selectedBank.value = bank
 }
 
-const sendOtp = () => {
-  loading.value = true;
-  const data = {
-    email: email.value,
-    token: otp.value,
-  };
-  const path = "user/email/verify";
-  axios
-    .post("user/email/verify", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      navigateTo("/user/create-profile");
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        toast.add({ title: errorMsg, color: "red" });
-      } else {
-        toast.add({
-          title: "Oops, something went wrong, please try again later",
-          color: "red",
-        });
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+const save = () => {
+  submitClicked.value = true;
+  if (submitClicked && amount.value && selectAccount.value) {
+    emit('proceed', amount.value, selectedBank.value)
+  }
 };
 
 getSavedBanks();
