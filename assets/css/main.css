@@ -30,16 +30,16 @@
 
 :root {
   font-size: 16px;
-  --HS-Bold: 'HankenSans-Bold';
-  --HS-Black: 'HankenSans-Black';
-  --HS-Light: 'HankenSans-Light';
-  --HS-Medium: 'HankenSans-Medium';
+  --HS-Bold: "HankenSans-Bold";
+  --HS-Black: "HankenSans-Black";
+  --HS-Light: "HankenSans-Light";
+  --HS-Medium: "HankenSans-Medium";
   --gray-darker: #101828;
   --gray-dark: #344054;
   --gray-light: #888f9b;
   --gray-lighter: #f9fafb;
   --gray-one: #6a707e;
-  --gray-two: #252C32;
+  --gray-two: #252c32;
   --gray-three: #858d96;
   --gray-four: rgba(2, 28, 62, 0.5);
   --primary-purple: rgb(122, 98, 235);
@@ -154,16 +154,23 @@ button {
   z-index: 20;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition:
+    background-color 0s 600000s,
+    color 0s 600000s !important;
+}
+
 .global_btn {
-	background-color: var(--primary-purple);
-	color: white;
-	border: 1px solid var(--primary-purple);
-	padding: 7px 30px;
-	border-radius: 5px;
-	min-width: 8rem;
+  background-color: var(--primary-purple);
+  color: white;
+  border: 1px solid var(--primary-purple);
+  padding: 7px 30px;
+  border-radius: 5px;
+  min-width: 8rem;
   width: fit-content;
-	/* font-weight: 700; */
-	white-space: nowrap;
+  /* font-weight: 700; */
+  white-space: nowrap;
   z-index: 0;
 }
 
@@ -524,8 +531,8 @@ select {
     no-repeat right 0.6rem center/.5rem 4rem !important;
 }
 
-
-.modal-input-field input:not(.modal-file-input), .modal-input-field select {
+.modal-input-field input:not(.modal-file-input),
+.modal-input-field select {
   display: block;
   border: var(--input-border-width) solid var(--border-two);
   font-size: 14px;
@@ -538,10 +545,13 @@ select {
   -moz-border-radius: var(--input-border-radius);
   -ms-border-radius: var(--input-border-radius);
   -o-border-radius: var(--input-border-radius);
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
-.modal-input-field input:not(.modal-file-input):focus, .modal-input-field select:focus {
+.modal-input-field input:not(.modal-file-input):focus,
+.modal-input-field select:focus {
   outline: none;
   box-shadow: 0 0 0 0.2rem var(--primary-purple-bg);
   border: var(--input-border-width) solid var(--primary-purple-outline) !important;
