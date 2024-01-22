@@ -1,42 +1,43 @@
 <template>
-  <div class="ctn">
-    <p class="welcome_text">Review loan details</p>
-    <p class="instruction_text">
-      A comprehensive overview of your loan request.
-    </p>
-    <div class="form">
-
-    <div class="contents">
-      <div class="content">
-        <p class="content_title">Loan Amount</p>
-        <p class="content_value bold_text">₦50,000</p>
+  <div class="form-content">
+    <div class="ctn">
+      <p class="welcome_text">Review loan details</p>
+      <p class="instruction_text">
+        A comprehensive overview of your loan request.
+      </p>
+      <div class="form">
+        <div class="contents">
+          <div class="content">
+            <p class="content_title">Loan Amount</p>
+            <p class="content_value bold_text">₦50,000</p>
+          </div>
+          <div class="content">
+            <p class="content_title">Amount to be repaid</p>
+            <p class="content_value bold_text">₦65,000</p>
+          </div>
+          <div class="content">
+            <p class="content_title">Frequency</p>
+            <p class="content_value">Monthly</p>
+          </div>
+          <div class="content">
+            <p class="content_title">Interest rate</p>
+            <p class="content_value">5%</p>
+          </div>
+          <div class="content">
+            <p class="content_title">Duration</p>
+            <p class="content_value">6 months</p>
+          </div>
+        </div>
+        <div class="btn-div">
+          <button v-if="!loading" class="action-btn" @click="$emit('continue')">
+            Continue
+          </button>
+          <button v-else class="action-btn" disabled>
+            <BtnLoader color="#fff" />
+          </button>
+        </div>
+        <p class="link_text" @click="$emit('go-back')">Back</p>
       </div>
-      <div class="content">
-        <p class="content_title">Amount to be repaid</p>
-        <p class="content_value bold_text">₦65,000</p>
-      </div>
-      <div class="content">
-        <p class="content_title">Frequency</p>
-        <p class="content_value">Monthly</p>
-      </div>
-      <div class="content">
-        <p class="content_title">Interest rate</p>
-        <p class="content_value">5%</p>
-      </div>
-      <div class="content">
-        <p class="content_title">Duration</p>
-        <p class="content_value">6 months</p>
-      </div>
-    </div>
-      <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="$emit('continue')">
-          Continue
-        </button>
-        <button v-else class="action-btn" disabled>
-          <BtnLoader color="#fff" />
-        </button>
-      </div>
-      <p class="link_text" @click="$emit('go-back');">Back</p>
     </div>
   </div>
 </template>
@@ -166,7 +167,7 @@ const save = () => {
 }
 
 .content_title {
-  color: #021C3E;
+  color: #021c3e;
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 7px;
@@ -179,9 +180,8 @@ const save = () => {
 }
 
 .bold_text {
-color: #10253E;
-font-size: 19px;
-font-weight: 700;
+  color: #10253e;
+  font-size: 19px;
+  font-weight: 700;
 }
-
 </style>

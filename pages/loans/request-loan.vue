@@ -3,33 +3,31 @@
     <div class="top_section">
       <h1 class="title">Request a loan</h1>
     </div>
-    <div class="form-content">
-      <LoanProfileUpdate
-        v-if="activeSection === 'Profile Update'"
-        @continue="profileUpdateDone"
-      />
-      <LoanDetails
-        v-if="activeSection === 'Loan Details'"
-        @continue="LoanDetailsDone"
-        @go-back="LoanDetailsBack"
-      />
-      <LoanRepaymentPlan
-        v-if="activeSection === 'Repayment Plan'"
-        @continue="repaymentPlanDone"
-        @go-back="repaymentPlanBack"
-      />
-      <LoanReviewDetails
-        v-if="activeSection === 'Review Details'"
-        @continue="openPinModal = true"
-        @go-back="reviewDetailsBack"
-      />
-      <ModalEnterPin
-        v-if="openPinModal"
-        :loading="loading"
-        @close-modal="openPinModal = false"
-        @proceed="transSuccess"
-      />
-    </div>
+    <LoanProfileUpdate
+      v-if="activeSection === 'Profile Update'"
+      @continue="profileUpdateDone"
+    />
+    <LoanDetails
+      v-if="activeSection === 'Loan Details'"
+      @continue="LoanDetailsDone"
+      @go-back="LoanDetailsBack"
+    />
+    <LoanRepaymentPlan
+      v-if="activeSection === 'Repayment Plan'"
+      @continue="repaymentPlanDone"
+      @go-back="repaymentPlanBack"
+    />
+    <LoanReviewDetails
+      v-if="activeSection === 'Review Details'"
+      @continue="openPinModal = true"
+      @go-back="reviewDetailsBack"
+    />
+    <ModalEnterPin
+      v-if="openPinModal"
+      :loading="loading"
+      @close-modal="openPinModal = false"
+      @proceed="transSuccess"
+    />
     <LoanApproved v-if="loanApproved" @close-modal="loanApproved = false" />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form-content">
     <p class="welcome_text">Let’s get to know you</p>
     <p class="instruction_text">
       Streamline your loan journey with a quick profile update!

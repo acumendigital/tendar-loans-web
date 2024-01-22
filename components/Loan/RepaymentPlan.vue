@@ -1,68 +1,87 @@
-
 import type { duration } from 'moment';
 <template>
-  <div>
+  <div class="repayment_ctn">
     <p class="welcome_text">Repayment plan</p>
-    <p class="instruction_text">
+    <!-- <p class="instruction_text">
       Discover tailored loan solutions for your every need
-    </p>
+    </p> -->
     <div class="form">
-      <div class="form_group_flex">
-        <div class="form-group">
-          <label class="form_label" for="firstName">Amount</label>
-          <input
-            id="amount"
-            v-model="amount"
-            type="number"
-            name="amount"
-            placeholder="Enter your Amount"
-          />
-        </div>
-        <div class="modal-input-field">
-          <label class="form_label" for="duration">Duration</label>
-          <select id="duration" v-model="duration" name="duration">
-            <option value="">Select</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-          <!-- </div> -->
-          <!-- <div
-              :class="submitClicked && !duration ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
-        </div>
+      <div>
+        <p class="content_title">Loan Amount</p>
+        <p class="content_value bold_text">₦50,000</p>
       </div>
-      <div class="form_group_flex">
-        <div class="modal-input-field">
-          <label class="form_label" for="frequency">Frequency</label>
-          <select id="frequency" v-model="frequency" name="frequency">
-            <option value="">Select</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-          <!-- </div> -->
-          <!-- <div
-              :class="submitClicked && !frequency ? '' : 'not-vis'"
-              class="error-text"
+      <div class="loan_options">
+        <p class="content_title">Select your preferred option below</p>
+        <div
+          v-for="(option, index) in 3"
+          :key="index"
+          class="option flex items-start"
+          :class="`${seletedOption === index ? 'active_option' : ''}`"
+          @click="selctOption(index)"
+        >
+          <div class="mr-[30px] mt-[6px]">
+            <svg
+              v-if="seletedOption === index"
+              width="24"
+              height="25"
+              viewBox="0 0 24 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              This field is required
-            </div> -->
-        </div>
-        <div class="form-group">
-          <label class="form_label" for="interestRate">Interest Rate</label>
-          <input
-            id="interestRate"
-            v-model="interestRate"
-            type="number"
-            name="interestRate"
-            placeholder="Enter your Interest Rate"
-          />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M1 12.6133C1 6.53815 5.92487 1.61328 12 1.61328C18.0751 1.61328 23 6.53815 23 12.6133C23 18.6884 18.0751 23.6133 12 23.6133C5.92487 23.6133 1 18.6884 1 12.6133Z"
+                fill="#7A62EB"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M17.3127 8.65625C17.7032 9.04677 17.7032 9.67994 17.3127 10.0705L11.1055 16.5705C10.715 16.961 10.0819 16.961 9.69133 16.5705L6.69133 13.5705C6.30081 13.1799 6.30081 12.5468 6.69133 12.1563C7.08185 11.7657 7.71502 11.7657 8.10554 12.1563L10.3984 14.4491L15.8984 8.65625C16.289 8.26573 16.9221 8.26573 17.3127 8.65625Z"
+                fill="white"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              viewBox="0 0 23 23"
+              fill="none"
+            >
+              <path
+                opacity="0.2"
+                d="M1.23438 11.6133C1.23438 5.81429 5.93539 1.11328 11.7344 1.11328C17.5334 1.11328 22.2344 5.81429 22.2344 11.6133C22.2344 17.4123 17.5334 22.1133 11.7344 22.1133C5.93539 22.1133 1.23438 17.4123 1.23438 11.6133Z"
+                stroke="#888F9B"
+              />
+            </svg>
+          </div>
+          <div class="basis-[85%]">
+            <div class="flex items-center mb-[30px]">
+              <p class="text-[#021C3E] text-[21px] font-medium">₦300,000</p>
+              <div
+                class="bg-[#7A62EB1A] ml-[10px] flex justify-center items-center gap-2.5 px-2.5 py-[3px] rounded-[10px]"
+              >
+                <p class="text-[#7A62EB] text-[15px] font-medium">
+                  for 6 months
+                </p>
+              </div>
+            </div>
+            <div class="w-[100%] flex justify-between">
+              <div class="basis-[33%]">
+                <p class="text-[#6A707E] font-[500]">Interest %</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">7%</p>
+              </div>
+              <div class="basis-[33%]">
+                <p class="text-[#6A707E] font-[500]">Interest Value</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">25,000</p>
+              </div>
+              <div class="basis-[33%]">
+                <p class="text-[#6A707E] font-[500]">Total payment</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">₦525,000</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="btn-div">
@@ -73,7 +92,7 @@ import type { duration } from 'moment';
           <BtnLoader color="#fff" />
         </button>
       </div>
-      <p class="link_text" @click="$emit('go-back');">Back</p>
+      <p class="link_text" @click="$emit('go-back')">Back</p>
     </div>
   </div>
 </template>
@@ -84,6 +103,7 @@ import axios from "axios";
 const amount = ref("");
 const duration = ref("");
 const frequency = ref("");
+const seletedOption = ref(null);
 const showOtpModal = ref(false);
 const loading = ref(false);
 
@@ -104,6 +124,11 @@ const formateDate = (e) => {
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   formattedDob.value = formattedDate;
   console.log(formattedDob.value);
+};
+
+const selctOption = (data) => {
+  console.log(data);
+  seletedOption.value = data;
 };
 
 const save = () => {
@@ -151,31 +176,58 @@ const save = () => {
 </script>
 
 <style scoped>
-.form-content {
-  background: #fff;
-  width: 38vw;
+.repayment_ctn {
+  width: 45vw;
   min-width: 500px;
-  height: auto;
-  min-height: fit-content;
   padding: 50px 30px 50px 50px;
-  border-radius: 10px;
   margin-top: 4vh;
   margin-left: 5vw;
-  border: 1px solid #d7e1ec;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center; */
-  z-index: 1;
 }
 .welcome_text {
   color: #021c3e;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
 }
 
 .instruction_text {
   color: #021c3e73;
+}
+
+.content_title {
+  color: #021c3e;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+
+.content_value {
+  color: #6a707e;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.loan_options {
+  margin-top: 30px;
+}
+
+.option {
+  background-color: #f9fafc;
+  border: 1px solid #d7e1ec;
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.active_option {
+  background-color: #7a62eb1a;
+  border: 1px solid #7a62eb;
+}
+
+.bold_text {
+  color: #10253e;
+  font-size: 19px;
+  font-weight: 700;
 }
 
 .form {
@@ -209,5 +261,11 @@ const save = () => {
   cursor: pointer;
   text-align: center;
   margin-top: 20px;
+}
+
+.btn-div {
+  width: 60%;
+  margin: auto;
+  margin-top: 3rem;
 }
 </style>
