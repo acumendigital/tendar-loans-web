@@ -146,7 +146,7 @@
             placeholder="Enter Amount"
             @input="payType = ''"
           />
-          <div :class="submitClicked && amount_to_pay < dataStore.loanData.next_pay_amount ? '' : 'not-vis'" class="error-text">
+          <div :class="submitClicked && amount_to_pay > dataStore.loanData.next_pay_amount ? '' : 'not-vis'" class="error-text">
             Minimum amount is
             {{
               functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN")
@@ -231,7 +231,7 @@ const selectPayType = (amount, type) => {
 
 const pay = () => {
   submitClicked.value = true;
-  if (amount_to_pay.value >= dataStore.loanData.next_pay_amount && paymentOption.value) {
+  if (amount_to_pay.value <= dataStore.loanData.next_pay_amount && paymentOption.value) {
     emit("openDetails", amount_to_pay.value, paymentOption.value);
   } 
 };
