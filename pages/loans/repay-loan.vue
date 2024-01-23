@@ -43,6 +43,7 @@ const openSuccess = ref(false);
 const amount_to_pay = ref(0);
 const totalAmount = ref(0);
 const paymentOption = ref("");
+const carId = ref("");
 
 const enterPin = (data) => {
   totalAmount.value = data
@@ -55,9 +56,10 @@ const transSuccess = () => {
   openSuccess.value = true;
 };
 
-const openDetails = (amount, option) => {
+const openDetails = (amount, option, id) => {
   amount_to_pay.value = amount;
   paymentOption.value = option;
+  carId.value = id
   openTransactionDetails.value = true;
 };
 
@@ -101,7 +103,7 @@ const payWithCard = (pin, id) => {
     pin: pin,
     loan_id: id,
     amount: totalAmount.value,
-    card_id: ''
+    card_id: carId.value
   };
   axios
     .post("loan/recollect/card", data)
