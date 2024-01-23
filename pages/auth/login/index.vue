@@ -119,10 +119,10 @@ const signIn = () => {
       let successMsg = ''
       if (!user_data.email_verified) {
         successMsg = "Login Successful. Please verify your email"
-        url = `/auth/signup?emailToVerify=${email.value.trim()}&from=login`
+        url = `/auth/signup?emailToVerify=${email.value.trim()}&from=${window.location.pathname}`
       } else if (!user_data.identity_verified) {
         successMsg = "Login Successful. Please verify your identity"
-        url = `/user/verify-identity?from=${window.location.pathname}`
+        url = `/user/verify-identity?from=/dashboard`
       } else {
         successMsg = "Login Successful"
         url = route.query.fallBackUrl || "/dashboard";
