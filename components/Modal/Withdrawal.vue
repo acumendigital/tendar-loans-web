@@ -11,19 +11,18 @@
         </span>
       </div>
       <p class="modal_subtitle">Available balance</p>
-      <p class="amount_balance">{{ functions.formatMoney(props.balance, 'NGN')  }}</p>
+      <p class="amount_balance">
+        {{ functions.formatMoney(props.balance, "NGN") }}
+      </p>
       <div class="modal_content">
         <div class="form">
           <div class="form-group">
             <label for="">Amount</label>
-            <input
-              class="amount_input"
-              id="amount"
-              v-model="amount"
-              type="number"
-              name="amount"
-              placeholder="Enter your Amount"
-            /><div
+            <Money3Component
+              v-model.number="amount"
+              :prefix="'₦ '"
+            ></Money3Component>
+            <div
               :class="submitClicked && !amount ? '' : 'not-vis'"
               class="error-text"
             >
@@ -31,7 +30,10 @@
             </div>
           </div>
           <div class="modal-input-field">
-            <label class="form_label" for="selectAccount">Select Account</label>
+            <div class="form_label flex">
+            <label class="mr-[10px]" for="selectAccount">Select Account</label>
+            <BtnLoader class="mt-[5px]" v-if="bankAccountLoading" color="#7a62eb" size="15" />
+          </div>
             <select
               id="selectAccount"
               v-model="selectAccount"
@@ -39,7 +41,13 @@
               @change="selectBank"
             >
               <option value="">Select</option>
-              <option v-for="(bank, index) in bankAccounts" :key="index" :value="bank.id">{{ bank.bank_name }}</option>
+              <option
+                v-for="(bank, index) in bankAccounts"
+                :key="index"
+                :value="bank.id"
+              >
+                {{ bank.bank_name }}
+              </option>
             </select>
             <!-- </div> -->
             <div
@@ -50,11 +58,7 @@
             </div>
           </div>
           <div class="btn-div">
-            <button
-              v-if="!loading"
-              class="action-btn"
-              @click="save"
-            >
+            <button v-if="!loading" class="action-btn" @click="save">
               Proceed
             </button>
             <button v-else class="action-btn" disabled>
@@ -69,22 +73,24 @@
 
 <script setup>
 import axios from "axios";
+import { Money3Component } from "v-money3";
 const props = defineProps({
   balance: {
     type: Number,
-    default: () => 0
-  }
-})
-const emit = defineEmits(["proceed"])
+    default: () => 0,
+  },
+});
+const emit = defineEmits(["proceed"]);
 const amount = ref("");
 const selectAccount = ref("");
 const loading = ref(false);
+const bankAccountLoading = ref(false);
 const submitClicked = ref(false);
 const selectedBank = ref({});
 const bankAccounts = ref([]);
 
 const getSavedBanks = () => {
-  loading.value = true;
+  bankAccountLoading.value = true;
   axios
     .get("bank-account/list")
     .then((onfulfilled) => {
@@ -96,22 +102,22 @@ const getSavedBanks = () => {
       toast.add({ title: errorMsg, color: "red" });
     })
     .finally(() => {
-      loading.value = false;
+      bankAccountLoading.value = false;
     });
 };
 
 const selectBank = (data) => {
   console.log(data.target.value);
   const id = data.target.value;
-  const bank = bankAccounts.value.find((val) => val.id === id )
+  const bank = bankAccounts.value.find((val) => val.id === id);
   console.log(bank);
-  selectedBank.value = bank
-}
+  selectedBank.value = bank;
+};
 
 const save = () => {
   submitClicked.value = true;
   if (submitClicked && amount.value && selectAccount.value) {
-    emit('proceed', amount.value, selectedBank.value)
+    emit("proceed", amount.value, selectedBank.value);
   }
 };
 
