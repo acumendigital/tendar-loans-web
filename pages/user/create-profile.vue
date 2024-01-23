@@ -155,15 +155,19 @@
           </div>
           <div class="form-group">
             <label class="form_label" for="country">Country</label>
-            <input
-              id="country"
-              v-model="country"
-              type="text"
-              name="country"
-              placeholder="Enter your Country"
-            />
+            <select
+                id="country"
+                v-model="country"
+                name=""
+                @change="setStates()"
+              >
+                <option value="" disabled selected>Please select</option>
+                <option v-for="(c, index) in countries" :key="index" :value="c">
+                  {{ c.name }}
+                </option>
+              </select>
             <div
-              :class="submitClicked && !country ? '' : 'not-vis'"
+              :class="submitClicked && !country.name ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
@@ -173,13 +177,12 @@
         <div class="form_group_flex">
           <div class="form-group">
             <label class="form_label" for="state">State</label>
-            <input
-              id="state"
-              v-model="state"
-              type="text"
-              name="state"
-              placeholder="Enter your State"
-            />
+            <select id="state" v-model="state" name="" @change="setCities()">
+                <option value="" disabled selected>Please select</option>
+                <option v-for="s in states" :key="s" :value="s">
+                  {{ s }}
+                </option>
+              </select>
             <div
               :class="submitClicked && !state ? '' : 'not-vis'"
               class="error-text"
@@ -189,13 +192,12 @@
           </div>
           <div class="form-group">
             <label class="form_label" for="city">City</label>
-            <input
-              id="city"
-              v-model="city"
-              type="text"
-              name="city"
-              placeholder="Enter your City"
-            />
+            <select id="city" v-model="city" name="">
+                <option value="" disabled selected>Please select</option>
+                <option v-for="(c, index) in cities" :key="index" :value="c">
+                  {{ c }}
+                </option>
+              </select>
             <div
               :class="submitClicked && !city ? '' : 'not-vis'"
               class="error-text"
@@ -226,6 +228,11 @@ definePageMeta({
 });
 
 import axios from "axios";
+import compCities from "countrycitystatejson";const countries = ref(
+  compCities
+    .getCountries()
+    .filter((c) => c.shortName === "NG" || c.shortName === "US")
+);
 
 const toast = useToast();
 const firstName = ref("");
@@ -236,14 +243,23 @@ const gender = ref("");
 const employmentStatus = ref("");
 const jobTitle = ref("");
 const address = ref("");
-const city = ref("");
+const country = ref({});
 const state = ref("");
-const country = ref("");
+const states = ref([]);
+const city = ref("");
+const cities = ref([]);
 const submitClicked = ref(false);
 const showOtpModal = ref(false);
 const loading = ref(false);
 
-const tokenStore = useUserStore();
+const setStates = () => {
+  states.value = compCities.getStatesByShort(country.value.shortName);
+  // console.log(states.value);
+};
+const setCities = () => {
+  cities.value = compCities.getCities(country.value.shortName, state.value);
+  // console.log(compCities.getCities(country.value.shortName, state.value))
+};
 
 const formateDate = (e) => {
   // console.log(e.target.value);
@@ -273,7 +289,7 @@ const save = () => {
     address.value &&
     city.value &&
     state.value &&
-    country.value
+    country.value.name
   ) {
     saveProfile();
   }
@@ -288,10 +304,10 @@ const saveProfile = () => {
     date_of_birth: formattedDob.value,
     gender: gender.value,
     address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
+      address: address.value,
+      city: city.value,
+      state: state.value,
+      country: country.value.name.toLowerCase(),
     },
     employment_status: employmentStatus.value,
     job_title: jobTitle.value,

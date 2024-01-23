@@ -82,8 +82,8 @@ const save = () => {
       console.log(onfulfilled);
       toast.add({ title: "Identity Verified", color: "green" });
       let url = "";
-      if (route.query?.from !== "") {
-        url = route.query?.from;
+      if (route.query.from) {
+        url = route.query.from;
       } else {
         url = "/user/add-bank";
       }
