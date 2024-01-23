@@ -169,25 +169,23 @@ const getLoanData = () => {
 };
 
 const getDueDate = (date) => {
-  let date1 = new Date();
-  let date2 = new Date(date);
-  let difference_in_time = date2.getTime() - date1.getTime();
+  console.log("date", date);
+  if (date === null || date === undefined) {
+    overdueStatus.value = "";
+  } else {
+    let date1 = new Date();
+    let date2 = new Date(date);
+    let difference_in_time = date2.getTime() - date1.getTime();
 
-  let difference_in_days = Math.round(difference_in_time / (1000 * 3600 * 24));
+    let difference_in_days = Math.round(
+      difference_in_time / (1000 * 3600 * 24)
+    );
 
-  // console.log(
-  //   "Total number of days between dates:\n" +
-  //     date1.toDateString() +
-  //     " and " +
-  //     date2.toDateString() +
-  //     " is: " +
-  //     difference_in_days +
-  //     " days"
-  // );
-  if (difference_in_days === 7 || difference_in_days === 3) {
-    overdueStatus.value = "due";
-  } else if (difference_in_days <= 0) {
-    overdueStatus.value = "overdue";
+    if (difference_in_days === 7 || difference_in_days === 3) {
+      overdueStatus.value = "due";
+    } else if (difference_in_days <= 0) {
+      overdueStatus.value = "overdue";
+    }
   }
 };
 
