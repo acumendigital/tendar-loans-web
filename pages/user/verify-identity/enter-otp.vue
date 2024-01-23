@@ -12,7 +12,8 @@
       </div>
       <p class="welcome_text">Enter verification code</p>
       <p class="instruction_text">
-        Please enter the code sent to Please enter the code sent to {{ route.query?.phone }}
+        Please enter the code sent to Please enter the code sent to
+        {{ route.query?.phone }}
       </p>
       <div class="form">
         <div class="pin_ctn">
@@ -72,33 +73,38 @@ const handleOTPChange = (value) => {
 
 const save = () => {
   loading.value = true;
-    console.log(loading.value);
-    const data = {
-      token: otp.value,
-    };
-    console.log(data);
-    axios
-      .post("identity/verify", data)
-      .then((onfulfilled) => {
-        console.log(onfulfilled);
-        toast.add({ title: "Idebtity Verified", color: "green" });
-        navigateTo("/user/add-bank");
-        // }
-      })
-      .catch((_err) => {
-        const errorMsg = _err?.response?.data?.message || _err?.message;
-        if (errorMsg) {
-          toast.add({ title: errorMsg, color: "red" });
-        } else {
-          toast.add({
-            title: "Oops, something went wrong, please try again later",
-            color: "red",
-          });
-        }
-      })
-      .finally(() => {
-        loading.value = false;
-      });
+  const data = {
+    token: otp.value,
+  };
+  console.log(data);
+  axios
+    .post("identity/verify", data)
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      toast.add({ title: "Identity Verified", color: "green" });
+      let url = "";
+      if (route.query?.from !== "") {
+        url = route.query?.from;
+      } else {
+        url = "/user/add-bank";
+      }
+      navigateTo(`${url}`);
+      // }
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        toast.add({ title: errorMsg, color: "red" });
+      } else {
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 const resendOtp = () => {
@@ -111,10 +117,10 @@ const resendOtp = () => {
   axios
     .post("identity/create", data)
     .then((onfulfilled) => {
-      const message = onfulfilled?.data?.message
+      const message = onfulfilled?.data?.message;
       toast.add({ title: message, color: "green" });
       console.log(onfulfilled);
-      const phone = onfulfilled.data.data.identity.phone_number
+      const phone = onfulfilled.data.data.identity.phone_number;
       // }
     })
     .catch((_err) => {
@@ -247,7 +253,6 @@ a.forgot-text:hover {
   color: #fff;
 }
 
-
 .bottom_link {
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -273,5 +278,4 @@ a.forgot-text:hover {
 .resend_btn_loader {
   margin-left: 15px;
 }
-
 </style>

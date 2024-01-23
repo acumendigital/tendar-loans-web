@@ -95,7 +95,7 @@ const resendOtp = () => {
     });
 };
 
-if (route.query.from === 'login') {
+if (route.query.from !== '') {
   resendOtp()
 }
 
@@ -151,8 +151,8 @@ const sendOtp = () => {
   /* margin-top: 5%; */
   position: relative;
   background-color: white;
-  max-width: 600px;
-  width: 32%;
+  max-width: 550px;
+  width: 30%;
   height: fit-content;
   align-items: center;
   border-radius: 20px;

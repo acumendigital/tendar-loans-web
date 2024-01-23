@@ -122,7 +122,7 @@ const signIn = () => {
         url = `/auth/signup?emailToVerify=${email.value.trim()}&from=login`
       } else if (!user_data.identity_verified) {
         successMsg = "Login Successful. Please verify your identity"
-        url = `/user/verify-identity?from=login`
+        url = `/user/verify-identity?from=${window.location.pathname}`
       } else {
         successMsg = "Login Successful"
         url = route.query.fallBackUrl || "/dashboard";

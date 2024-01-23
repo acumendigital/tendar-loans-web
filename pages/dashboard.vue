@@ -107,6 +107,7 @@ const getUserProfile = () => {
       loading.value = false;
     });
 };
+
 const getAnalytics = () => {
   loading.value = true;
   axios
@@ -137,7 +138,7 @@ const getLoanData = () => {
     .then((onfulfilled) => {
       // console.log(onfulfilled);
       const fullLoanData = onfulfilled.data?.data?.loans?.data[0];
-      loanId.value = fullLoanData?.id
+      loanId.value = fullLoanData?.id;
       console.log(fullLoanData);
       dataStore.updateLoanData(fullLoanData);
     })
@@ -152,7 +153,7 @@ const getLoanData = () => {
 
 const getDueDate = (date) => {
   let date1 = new Date();
-  let date2 = new Date('01/15/2024');
+  let date2 = new Date("01/15/2024");
   let difference_in_time = date2.getTime() - date1.getTime();
 
   let difference_in_days = Math.round(difference_in_time / (1000 * 3600 * 24));
@@ -172,7 +173,17 @@ const getDueDate = (date) => {
     overdueStatus.value = "overdue";
   }
 };
+const checkEmailVerification = () => {
+  // console.log("Verified? - ", dataStore.userData?.email_verified);
+  if (!dataStore.userData?.email_verified) {
+    toast.add({ title: "Please verify your email", color: "green" });
+    navigateTo(
+      `/auth/signup?emailToVerify=${dataStore.userData.email}&from=${window.location.pathname}`
+    );
+  }
+};
 
+checkEmailVerification();
 getAnalytics();
 getUserProfile();
 getLoanData();

@@ -2,9 +2,7 @@
   <div>
     <div class="top_section">
       <h1 class="title">Loans</h1>
-      <button class="global_btn" @click="navigateTo('/loans/request-loan')">
-        Request a loan
-      </button>
+      <button class="global_btn" @click="requestLoan()">Request a loan</button>
     </div>
     <div class="cards_section">
       <div class="card_ctn">
@@ -111,6 +109,21 @@ const toggleSidebar = (val) => {
 };
 const updateIsOpen = (newVal) => {
   isOpen.value = newVal;
+};
+
+const requestLoan = () => {
+  if (!dataStore.userData.identity_verified) {
+    toast.add({ title: "Please verify your identity", color: "red" });
+    navigateTo(`/user/verify-identity?from=${window.location.pathname}`);
+  } else if (!dataStore.userData.bank_account_set) {
+    toast.add({ title: "Please add a bank account", color: "red" });
+    navigateTo("/settings?tab=Bank+Account+Management");
+  } else if (!dataStore.userData.card_set) {
+    toast.add({ title: "Please add a card", color: "red" });
+    navigateTo("/settings?tab=Cards");
+  } else {
+    navigateTo("/loans/request-loan");
+  }
 };
 
 const getAnalytics = () => {

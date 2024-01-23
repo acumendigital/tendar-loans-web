@@ -18,7 +18,12 @@
       <div class="form">
         <div class="modal-input-field form-group">
           <label class="form_label" for="gender">Select your preference</label>
-          <select id="gender" v-model="preference" name="gender" @change="clearInput">
+          <select
+            id="gender"
+            v-model="preference"
+            name="gender"
+            @change="clearInput"
+          >
             <option value="">Select</option>
             <option value="bvn">BVN</option>
             <option value="nin">NIN</option>
@@ -71,6 +76,7 @@ definePageMeta({
   layout: "auth-layout",
 });
 
+const route = useRoute();
 import axios from "axios";
 const toast = useToast();
 const preference = ref("");
@@ -80,9 +86,9 @@ const showPassword = ref(false);
 const loading = ref(false);
 
 const clearInput = () => {
-  nin.value = ''
-  bvn.value = ''
-}
+  nin.value = "";
+  bvn.value = "";
+};
 
 const save = () => {
   loading.value = true;
@@ -95,11 +101,13 @@ const save = () => {
   axios
     .post("identity/create", data)
     .then((onfulfilled) => {
-      const message = onfulfilled?.data?.message
+      const message = onfulfilled?.data?.message;
       toast.add({ title: message, color: "green" });
       console.log(onfulfilled);
-      const phone = onfulfilled.data.data.identity.phone_number
-      navigateTo(`/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}`);
+      const phone = onfulfilled.data.data.identity.phone_number;
+      navigateTo(
+        `/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}&from=${route.query?.from}`
+      );
       // }
     })
     .catch((_err) => {
