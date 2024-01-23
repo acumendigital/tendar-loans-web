@@ -222,9 +222,9 @@ const country = ref(
       functions.capitalizeFirstLetter(dataStore.userProfile?.address.country)
   ) || {}
 );
-const state = ref(dataStore.userProfile?.address.state || "");
+const state = ref("");
 const states = ref([]);
-const city = ref(dataStore.userProfile?.address.city || "");
+const city = ref("");
 const cities = ref([]);
 console.log(dataStore.userProfile?.address.state);
 console.log(countries.value);
@@ -232,7 +232,7 @@ console.log(country.value);
 
 const setStates = () => {
   states.value = compCities.getStatesByShort(country.value.shortName);
-  return states.value
+  console.log(states.value);
 };
 const setCities = () => {
   cities.value = compCities.getCities(country.value.shortName, state.value);
@@ -305,8 +305,17 @@ const save = () => {
 };
 const loadStates = () => {
   if (country.value.name) {
-    return setStates();
+    setStates();
   }
+  state.value = functions.capitalizeFirstLetter(
+    dataStore.userProfile?.address.state
+  );
+  if (state.value) {
+    setCities();
+  }
+  city.value = functions.capitalizeFirstLetter(
+    dataStore.userProfile?.address.city
+  );
 };
 
 loadStates();
