@@ -116,12 +116,15 @@ const signIn = () => {
       // console.log(dataStore.token);
       let url = ''
       let successMsg = ''
-      if (user_data.email_verified) {
-        successMsg = "Login Successful"
-        url = route.query.fallBackUrl || "/dashboard";
-      } else {
+      if (!user_data.email_verified) {
         successMsg = "Login Successful. Please verify your email"
         url = `/auth/signup?emailToVerify=${email.value.trim()}&from=login`
+      } else if (!user_data.identity_verified) {
+        successMsg = "Login Successful. Please verify your identity"
+        url = `/user/verify-identity?from=login`
+      } else {
+        successMsg = "Login Successful"
+        url = route.query.fallBackUrl || "/dashboard";
       }
       toast.add({ title: successMsg, color: "green" });
       navigateTo(`${url}`);
