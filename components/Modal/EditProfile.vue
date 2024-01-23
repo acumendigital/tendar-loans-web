@@ -226,13 +226,10 @@ const state = ref("");
 const states = ref([]);
 const city = ref("");
 const cities = ref([]);
-console.log(dataStore.userProfile?.address.state);
-console.log(countries.value);
-console.log(country.value);
 
 const setStates = () => {
   states.value = compCities.getStatesByShort(country.value.shortName);
-  console.log(states.value);
+  // console.log(states.value);
 };
 const setCities = () => {
   cities.value = compCities.getCities(country.value.shortName, state.value);
@@ -266,9 +263,9 @@ const save = () => {
     date_of_birth: formateDate(formattedDob.value),
     gender: gender.value,
     address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
+      address: address.value,
+      city: city.value,
+      state: state.value,
       country: country.value.name.toLowerCase(),
     },
     employment_status: employmentStatus.value,
@@ -307,15 +304,11 @@ const loadStates = () => {
   if (country.value.name) {
     setStates();
   }
-  state.value = functions.capitalizeFirstLetter(
-    dataStore.userProfile?.address.state
-  );
+  state.value = dataStore.userProfile?.address.state;
   if (state.value) {
     setCities();
   }
-  city.value = functions.capitalizeFirstLetter(
-    dataStore.userProfile?.address.city
-  );
+  city.value = dataStore.userProfile?.address.city;
 };
 
 loadStates();

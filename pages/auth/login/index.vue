@@ -5,7 +5,7 @@
         <div class="lhs">
           <img
             class="company_logo"
-            src="~assets/images/aumen_logo.png"
+            src="~assets/images/tendar_logo.png"
             alt=""
           />
         </div>

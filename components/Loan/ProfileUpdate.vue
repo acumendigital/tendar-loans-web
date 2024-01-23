@@ -107,35 +107,32 @@
         </div>
         <div class="form-group">
           <label class="form_label" for="country">Country</label>
-          <input
-            id="country"
-            v-model="country"
-            type="text"
-            name="country"
-            placeholder="Enter your Country"
-          />
+          <select id="country" v-model="country" name="" @change="setStates()">
+            <option value="" disabled selected>Please select</option>
+            <option v-for="(c, index) in countries" :key="index" :value="c">
+              {{ c.name }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="form_group_flex">
         <div class="form-group">
           <label class="form_label" for="state">State</label>
-          <input
-            id="state"
-            v-model="state"
-            type="text"
-            name="state"
-            placeholder="Enter your State"
-          />
+          <select id="state" v-model="state" name="" @change="setCities()">
+            <option value="" disabled selected>Please select</option>
+            <option v-for="s in states" :key="s" :value="s">
+              {{ s }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label class="form_label" for="city">City</label>
-          <input
-            id="city"
-            v-model="city"
-            type="text"
-            name="city"
-            placeholder="Enter your City"
-          />
+          <select id="city" v-model="city" name="">
+            <option value="" disabled selected>Please select</option>
+            <option v-for="(c, index) in cities" :key="index" :value="c">
+              {{ c }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="btn-div">
@@ -146,23 +143,28 @@
           <BtnLoader color="#fff" />
         </button>
       </div>
-      <p class="link_text" @click="$emit('continue');">Skip</p>
+      <p class="link_text" @click="$emit('continue')">Skip</p>
     </div>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
+import compCities from "countrycitystatejson";
 const toast = useToast();
 const dataStore = useUserStore();
-const emit = defineEmits(['continue'])
+const emit = defineEmits(["continue"]);
 const props = defineProps({
   email: {
     type: String,
     default: () => "",
   },
 });
-
+const countries = ref(
+  compCities
+    .getCountries()
+    .filter((c) => c.shortName === "NG" || c.shortName === "US")
+);
 
 const formattedDob = ref("");
 
@@ -184,20 +186,37 @@ const reFormatDate = (e) => {
   return formattedDob.value;
 };
 
-const otp = ref('');
+const otp = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
-const firstName = ref(dataStore.userProfile?.first_name || '');
-const lastName = ref(dataStore.userProfile?.last_name || '');
-const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || '');
+const firstName = ref(dataStore.userProfile?.first_name || "");
+const lastName = ref(dataStore.userProfile?.last_name || "");
+const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || "");
 console.log(dob);
-const gender = ref(dataStore.userProfile?.gender || '');
-const employmentStatus = ref(dataStore.userProfile?.employment_status || '');
-const jobTitle = ref(dataStore.userProfile?.job_title || '');
-const address = ref(dataStore.userProfile?.address?.address || '');
-const city = ref(dataStore.userProfile?.address?.city || '');
-const state = ref(dataStore.userProfile?.address?.state || '');
-const country = ref(dataStore.userProfile?.address?.country || '');
+const gender = ref(dataStore.userProfile?.gender || "");
+const employmentStatus = ref(dataStore.userProfile?.employment_status || "");
+const jobTitle = ref(dataStore.userProfile?.job_title || "");
+const address = ref(dataStore.userProfile?.address?.address || "");
+const country = ref(
+  countries.value.find(
+    (c) =>
+      c.name ===
+      functions.capitalizeFirstLetter(dataStore.userProfile?.address.country)
+  ) || {}
+);
+const state = ref("");
+const states = ref([]);
+const city = ref("");
+const cities = ref([]);
+
+const setStates = () => {
+  states.value = compCities.getStatesByShort(country.value.shortName);
+  // console.log(states.value);
+};
+const setCities = () => {
+  cities.value = compCities.getCities(country.value.shortName, state.value);
+  // console.log(compCities.getCities(country.value.shortName, state.value))
+};
 
 const formateDate = (e) => {
   // console.log(e);
@@ -214,11 +233,11 @@ const formateDate = (e) => {
 
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   formattedDob.value = formattedDate;
-  return formattedDob.value
+  return formattedDob.value;
 };
 
-console.log('date - ', dataStore.userProfile?.date_of_birth);
-console.log('new date - ', new Date(dataStore.userProfile?.date_of_birth));
+console.log("date - ", dataStore.userProfile?.date_of_birth);
+console.log("new date - ", new Date(dataStore.userProfile?.date_of_birth));
 
 const save = () => {
   loading.value = true;
@@ -229,10 +248,10 @@ const save = () => {
     date_of_birth: formateDate(formattedDob.value),
     gender: gender.value,
     address: {
-      address: address.value.toLowerCase(),
-      city: city.value.toLowerCase(),
-      state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
+      address: address.value,
+      city: city.value,
+      state: state.value,
+      country: country.value.name.toLowerCase(),
     },
     employment_status: employmentStatus.value,
     job_title: jobTitle.value,
@@ -249,7 +268,7 @@ const save = () => {
       dataStore.updateUserProfile(user_profile);
       // navigateTo("/user/verify-identity");
       // }
-      emit('continue');
+      emit("continue");
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -266,6 +285,19 @@ const save = () => {
       loading.value = false;
     });
 };
+
+const loadStates = () => {
+  if (country.value.name) {
+    setStates();
+  }
+  state.value = dataStore.userProfile?.address.state;
+  if (state.value) {
+    setCities();
+  }
+  city.value = dataStore.userProfile?.address.city;
+};
+
+loadStates();
 </script>
 
 <style scoped>
