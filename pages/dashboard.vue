@@ -94,7 +94,7 @@ const getUserProfile = () => {
   axios
     .get("customer/profile")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
+      console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
       console.log(dataStore.userProfile.first_name);
