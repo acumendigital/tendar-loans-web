@@ -49,6 +49,7 @@ const handleLogout = () => {
       console.log(onfulfilled);
       toast.add({ title: "Logged out!", color: "green" });
       const logoutResponse = onfulfilled.data.code
+      dataStore.resetStore();
       if (logoutResponse === 200) {
         navigateTo('/auth/login')
         // setTimeout(() => {

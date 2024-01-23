@@ -27,8 +27,8 @@ const props = defineProps({
     default: () => 'due'
   },
   amount: {
-    type: String,
-    default: () => ''
+    type: Number,
+    default: () => 0
   },
   dueDate: {
     type: String,
