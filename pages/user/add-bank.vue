@@ -22,37 +22,43 @@
       <!-- <div class="signin-form-ctn"> -->
       <div class="form">
         <div class="form-group">
-          <label for="bank">Bank</label>
-          <input
+          <div class="flex">
+            <label class="mr-[10px]" for="bank">Bank</label>
+            <BtnLoader class="mt-[5px]" v-if="banksLoading" color="#7a62eb" size="15" />
+          </div>
+          <select
             id="bank"
             v-model="bank"
-            type="text"
             name="bank"
-            placeholder="Enter your bank"
-          />
+            @change="selectBankName(bank)"
+          >
+            <option value="">Select</option>
+            <option v-for="(data, index) in banks" :key="index" :value="data">
+              {{ data.name }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label for="acct_num">Account number</label>
           <input
-            id="acct_num"
-            v-model="acct_num"
-            type="number"
-            name="acct_num"
-            placeholder="Enter your account number"
+            class="amount_input"
+            id="accountNumber"
+            v-model="accountNumber"
+            type="text"
+            name="accountNumber"
+            placeholder="Enter your Account Number"
+            @input="countAcctNum"
           />
         </div>
         <div class="form-group">
-          <label for="acct_name">Account holder name</label>
-          <input
-            id="acct_name"
-            v-model="acct_name"
-            type="number"
-            name="acct_name"
-            placeholder="Enter your account name"
-          />
+          <label for="">Account holder name</label>
+          <div class="holder_input">
+            <p>{{ holderName }}</p>
+            <BtnLoader v-if="accountLoading" color="#7a62eb" size="20" />
+          </div>
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signIn()">
+          <button v-if="!loading" class="action-btn" @click="addBankAccount()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
@@ -67,35 +73,80 @@
 </template>
 
 <script setup>
+import axios from "axios";
 definePageMeta({
   layout: "auth-layout",
 });
 
 const toast = useToast();
-const bank = ref("");
-const acct_num = ref("");
-const acct_name = ref("");
-const showPassword = ref(false);
+const holderName = ref("");
+const accountNumber = ref("");
+const banks = ref([]);
+const bank = ref({});
+const bankCode = ref("");
+const bankName = ref("");
+const accountName = ref("");
+const accountLoading = ref(false);
 const loading = ref(false);
+const banksLoading = ref(false);
 
-const save = () => {
-  loading.value = true;
-  console.log(loading.value);
+const countAcctNum = (val) => {
+  if (val.target.value.length === 10) {
+    getAccount();
+  }
+};
+
+const selectBankName = (val) => {
+  console.log(val);
+  bankCode.value = val.code;
+  bankName.value = val.name;
+};
+
+const getAccount = () => {
+  accountLoading.value = true;
   const data = {
-    // first_name: firstName.value,
-    // last_name: lastName.value,
-    // date_of_birth: formattedDob.value,
-    // gender: gender.value,
+    account_number: accountNumber.value,
+    bank_code: bankCode.value,
   };
-  console.log(data);
   axios
-    .post("", data)
+    .post("bank-account/account-number/resolve", data)
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      toast.add({ title: "Bank Added", color: "green" });
+      holderName.value = onfulfilled.data.data.account.account_name;
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        toast.add({ title: errorMsg, color: "red" });
+      } else {
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
+      }
+    })
+    .finally(() => {
+      accountLoading.value = false;
+    });
+};
+
+const addBankAccount = () => {
+  loading.value = true;
+  const data = {
+    account_name: holderName.value,
+    bank_name: bankName.value,
+    account_number: accountNumber.value,
+    bank_code: bankCode.value,
+    currency: "NGN",
+  };
+  axios
+    .post("bank-account/create", data)
+    .then((onfulfilled) => {
+      // const data = onfulfilled?.data?.data
+      console.log(onfulfilled);
+      toast.add({ title: "Bank Account Added", color: "green" });
       navigateTo("/user/create-pin");
-      // }
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -112,6 +163,25 @@ const save = () => {
       loading.value = false;
     });
 };
+
+const getBanks = () => {
+  banksLoading.value = true;
+  axios
+    .get("bank-account/bank/list")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      banks.value = onfulfilled.data.data.banks;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      banksLoading.value = false;
+    });
+};
+
+getBanks();
 </script>
 
 <style scoped>
@@ -228,5 +298,22 @@ a.forgot-text:hover {
   cursor: pointer;
   text-align: center;
   margin-top: 20px;
+}
+
+.holder_input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-radius: var(--input-border-radius);
+  background: var(--input-bg);
+  width: 100%;
+  height: 45px;
+  border: var(--input-border-width) solid var(--border-two);
+}
+
+.holder_input p {
+  font-size: 14px;
+  line-height: 17px;
 }
 </style>
