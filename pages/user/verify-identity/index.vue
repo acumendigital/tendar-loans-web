@@ -95,11 +95,11 @@ const save = () => {
   axios
     .post("identity/create", data)
     .then((onfulfilled) => {
-      const data = onfulfilled?.data?.message
-      toast.add({ title: data, color: "green" });
+      const message = onfulfilled?.data?.message
+      toast.add({ title: message, color: "green" });
       console.log(onfulfilled);
       const phone = onfulfilled.data.data.identity.phone_number
-      navigateTo(`/user/verify-identity/enter-otp?phone=${phone}`);
+      navigateTo(`/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}`);
       // }
     })
     .catch((_err) => {

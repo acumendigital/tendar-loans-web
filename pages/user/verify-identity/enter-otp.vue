@@ -18,16 +18,27 @@
         <div class="pin_ctn">
           <div class="form-group">
             <label for="email">OTP</label>
-            <OTPInput inputs="6" @input="handleOTPChange($event)" />
+            <OTPInput inputs="6" @inputs="handleOTPChange($event)" />
           </div>
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signIn()">
+          <button v-if="!loading" class="action-btn" @click="save()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
             <BtnLoader color="#fff" />
           </button>
+        </div>
+        <div class="bottom_link">
+          <p class="bottom_text">
+            Didn’t get a code?
+            <span v-if="!resendLoading" class="resend_btn" @click="resendOtp()"
+              >Resend code</span
+            >
+            <span v-else class="resend_btn_loader"
+              ><BtnLoader color="#7a62eb" size="20"
+            /></span>
+          </p>
         </div>
         <!-- <p class="link_text" @click="navigateTo('/dashboard')">
           Skip, continue to dashboard
@@ -44,12 +55,19 @@ definePageMeta({
   layout: "auth-layout",
 });
 
+console.log(route);
+
 const toast = useToast();
 const otp = ref("");
 const loading = ref(false);
+const resendLoading = ref(false);
 
 const handleOTPChange = (value) => {
   otp.value = value;
+  if (otp.value.length === 6) {
+    console.log(otp.value);
+    save();
+  }
 };
 
 const save = () => {
@@ -81,6 +99,38 @@ const save = () => {
       .finally(() => {
         loading.value = false;
       });
+};
+
+const resendOtp = () => {
+  resendLoading.value = true;
+  const data = {
+    type: route.query?.type,
+    number: route.query?.id,
+  };
+  console.log(data);
+  axios
+    .post("identity/create", data)
+    .then((onfulfilled) => {
+      const message = onfulfilled?.data?.message
+      toast.add({ title: message, color: "green" });
+      console.log(onfulfilled);
+      const phone = onfulfilled.data.data.identity.phone_number
+      // }
+    })
+    .catch((_err) => {
+      const errorMsg = _err?.response?.data?.message || _err?.message;
+      if (errorMsg) {
+        toast.add({ title: errorMsg, color: "red" });
+      } else {
+        toast.add({
+          title: "Oops, something went wrong, please try again later",
+          color: "red",
+        });
+      }
+    })
+    .finally(() => {
+      resendLoading.value = false;
+    });
 };
 </script>
 
@@ -197,12 +247,31 @@ a.forgot-text:hover {
   color: #fff;
 }
 
-.link_text {
-  color: var(--primary-purple);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-  margin-top: 20px;
+
+.bottom_link {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
+
+.bottom_text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00000086;
+  font-size: 16px;
+  font-weight: 300;
+  /* text-align: center; */
+}
+
+.resend_btn {
+  color: #7a62eb;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.resend_btn_loader {
+  margin-left: 15px;
+}
+
 </style>
