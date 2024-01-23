@@ -24,14 +24,10 @@
       <div class="form">
         <div class="form-group">
           <label for="">How much do you want to borrow?</label>
-          <input
-            class="amount_input"
-            id="amount"
-            v-model="amount"
-            type="number"
-            name="amount"
-            placeholder="Enter your Amount"
-          />
+          <Money3Component
+            v-model.number="amount"
+            :prefix="'₦ '"
+          ></Money3Component>
           <div
             :class="submitClicked && !amount ? '' : 'not-vis'"
             class="error-text"
@@ -79,16 +75,11 @@
 </template>
 
 <script setup>
-// import { Money } from "v-money";
+import { Money3Component } from "v-money3";
 import axios from "axios";
 const emit = defineEmits(["continue"]);
 const dataStore = useUserStore();
 
-const money = ref({
-  prefix: "₦ ",
-  precision: 0,
-  masked: false,
-});
 const amount = ref("");
 const reasonForLoan = ref("");
 const highestAmount = ref(null);

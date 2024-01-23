@@ -138,15 +138,20 @@
       <div class="form_group_flex">
         <div class="form-group">
           <label class="form_label" for="amount">Enter a specific amount</label>
-          <input
-            id="amount"
-            v-model="amount_to_pay"
-            type="number"
-            name="amount"
-            placeholder="Enter Amount"
+          <Money3Component
+            v-model.number="amount_to_pay"
+            :prefix="'₦ '"
             @input="payType = ''"
-          />
-          <div :class="submitClicked && amount_to_pay > dataStore.loanData.next_pay_amount ? '' : 'not-vis'" class="error-text">
+          ></Money3Component>
+          <div
+            :class="
+              submitClicked &&
+              amount_to_pay < dataStore.loanData.next_pay_amount
+                ? ''
+                : 'not-vis'
+            "
+            class="error-text"
+          >
             Minimum amount is
             {{
               functions.formatMoney(dataStore.loanData.next_pay_amount, "NGN")
@@ -182,12 +187,12 @@
             <option value="card">Pay with Card</option>
             <option value="online">Pay online</option>
           </select>
-            <div
-              :class="submitClicked && !paymentOption ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div>
+          <div
+            :class="submitClicked && !paymentOption ? '' : 'not-vis'"
+            class="error-text"
+          >
+            This field is required
+          </div>
         </div>
         <p class=""></p>
       </div>
@@ -204,6 +209,7 @@
 </template>
 
 <script setup>
+import { Money3Component } from "v-money3";
 import axios from "axios";
 const toast = useToast();
 const dataStore = useUserStore();
@@ -231,9 +237,12 @@ const selectPayType = (amount, type) => {
 
 const pay = () => {
   submitClicked.value = true;
-  if (amount_to_pay.value <= dataStore.loanData.next_pay_amount && paymentOption.value) {
+  if (
+    amount_to_pay.value >= dataStore.loanData.next_pay_amount &&
+    paymentOption.value
+  ) {
     emit("openDetails", amount_to_pay.value, paymentOption.value);
-  } 
+  }
 };
 
 // const lowAmount = computed(() => {
