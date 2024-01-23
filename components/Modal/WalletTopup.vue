@@ -15,14 +15,7 @@
         <div class="form">
           <div class="form-group">
             <label for="">Amount</label>
-            <input
-              class="amount_input"
-              id="amount"
-              v-model="amount"
-              type="number"
-              name="amount"
-              placeholder="Enter your Amount"
-            />
+            <Money3Component v-model.number="amount" :prefix="'₦ '"></Money3Component>
             <div
               :class="submitClicked && !amount ? '' : 'not-vis'"
               class="error-text"
@@ -31,11 +24,7 @@
             </div>
           </div>
           <div class="btn-div">
-            <button
-              v-if="!loading"
-              class="action-btn"
-              @click="save"
-            >
+            <button v-if="!loading" class="action-btn" @click="save">
               Continue
             </button>
             <button v-else class="action-btn" disabled>
@@ -50,7 +39,8 @@
 </template>
 
 <script setup>
-const emit = defineEmits(["proceed"])
+import { Money3Component } from "v-money3";
+const emit = defineEmits(["proceed"]);
 
 const amount = ref("");
 const selectAccount = ref("");
@@ -60,7 +50,7 @@ const submitClicked = ref(false);
 const save = () => {
   submitClicked.value = true;
   if (submitClicked && amount.value) {
-    emit('proceed', amount.value)
+    emit("proceed", amount.value);
   }
 };
 </script>
