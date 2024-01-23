@@ -31,6 +31,7 @@
     "@pinia/nuxt": "^0.5.1",
     "axios": "^1.6.2",
     "buffer": "^6.0.3",
+    "countrycitystatejson": "^21.3.2702",
     "crypto-js": "^4.2.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
