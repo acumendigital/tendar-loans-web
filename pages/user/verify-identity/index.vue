@@ -92,7 +92,6 @@ const clearInput = () => {
 
 const save = () => {
   loading.value = true;
-  console.log(loading.value);
   const data = {
     type: preference.value,
     number: nin.value || bvn.value,
@@ -105,9 +104,16 @@ const save = () => {
       toast.add({ title: message, color: "green" });
       console.log(onfulfilled);
       const phone = onfulfilled.data.data.identity.phone_number;
-      navigateTo(
-        `/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}&from=${route.query?.from}`
-      );
+      if (route.query.from) {
+        navigateTo(
+          `/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}&from=${route.query?.from}`
+        );
+      } else {
+        navigateTo(
+          `/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}`
+        );
+      }
+
       // }
     })
     .catch((_err) => {

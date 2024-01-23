@@ -31,8 +31,8 @@
             <BtnLoader color="#fff" />
           </button>
         </div>
-        <p class="link_text" @click="navigateTo('/dashboard')">
-          Skip, continue to dashboard
+        <p class="link_text" @click="navigateTo('/auth/login')">
+          Skip, continue to login
         </p>
       </div>
     </div>
@@ -89,8 +89,8 @@ const save = () => {
       .post("user/pin/set", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
-        toast.add({ title: "Pin Created", color: "green" });
-        navigateTo("/dashboard");
+        toast.add({ title: "Pin Created, Please login", color: "green" });
+        navigateTo("/auth/login");
         // }
       })
       .catch((_err) => {

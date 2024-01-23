@@ -183,7 +183,7 @@ const checkEmailVerification = () => {
   if (!dataStore.userData?.email_verified) {
     toast.add({ title: "Please verify your email", color: "green" });
     navigateTo(
-      `/auth/signup?emailToVerify=${dataStore.userData.email}&from=${window.location.pathname}`
+      `/auth/signup?emailToVerify=${dataStore.userData.email}&from=/dashboard`
     );
   }
 };
