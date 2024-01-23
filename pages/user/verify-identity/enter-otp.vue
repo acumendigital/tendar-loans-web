@@ -5,15 +5,14 @@
         <div class="lhs">
           <img
             class="company_logo"
-            src="~assets/images/aumen_logo.png"
+            src="~assets/images/tendar_logo.png"
             alt=""
           />
         </div>
       </div>
       <p class="welcome_text">Enter verification code</p>
       <p class="instruction_text">
-        Please enter the code sent to Please enter the code sent to
-        {{ route.query?.phone }}
+        Please enter the code sent to {{ route.query?.phone }}
       </p>
       <div class="form">
         <div class="pin_ctn">
