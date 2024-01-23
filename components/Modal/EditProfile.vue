@@ -5,7 +5,7 @@
         <h1 class="modal_title">Enter Profile</h1>
         <span
           class="material-icons-outlined close"
-           @click="$emit('close-modal')"
+          @click="$emit('close-modal')"
         >
           close
         </span>
@@ -14,152 +14,154 @@
         Streamline your loan journey with a quick profile update
       </p>
       <div class="modal_content">
-    <div class="form">
-      <div class="form_group_flex">
-        <div class="form-group">
-          <label class="form_label" for="firstName">First Name</label>
-          <input
-            id="firstName"
-            v-model="firstName"
-            type="text"
-            name="firstName"
-            placeholder="Enter your First Name"
-            disabled
-          />
-        </div>
-        <div class="form-group">
-          <label class="form_label" for="lastName">Last Name</label>
-          <input
-            id="lastName"
-            v-model="lastName"
-            type="text"
-            name="lastName"
-            placeholder="Enter your Last Name"
-            disabled
-          />
-        </div>
-      </div>
-      <div class="form_group_flex">
-        <div class="form-group">
-          <label class="form_label" for="dob">Date of Birth</label>
-          <input
-            id="dob"
-            v-model="dob"
-            type="date"
-            name="dob"
-            @change="formateDate"
-            disabled
-            
-          />
-        </div>
-        <div class="modal-input-field">
-          <label class="form_label" for="gender">Gender</label>
-          <select id="gender" v-model="gender" name="gender" disabled>
-            <option value="">Select</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-          <!-- </div> -->
-          <!-- <div
+        <div class="form">
+          <div class="form_group_flex">
+            <div class="form-group">
+              <label class="form_label" for="firstName">First Name</label>
+              <input
+                id="firstName"
+                v-model="firstName"
+                type="text"
+                name="firstName"
+                placeholder="Enter your First Name"
+                disabled
+              />
+            </div>
+            <div class="form-group">
+              <label class="form_label" for="lastName">Last Name</label>
+              <input
+                id="lastName"
+                v-model="lastName"
+                type="text"
+                name="lastName"
+                placeholder="Enter your Last Name"
+                disabled
+              />
+            </div>
+          </div>
+          <div class="form_group_flex">
+            <div class="form-group">
+              <label class="form_label" for="dob">Date of Birth</label>
+              <input
+                id="dob"
+                v-model="dob"
+                type="date"
+                name="dob"
+                @change="formateDate"
+                disabled
+              />
+            </div>
+            <div class="modal-input-field">
+              <label class="form_label" for="gender">Gender</label>
+              <select id="gender" v-model="gender" name="gender" disabled>
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              <!-- </div> -->
+              <!-- <div
               :class="submitClicked && !gender ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
             </div> -->
-        </div>
-      </div>
-      <div class="form_group_flex">
-        <div class="modal-input-field">
-          <label class="form_label" for="employmentStatus"
-            >Employment status</label
-          >
-          <select
-            id="employment-status"
-            v-model="employmentStatus"
-            name="employment-status"
-          >
-            <option value="">Select</option>
-            <option value="contract worker">Contract Worker</option>
-            <option value="self employed">Self Employed</option>
-            <option value="employed">Employed</option>
-            <option value="business owner">Business Owner</option>
-            <option value="student">Student</option>
-            <option value="unemployed">Unemployed</option>
-          </select>
-          <!-- </div> -->
-          <!-- <div
+            </div>
+          </div>
+          <div class="form_group_flex">
+            <div class="modal-input-field">
+              <label class="form_label" for="employmentStatus"
+                >Employment status</label
+              >
+              <select
+                id="employment-status"
+                v-model="employmentStatus"
+                name="employment-status"
+              >
+                <option value="">Select</option>
+                <option value="contract worker">Contract Worker</option>
+                <option value="self employed">Self Employed</option>
+                <option value="employed">Employed</option>
+                <option value="business owner">Business Owner</option>
+                <option value="student">Student</option>
+                <option value="unemployed">Unemployed</option>
+              </select>
+              <!-- </div> -->
+              <!-- <div
               :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
               class="error-text"
             >
               This field is required
             </div> -->
+            </div>
+            <div class="form-group">
+              <label class="form_label" for="jobTitle"
+                >Job title (Optional)</label
+              >
+              <input
+                id="jobTitle"
+                v-model="jobTitle"
+                type="text"
+                name="jobTitle"
+                placeholder="Enter your Job Title"
+              />
+            </div>
+          </div>
+          <div class="form_group_flex">
+            <div class="form-group">
+              <label class="form_label" for="address">Address</label>
+              <input
+                id="address"
+                v-model="address"
+                type="text"
+                name="address"
+                placeholder="Enter your Address"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form_label" for="country">Country</label>
+              <select
+                id="country"
+                v-model="country"
+                name=""
+                @change="setStates()"
+              >
+                <option value="" disabled selected>Please select</option>
+                <option v-for="(c, index) in countries" :key="index" :value="c">
+                  {{ c.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form_group_flex">
+            <div class="form-group">
+              <label class="form_label" for="state">State</label>
+              <select id="state" v-model="state" name="" @change="setCities()">
+                <option value="" disabled selected>Please select</option>
+                <option v-for="s in states" :key="s" :value="s">
+                  {{ s }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form_label" for="city">City</label>
+              <select id="city" v-model="city" name="">
+                <option value="" disabled selected>Please select</option>
+                <option v-for="(c, index) in cities" :key="index" :value="c">
+                  {{ c }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-div">
+            <button v-if="!loading" class="action-btn" @click="save()">
+              Continue
+            </button>
+            <button v-else class="action-btn" disabled>
+              <BtnLoader color="#fff" />
+            </button>
+          </div>
+          <!-- <p class="link_text">Cancel</p> -->
         </div>
-        <div class="form-group">
-          <label class="form_label" for="jobTitle">Job title (Optional)</label>
-          <input
-            id="jobTitle"
-            v-model="jobTitle"
-            type="text"
-            name="jobTitle"
-            placeholder="Enter your Job Title"
-          />
-        </div>
-      </div>
-      <div class="form_group_flex">
-        <div class="form-group">
-          <label class="form_label" for="address">Address</label>
-          <input
-            id="address"
-            v-model="address"
-            type="text"
-            name="address"
-            placeholder="Enter your Address"
-          />
-        </div>
-        <div class="form-group">
-          <label class="form_label" for="country">Country</label>
-          <input
-            id="country"
-            v-model="country"
-            type="text"
-            name="country"
-            placeholder="Enter your Country"
-          />
-        </div>
-      </div>
-      <div class="form_group_flex">
-        <div class="form-group">
-          <label class="form_label" for="state">State</label>
-          <input
-            id="state"
-            v-model="state"
-            type="text"
-            name="state"
-            placeholder="Enter your State"
-          />
-        </div>
-        <div class="form-group">
-          <label class="form_label" for="city">City</label>
-          <input
-            id="city"
-            v-model="city"
-            type="text"
-            name="city"
-            placeholder="Enter your City"
-          />
-        </div>
-      </div>
-      <div class="btn-div">
-        <button v-if="!loading" class="action-btn" @click="save()">
-          Continue
-        </button>
-        <button v-else class="action-btn" disabled>
-          <BtnLoader color="#fff" />
-        </button>
-      </div>
-      <!-- <p class="link_text">Cancel</p> -->
-    </div>
-        
       </div>
     </div>
   </div>
@@ -167,16 +169,21 @@
 
 <script setup>
 import axios from "axios";
+import compCities from "countrycitystatejson";
 const toast = useToast();
 const dataStore = useUserStore();
-const emit = defineEmits(['continue'])
+const emit = defineEmits(["continue"]);
 const props = defineProps({
   email: {
     type: String,
     default: () => "",
   },
 });
-
+const countries = ref(
+  compCities
+    .getCountries()
+    .filter((c) => c.shortName === "NG" || c.shortName === "US")
+);
 
 const formattedDob = ref("");
 
@@ -198,26 +205,42 @@ const reFormatDate = (e) => {
   return formattedDob.value;
 };
 
-const otp = ref('');
+const otp = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
-const firstName = ref(dataStore.userProfile?.first_name || '');
-const lastName = ref(dataStore.userProfile?.last_name || '');
-const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || '');
-console.log(dob);
-const gender = ref(dataStore.userProfile?.gender || '');
-const employmentStatus = ref(dataStore.userProfile?.employment_status || '');
-const jobTitle = ref(dataStore.userProfile?.job_title || '');
-const address = ref(dataStore.userProfile?.address.address || '');
-const city = ref(dataStore.userProfile?.address.city || '');
-const state = ref(dataStore.userProfile?.address.state || '');
-const country = ref(dataStore.userProfile?.address.country || '');
+const firstName = ref(dataStore.userProfile?.first_name || "");
+const lastName = ref(dataStore.userProfile?.last_name || "");
+const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || "");
+const gender = ref(dataStore.userProfile?.gender || "");
+const employmentStatus = ref(dataStore.userProfile?.employment_status || "");
+const jobTitle = ref(dataStore.userProfile?.job_title || "");
+const address = ref(dataStore.userProfile?.address.address || "");
+const country = ref(
+  countries.value.find(
+    (c) =>
+      c.name ===
+      functions.capitalizeFirstLetter(dataStore.userProfile?.address.country)
+  ) || {}
+);
+const state = ref(dataStore.userProfile?.address.state || "");
+const states = ref([]);
+const city = ref(dataStore.userProfile?.address.city || "");
+const cities = ref([]);
+console.log(dataStore.userProfile?.address.state);
+console.log(countries.value);
+console.log(country.value);
+
+const setStates = () => {
+  states.value = compCities.getStatesByShort(country.value.shortName);
+  return states.value
+};
+const setCities = () => {
+  cities.value = compCities.getCities(country.value.shortName, state.value);
+  // console.log(compCities.getCities(country.value.shortName, state.value))
+};
 
 const formateDate = (e) => {
-  // console.log(e);
-  // console.log(e.target.value);
   const date = e;
-  // console.log(date);
   const newDate = new Date(date);
   const yyyy = newDate.getFullYear();
   let mm = newDate.getMonth() + 1; // Months start at 0!
@@ -228,11 +251,11 @@ const formateDate = (e) => {
 
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   formattedDob.value = formattedDate;
-  return formattedDob.value
+  return formattedDob.value;
 };
 
-console.log('date - ', dataStore.userProfile?.date_of_birth);
-console.log('new date - ', new Date(dataStore.userProfile?.date_of_birth));
+console.log("date - ", dataStore.userProfile?.date_of_birth);
+console.log("new date - ", new Date(dataStore.userProfile?.date_of_birth));
 
 const save = () => {
   loading.value = true;
@@ -246,7 +269,7 @@ const save = () => {
       address: address.value.toLowerCase(),
       city: city.value.toLowerCase(),
       state: state.value.toLowerCase(),
-      country: country.value.toLowerCase(),
+      country: country.value.name.toLowerCase(),
     },
     employment_status: employmentStatus.value,
     job_title: jobTitle.value,
@@ -263,7 +286,7 @@ const save = () => {
       dataStore.updateUserProfile(user_profile);
       // navigateTo("/user/verify-identity");
       // }
-      emit('continue');
+      emit("continue");
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -280,6 +303,13 @@ const save = () => {
       loading.value = false;
     });
 };
+const loadStates = () => {
+  if (country.value.name) {
+    return setStates();
+  }
+};
+
+loadStates();
 </script>
 
 <style scoped>
