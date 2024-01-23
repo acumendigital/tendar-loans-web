@@ -24,6 +24,17 @@ export const useUserStore = defineStore("users", {
     selectedRepaymentOption: {},
   }),
   actions: {
+    resetStore() {
+      this.token = "";
+      this.apiToken = "";
+      this.userData = {};
+      this.userProfile = {};
+      this.loanData = {};
+      this.repaymentOption = [];
+      this.loanAmount = 0;
+      this.purposeForLoan = "";
+      this.selectedRepaymentOption = {};
+    },
     updateToken(val) {
       this.token = val;
       console.log("This Token -", this.token);

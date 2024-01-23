@@ -103,6 +103,7 @@ const signIn = () => {
   axios
     .post("auth/login", data)
     .then((onfulfilled) => {
+      dataStore.resetStore();
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
       const token = onfulfilled.data.data.token;

@@ -57,7 +57,7 @@
               {{ repaymentData.no_of_active_repayment || 0 }}
             </p>
           </div>
-          <div v-if="!loanData.active" class="rhs">
+          <div v-if="loanData.active" class="rhs">
             <p class="active_badge">Active loan</p>
           </div>
         </div>
@@ -136,8 +136,8 @@ const getLoanData = () => {
     .get("loan/list")
     .then((onfulfilled) => {
       // console.log(onfulfilled);
-      const fullLoanData = onfulfilled.data.data.loans.data[0];
-      loanId.value = fullLoanData.id
+      const fullLoanData = onfulfilled.data?.data?.loans?.data[0];
+      loanId.value = fullLoanData?.id
       console.log(fullLoanData);
       dataStore.updateLoanData(fullLoanData);
     })
