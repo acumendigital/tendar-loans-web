@@ -30,10 +30,17 @@
             </div>
           </div>
           <div class="modal-input-field">
-            <div class="form_label flex">
-            <label class="mr-[10px]" for="selectAccount">Select Account</label>
-            <BtnLoader class="mt-[5px]" v-if="bankAccountLoading" color="#7a62eb" size="15" />
-          </div>
+            <div class="flex">
+              <label class="form_label mr-[10px]" for="selectAccount"
+                >Select Account</label
+              >
+              <BtnLoader
+                class="mt-[5px]"
+                v-if="bankAccountLoading"
+                color="#7a62eb"
+                size="15"
+              />
+            </div>
             <select
               id="selectAccount"
               v-model="selectAccount"
@@ -107,10 +114,8 @@ const getSavedBanks = () => {
 };
 
 const selectBank = (data) => {
-  console.log(data.target.value);
   const id = data.target.value;
   const bank = bankAccounts.value.find((val) => val.id === id);
-  console.log(bank);
   selectedBank.value = bank;
 };
 

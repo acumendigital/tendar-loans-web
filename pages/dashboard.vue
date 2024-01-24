@@ -104,6 +104,7 @@ const getUserProfile = () => {
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
       console.log(dataStore.userProfile.first_name);
+      checkEmailVerification();
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -188,7 +189,6 @@ const checkEmailVerification = () => {
   }
 };
 
-checkEmailVerification();
 getAnalytics();
 getUserProfile();
 getLoanData();

@@ -184,7 +184,7 @@
           >
             <option value="">Select</option>
             <option value="wallet">Pay with wallet</option>
-            <option value="card">Pay with Card</option>
+            <option value="card">Pay with card</option>
             <option value="online">Pay online</option>
           </select>
           <div
@@ -195,6 +195,44 @@
           </div>
         </div>
         <p class=""></p>
+      </div>
+      <div v-if="paymentOption === 'card'" class="form_group_flex">
+        <div class="modal-input-field">
+          <div class="flex items-center">
+            <label class="form_label mr-[10px]" for="selectAccount"
+              >Select Card</label
+            >
+            <BtnLoader
+              class="mb-[10px]"
+              v-if="cardLoading"
+              color="#7a62eb"
+              size="15"
+            />
+          </div>
+          <select
+            id="selectAccount"
+            v-model="selectedCard"
+            name="selectAccount"
+          >
+            <option value="">Select</option>
+            <option
+              v-for="(card, index) in cards"
+              :key="index"
+              :value="card.id"
+            >
+              ******{{ card.last_4_digits }} - (Expires: {{ card.exp_month }}/{{
+                card.exp_year
+              }})
+            </option>
+          </select>
+          <!-- </div> -->
+          <div
+            :class="submitClicked && !selectedCard ? '' : 'not-vis'"
+            class="error-text"
+          >
+            This field is required
+          </div>
+        </div>
       </div>
       <div class="btn-div">
         <button v-if="!loading" class="action-btn" @click="pay()">
@@ -224,9 +262,11 @@ const props = defineProps({
 const payType = ref("");
 const paymentOption = ref("");
 const amount_to_pay = ref("");
+const selectedCard = ref("");
 const loading = ref(false);
+const cardLoading = ref(false);
 const submitClicked = ref(false);
-const lowAmount = ref(true);
+const cards = ref([]);
 
 const selectPayType = (amount, type) => {
   console.log(amount);
@@ -235,19 +275,52 @@ const selectPayType = (amount, type) => {
   payType.value = type;
 };
 
+// const selectCard = (data) => {
+//   console.log(data.target.value);
+//   const id = data.target.value;
+//   const card = cards.value.find((val) => val.id === id);
+//   console.log(card);
+//   selectedBank.value = card;
+// };
+
 const pay = () => {
   submitClicked.value = true;
-  if (
-    amount_to_pay.value >= dataStore.loanData.next_pay_amount &&
-    paymentOption.value
-  ) {
-    emit("openDetails", amount_to_pay.value, paymentOption.value);
+  if (paymentOption.value === "card") {
+    console.log(selectedCard.value);
+    if (
+      amount_to_pay.value >= dataStore.loanData.next_pay_amount &&
+      paymentOption.value && selectedCard.value
+    ) {
+      emit("openDetails", amount_to_pay.value, paymentOption.value, selectedCard.value);
+    }
+  } else {
+    if (
+      amount_to_pay.value >= dataStore.loanData.next_pay_amount &&
+      paymentOption.value
+    ) {
+      emit("openDetails", amount_to_pay.value, paymentOption.value);
+    }
   }
 };
 
-// const lowAmount = computed(() => {
-//   return amount_to_pay.value >= dataStore.loanData.next_pay_amount
-// })
+const getCards = () => {
+  cardLoading.value = true;
+  axios
+    .get("card/list")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      cards.value = onfulfilled.data.data.cards;
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      cardLoading.value = false;
+    });
+};
+
+getCards();
 </script>
 
 <style scoped>
