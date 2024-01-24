@@ -45,7 +45,7 @@ definePageMeta({
 });
 
 import axios from "axios";
-
+const route = useRoute();
 const toast = useToast();
 const config = useRuntimeConfig();
 const encryptionKey = config.public.ENCRYPTION_KEY;
@@ -65,6 +65,8 @@ const handleConfirmPinChange = (value) => {
 };
 
 const save = () => {
+  const fallBackUrl = route.query?.fallBackUrl;
+  console.log(fallBackUrl);
   if (newPin.value === "" || confirmPin.value === "") {
     toast.add({
       title: "Incomplete feilds",
@@ -89,8 +91,13 @@ const save = () => {
       .post("user/pin/set", data)
       .then((onfulfilled) => {
         console.log(onfulfilled);
-        toast.add({ title: "Pin Created, Please login", color: "green" });
-        navigateTo("/auth/login");
+        if (fallBackUrl) {
+          toast.add({ title: "Pin Created", color: "green" });
+          navigateTo(fallBackUrl);
+        } else {
+          toast.add({ title: "Pin Created, Please login", color: "green" });
+          navigateTo("/auth/login");
+        }
         // }
       })
       .catch((_err) => {
