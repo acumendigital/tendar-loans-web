@@ -44,6 +44,7 @@ const props = defineProps({
     default: () => false,
   },
 });
+const dataStore = useUserStore();
 
 const pin = ref("");
 
@@ -56,7 +57,12 @@ const handlePINChange = (value) => {
 };
 
 const createPin = () => {
-  navigateTo("/settings?tab=Security&type=Pin");
+  console.log(dataStore.userData.pin_set);
+  if (!dataStore.userData.pin_set) {
+    navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
+  } else {
+    navigateTo("/settings?tab=Security&type=Pin");
+  }
 };
 </script>
 

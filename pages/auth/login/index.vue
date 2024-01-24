@@ -117,6 +117,7 @@ const signIn = () => {
       // console.log(dataStore.token);
       let url = ''
       let successMsg = ''
+      // console.log(user_data);
       if (!user_data.email_verified) {
         successMsg = "Login Successful. Please verify your email"
         url = `/auth/signup?emailToVerify=${email.value.trim()}&from=${window.location.pathname}`
