@@ -26,8 +26,11 @@
               </span>
             </p>
             <p class="card_text">
-              Account number: <span class="acct_num">00123456789</span
-              ><span class="material-icons-outlined copy_icon">
+              Account number: <span class="acct_num">{{ accountNum }}</span
+              ><span
+                class="material-icons-outlined copy_icon"
+                @click="copyAcctNum()"
+              >
                 content_copy
               </span>
             </p>
@@ -141,12 +144,14 @@
 <script setup>
 import axios from "axios";
 import LogoVue from "~/components/Tendar/Logo.vue";
+import { useClipboard, usePermission } from "@vueuse/core";
 const config = useRuntimeConfig();
 const route = useRoute();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 const toast = useToast();
-const openTopup = ref(route.query?.action === 'topup' || false);
-const openWithdrawal = ref(route.query?.action === 'withdraw' || false);
+const { text, isSupported, copy } = useClipboard();
+const openTopup = ref(route.query?.action === "topup" || false);
+const openWithdrawal = ref(route.query?.action === "withdraw" || false);
 const openTransactionDetails = ref(false);
 const openPinModal = ref(false);
 const openSuccess = ref(false);
@@ -157,6 +162,15 @@ const transactionId = ref("");
 const amount = ref(null);
 const withdrawAmount = ref(null);
 const bankData = ref("");
+const accountNum = ref("00123456789");
+
+const copyAcctNum = () => {
+  copy(accountNum.value);
+  toast.add({
+    title: "Account number copied",
+    color: "green",
+  });
+};
 
 const toggleSidebar = (val) => {
   isOpen.value = !isOpen.value;
