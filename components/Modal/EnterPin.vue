@@ -57,8 +57,8 @@ const handlePINChange = (value) => {
 };
 
 const createPin = () => {
-  console.log(dataStore.userData.pin_set);
-  if (!dataStore.userData.pin_set) {
+  console.log(dataStore.userProfile.user.pin_set);
+  if (!dataStore.userProfile.user.pin_set) {
     navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
   } else {
     navigateTo("/settings?tab=Security&type=Pin");

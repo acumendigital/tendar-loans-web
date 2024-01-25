@@ -36,6 +36,8 @@
 <script setup>
 import axios from "axios";
 const route = useRoute();
+const toast = useToast();
+const dataStore = useUserStore();
 
 const updateRoute = (val) => {
   navigateTo({
@@ -53,11 +55,30 @@ const addBank = ref(false);
 const addCard = ref(false);
 const activeTab = ref(route.query?.tab || "Personal Details");
 const banksLoading = ref(false);
+const loading = ref(false);
 const banks = ref([]);
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
   updateRoute(tab);
+};
+
+const getUserProfile = () => {
+  loading.value = true;
+  axios
+    .get("customer/profile")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      const user_profile = onfulfilled.data.data.customer;
+      dataStore.updateUserProfile(user_profile);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 const getBanks = () => {
@@ -77,6 +98,7 @@ const getBanks = () => {
     });
 };
 
+getUserProfile();
 getBanks();
 </script>
 
