@@ -180,11 +180,11 @@ const getDueDate = (date) => {
   }
 };
 const checkEmailVerification = () => {
-  console.log("Verified? - ", dataStore.userData?.email_verified);
-  if (!dataStore.userData?.email_verified) {
+  console.log("Verified? - ", dataStore.userProfile.user?.email_verified);
+  if (!dataStore.userProfile.user?.email_verified) {
     toast.add({ title: "Please verify your email", color: "green" });
     navigateTo(
-      `/auth/signup?emailToVerify=${dataStore.userData.email}&from=/dashboard`
+      `/auth/signup?emailToVerify=${dataStore.userProfile.user.email}&from=/dashboard`
     );
   }
 };

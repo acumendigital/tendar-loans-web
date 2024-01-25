@@ -21,7 +21,7 @@
       </div>
       <div class="content">
         <p class="content_title">Email</p>
-        <p class="content_value">{{ dataStore.userData?.email || '--' }}</p>
+        <p class="content_value">{{ dataStore.userProfile.user?.email || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">State</p>
@@ -29,7 +29,7 @@
       </div>
       <div class="content">
         <p class="content_title">Phone Number</p>
-        <p class="content_value">{{ dataStore.userData?.phone || '--' }}</p>
+        <p class="content_value">{{ dataStore.userProfile.user?.phone || '--' }}</p>
       </div>
       <div class="content">
         <p class="content_title">Employment status</p>

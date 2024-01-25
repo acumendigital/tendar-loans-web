@@ -156,16 +156,16 @@
           <div class="form-group">
             <label class="form_label" for="country">Country</label>
             <select
-                id="country"
-                v-model="country"
-                name=""
-                @change="setStates()"
-              >
-                <option value="" disabled selected>Please select</option>
-                <option v-for="(c, index) in countries" :key="index" :value="c">
-                  {{ c.name }}
-                </option>
-              </select>
+              id="country"
+              v-model="country"
+              name=""
+              @change="setStates()"
+            >
+              <option value="" disabled selected>Please select</option>
+              <option v-for="(c, index) in countries" :key="index" :value="c">
+                {{ c.name }}
+              </option>
+            </select>
             <div
               :class="submitClicked && !country.name ? '' : 'not-vis'"
               class="error-text"
@@ -178,11 +178,11 @@
           <div class="form-group">
             <label class="form_label" for="state">State</label>
             <select id="state" v-model="state" name="" @change="setCities()">
-                <option value="" disabled selected>Please select</option>
-                <option v-for="s in states" :key="s" :value="s">
-                  {{ s }}
-                </option>
-              </select>
+              <option value="" disabled selected>Please select</option>
+              <option v-for="s in states" :key="s" :value="s">
+                {{ s }}
+              </option>
+            </select>
             <div
               :class="submitClicked && !state ? '' : 'not-vis'"
               class="error-text"
@@ -193,11 +193,11 @@
           <div class="form-group">
             <label class="form_label" for="city">City</label>
             <select id="city" v-model="city" name="">
-                <option value="" disabled selected>Please select</option>
-                <option v-for="(c, index) in cities" :key="index" :value="c">
-                  {{ c }}
-                </option>
-              </select>
+              <option value="" disabled selected>Please select</option>
+              <option v-for="(c, index) in cities" :key="index" :value="c">
+                {{ c }}
+              </option>
+            </select>
             <div
               :class="submitClicked && !city ? '' : 'not-vis'"
               class="error-text"
@@ -228,7 +228,9 @@ definePageMeta({
 });
 
 import axios from "axios";
-import compCities from "countrycitystatejson";const countries = ref(
+const route = useRoute();
+import compCities from "countrycitystatejson";
+const countries = ref(
   compCities
     .getCountries()
     .filter((c) => c.shortName === "NG" || c.shortName === "US")
@@ -296,8 +298,8 @@ const save = () => {
 };
 
 const saveProfile = () => {
+  const fallBackUrl = route.query?.fallBackUrl;
   loading.value = true;
-  console.log(loading.value);
   const data = {
     first_name: firstName.value,
     last_name: lastName.value,
@@ -319,8 +321,13 @@ const saveProfile = () => {
     .then((onfulfilled) => {
       // const data = onfulfilled?.data?.data
       console.log(onfulfilled);
-      toast.add({ title: "Profile Created", color: "green" });
-      navigateTo("/user/verify-identity");
+      if (fallBackUrl) {
+        toast.add({ title: "Pin Created", color: "green" });
+        navigateTo(fallBackUrl);
+      } else {
+        toast.add({ title: "Profile Created", color: "green" });
+        navigateTo("/user/verify-identity");
+      }
       // }
     })
     .catch((_err) => {

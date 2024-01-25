@@ -112,13 +112,16 @@ const updateIsOpen = (newVal) => {
 };
 
 const requestLoan = () => {
-  if (!dataStore.userData.identity_verified) {
+  if (!dataStore.userProfile.user.identity_verified) {
     toast.add({ title: "Please verify your identity", color: "red" });
     navigateTo(`/user/verify-identity?from=${window.location.pathname}`);
-  } else if (!dataStore.userData.bank_account_set) {
+  } else if (!dataStore.userProfile.user.profile_set) {
+    toast.add({ title: "Please create your profile", color: "red" });
+    navigateTo(`/user/create-profile?fallBackUrl=${window.location.pathname}`);
+  } else if (!dataStore.userProfile.user.bank_account_set) {
     toast.add({ title: "Please add a bank account", color: "red" });
     navigateTo("/settings?tab=Bank+Account+Management");
-  } else if (!dataStore.userData.card_set) {
+  } else if (!dataStore.userProfile.user.card_set) {
     toast.add({ title: "Please add a card", color: "red" });
     navigateTo("/settings?tab=Cards");
   } else {
@@ -139,6 +142,24 @@ const getAnalytics = () => {
       // dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
       // dataStore.updateFullRepayment(loanData.value.loan_amount)
       getDueDate(repaymentData.value.next_due_date);
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const getUserProfile = () => {
+  loading.value = true;
+  axios
+    .get("customer/profile")
+    .then((onfulfilled) => {
+      console.log(onfulfilled);
+      const user_profile = onfulfilled.data.data.customer;
+      dataStore.updateUserProfile(user_profile);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
@@ -189,6 +210,7 @@ const getDueDate = (date) => {
   }
 };
 
+getUserProfile();
 getLoanData();
 getAnalytics();
 </script>
