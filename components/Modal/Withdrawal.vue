@@ -3,6 +3,7 @@
     <div class="modal reveals" @click.stop>
       <div class="top_section">
         <h1 class="modal_title">Withdrawal</h1>
+        <p class="modal_subtitle">Withdraw to your bank account</p>
         <span
           class="material-icons-outlined close"
           @click="$emit('close-modal')"
@@ -159,9 +160,10 @@ getSavedBanks();
 }
 
 .top_section {
-  display: flex;
+  margin-bottom: 2rem;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   /* padding-bottom: 20px; */
 }
 
@@ -171,7 +173,6 @@ getSavedBanks();
   font-size: 30px;
   font-weight: 700;
   margin-top: 1rem;
-  margin-bottom: 2rem;
 }
 
 .modal_subtitle {
