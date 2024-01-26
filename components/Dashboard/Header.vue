@@ -4,8 +4,15 @@
       <TendarLogo />
       <div>
         <div class="profile" @click="dropDownShow = !dropDownShow">
-          <p class="username">{{ dataStore.userProfile?.first_name }} {{ dataStore.userProfile?.last_name }}</p>
-          <img src="~assets/images/Ellipse 45.png" alt="" />
+          <p class="username">
+            {{ dataStore.userProfile?.first_name }}
+            {{ dataStore.userProfile?.last_name }}
+          </p>
+          <!-- <img src="~assets/images/Ellipse-45.png" alt="" /> -->
+          <img class="image_sec" v-if="image" :src="image" alt="" />
+          <div v-else class="image_sec">
+            <span class="material-icons-round"> account_circle </span>
+          </div>
           <!-- <MazDropdown :items="dropDownItems">
         Josh Anaba
         <MazAvatar
@@ -40,18 +47,19 @@ const config = useRuntimeConfig();
 const toast = useToast();
 const dropDownShow = ref(false);
 const loading = ref(false);
+const image = ref(dataStore.userProfile?.image || "");
 
 const handleLogout = () => {
   loading.value = true;
   axios
-    .get('auth/logout')
+    .get("auth/logout")
     .then((onfulfilled) => {
       console.log(onfulfilled);
       toast.add({ title: "Logged out!", color: "green" });
-      const logoutResponse = onfulfilled.data.code
+      const logoutResponse = onfulfilled.data.code;
       dataStore.resetStore();
       if (logoutResponse === 200) {
-        navigateTo('/auth/login')
+        navigateTo("/auth/login");
         // setTimeout(() => {
         //   this.$store.commit('setLoggedInState', false)
         //   this.$store.commit('setToDefault')
@@ -129,7 +137,6 @@ const handleLogout = () => {
   transition: all 0.2s ease-out;
   cursor: pointer;
   font-weight: 500;
-
 }
 
 .action-filter-drop-down > .action-item:hover {
@@ -164,5 +171,17 @@ const handleLogout = () => {
 .btn_loader {
   width: fit-content;
   margin: auto;
+}
+
+.image_sec {
+  background-position: center;
+  background-size: cover;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+}
+
+.material-icons-round {
+  font-size: 60px;
 }
 </style>
