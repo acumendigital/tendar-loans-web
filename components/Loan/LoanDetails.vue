@@ -123,7 +123,7 @@ const save = () => {
     axios
       .post("loan/repayment-option", data)
       .then((onfulfilled) => {
-        // console.log(onfulfilled.data.data.repayment_option);
+        console.log(onfulfilled.data.data.repayment_option);
         const repaymentOption = onfulfilled?.data?.data.repayment_option;
         dataStore.updateRepaymentOption(repaymentOption);
         dataStore.updateLoanAmount(amount.value);

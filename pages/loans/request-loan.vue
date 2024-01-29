@@ -102,7 +102,7 @@ const requestLoan = (pin) => {
     duration_type: loanDetails.duration_type,
     duration: loanDetails.duration,
     frequency_type: loanDetails.frequency_type,
-    frequency: loanDetails.frequency,
+    frequency: loanDetails.frequency_duration,
     interest_rate: loanDetails.interest_rate,
     interest_type: loanDetails.interest_type,
     purpose: purpose.value || purpose,

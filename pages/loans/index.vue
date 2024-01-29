@@ -17,7 +17,7 @@
                 {{ detailedDate(repaymentData.next_due_date) }}
               </p>
               <p
-                v-if="overdueStatus === 'due'"
+                v-if="overdueStatus === 'due' || loanData.active"
                 class="pay_early"
                 @click="navigateTo(`/loans/repay-loan?id=${loanId}`)"
               >
@@ -39,12 +39,7 @@
           <div class="lhs">
             <p class="card_title">Active loan amount</p>
             <p class="card_subtitle">
-              {{
-                functions.formatMoney(
-                  walletData.available_balance,
-                  walletData.currency || "NGN"
-                )
-              }}
+              {{ functions.formatMoney(loanData.loan_amount, "NGN") }}
             </p>
           </div>
         </div>
@@ -95,6 +90,7 @@ const toast = useToast();
 const dataStore = useUserStore();
 
 const overdueStatus = ref("");
+const loanId = ref("");
 const loading = ref(false);
 const showDetails = ref(true);
 const analytics = ref({});
@@ -134,7 +130,7 @@ const getAnalytics = () => {
   axios
     .get("loan/analytics")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
+      console.log(onfulfilled);
       // analytics.value = onfulfilled.data.data;
       // walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
@@ -177,6 +173,7 @@ const getLoanData = () => {
     .then((onfulfilled) => {
       // console.log(onfulfilled);
       const fullLoanData = onfulfilled.data.data.loans.data[0];
+      loanId.value = fullLoanData?.id;
       console.log(fullLoanData);
       dataStore.updateLoanData(fullLoanData);
     })
