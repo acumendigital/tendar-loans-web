@@ -121,6 +121,9 @@ const signIn = () => {
       if (!user_data.email_verified) {
         successMsg = "Login Successful. Please verify your email"
         url = `/auth/signup?emailToVerify=${email.value.trim()}&from=${window.location.pathname}`
+      } else if (!user_data.profile_set) {
+        successMsg = "Login Successful. Please create your profile"
+        url = `/user/create-profile?from=/dashboard`
       } else if (!user_data.identity_verified) {
         successMsg = "Login Successful. Please verify your identity"
         url = `/user/verify-identity?from=/dashboard`
