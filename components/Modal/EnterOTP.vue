@@ -95,7 +95,7 @@ const resendOtp = () => {
     });
 };
 
-if (route.query.from !== '') {
+if (route.query.from) {
   resendOtp()
 }
 

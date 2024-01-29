@@ -74,6 +74,27 @@ const handleLogout = () => {
       loading.value = false;
     });
 };
+
+const getUserProfile = () => {
+  // loading.value = true;
+  axios
+    .get("customer/profile")
+    .then((onfulfilled) => {
+      // console.log(onfulfilled);
+      const user_profile = onfulfilled.data.data.customer;
+      dataStore.updateUserProfile(user_profile);
+      image.value = user_profile?.image
+    })
+    .catch((err) => {
+      const errorMsg = err.response?.data?.message || err.message;
+      toast.add({ title: errorMsg, color: "red" });
+    })
+    .finally(() => {
+      // loading.value = false;
+    });
+};
+
+getUserProfile()
 </script>
 
 <style scoped>
