@@ -31,7 +31,7 @@
                 {{ detailedDate(repaymentData.next_due_date) }}
               </p>
               <p
-                v-if="overdueStatus === 'due'"
+                v-if="overdueStatus === 'due' || loanData.active"
                 class="pay_early"
                 @click="navigateTo(`/loans/repay-loan?id=${loanId}`)"
               >
