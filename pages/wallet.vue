@@ -290,6 +290,8 @@ const widthdraw = (pin) => {
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;
       toast.add({ title: errorMsg, color: "red" });
+      openPinModal.value = false;
+      openWithdrawal.value = true;
     })
     .finally(() => {
       loading.value = false;
