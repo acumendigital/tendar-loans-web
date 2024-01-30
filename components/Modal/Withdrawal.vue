@@ -29,6 +29,12 @@
             >
               This field is required
             </div>
+            <div
+              :class="submitClicked && amount > props.balance ? '' : 'not-vis'"
+              class="error-text"
+            >
+              Amount is more than available balance
+            </div>
           </div>
           <div class="modal-input-field">
             <div class="flex">
@@ -122,7 +128,8 @@ const selectBank = (data) => {
 
 const save = () => {
   submitClicked.value = true;
-  if (submitClicked && amount.value && selectAccount.value) {
+  console.log(props.balance);
+  if (submitClicked && amount.value && amount.value <= props.balance && selectAccount.value) {
     emit("proceed", amount.value, selectedBank.value);
   }
 };

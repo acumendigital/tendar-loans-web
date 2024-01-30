@@ -64,7 +64,7 @@
       <div class="content">
         <p class="content_title">State</p>
         <p class="content_value">
-          {{ dataStore.userProfile?.address.state || "--" }}
+          {{ dataStore.userProfile?.address?.state || "--" }}
         </p>
       </div>
       <div class="content">
