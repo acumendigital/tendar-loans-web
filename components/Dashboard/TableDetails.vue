@@ -117,10 +117,6 @@
                     }}
                   </p>
                 </div>
-                <div v-if="detailsData.interest" class="content">
-                  <p class="content_title">Interest</p>
-                  <p class="content_value">{{ detailsData.interest }}%</p>
-                </div>
                 <div class="content">
                   <p class="content_title">Loan Status</p>
                   <Badge :type="detailsData.status" />
