@@ -20,6 +20,7 @@
         <div class="search_filter">
           <div class="search-filter-row">
             <TableSearch
+              :searchName="'Loan ID'"
               :loading="searchLoading"
               @search="searchTransaction($event)"
             />

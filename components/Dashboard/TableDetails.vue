@@ -92,7 +92,7 @@
                   </p>
                 </div>
                 <div class="content">
-                  <p class="content_title">Date disbursed</p>
+                  <p class="content_title">Date</p>
                   <p class="content_value">
                     {{ detailedDate(detailsData.created_at) }}
                   </p>
@@ -117,6 +117,10 @@
                     }}
                   </p>
                 </div>
+                <div v-if="detailsData.interest" class="content">
+                  <p class="content_title">Interest</p>
+                  <p class="content_value">{{ detailsData.interest }}%</p>
+                </div>
                 <div class="content">
                   <p class="content_title">Loan Status</p>
                   <Badge :type="detailsData.status" />
@@ -124,7 +128,10 @@
               </div>
             </div>
             <div class="table_section" v-if="$route.name === 'loans'">
-              <TableRepaymentHistory :tableData="repayments" :loading="loading" />
+              <TableRepaymentHistory
+                :tableData="repayments"
+                :loading="loading"
+              />
             </div>
           </div>
         </div>

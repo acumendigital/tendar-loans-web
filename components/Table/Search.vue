@@ -5,7 +5,7 @@
       v-model="search"
       type="search"
       class="default-input search"
-      placeholder="Type to search"
+      :placeholder="`Search by ${searchName}`"
       @input="searchTable($event.target.value)"
     />
     <label :for="`${tableType}-table-search`">
@@ -47,6 +47,10 @@
 export default {
   props: {
     tableType: {
+      type: String,
+      default: () => "",
+    },
+    searchName: {
       type: String,
       default: () => "",
     },
