@@ -331,8 +331,8 @@ export default {
           //       : "All";
           this.transactionData = success.data.data.transactions;
           this.tableData = this.transactionData.data;
-          this.totalPages = this.transactionData.totalPages;
-          this.totalData = this.transactionData.totalDocs;
+          this.totalPages = this.transactionData.total_pages;
+          this.totalData = this.transactionData.total;
           this.currentPage = this.transactionData.page;
           this.filterFromDate = fromDate;
           this.filterToDate = toDate;
