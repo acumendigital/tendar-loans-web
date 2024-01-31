@@ -8,7 +8,9 @@ import type { duration } from 'moment';
     <div class="form">
       <div>
         <p class="content_title">Loan Amount</p>
-        <p class="content_value bold_text">{{ functions.formatMoney(loanAmount, 'NGN') }}</p>
+        <p class="content_value bold_text">
+          {{ functions.formatMoney(loanAmount, "NGN") }}
+        </p>
       </div>
       <div class="loan_options">
         <p class="content_title">Select your preferred option below</p>
@@ -57,15 +59,17 @@ import type { duration } from 'moment';
             </svg>
           </div>
           <div class="basis-[85%]">
-            <div class="flex items-center mb-[30px]">
+            <div class="flex items-center justify-between mb-[30px]">
               <p class="text-[#021C3E] text-[21px] font-medium">
-                {{ functions.formatMoney(option.amount_per_installment, 'NGN') }}
+                {{
+                  functions.formatMoney(option.amount_per_installment, "NGN")
+                }} / {{ formattedFreq(option.frequency_duration, option.frequency_type, option.duration, option.duration_type) }}
               </p>
               <div
                 class="bg-[#7A62EB1A] ml-[10px] flex justify-center items-center gap-2.5 px-2.5 py-[3px] rounded-[10px]"
               >
                 <p class="text-[#7A62EB] text-[15px] font-medium">
-                  for {{ option.duration }}
+                  <!-- for {{ option.duration }}
                   {{
                     option.duration_type === "yearly"
                       ? "year"
@@ -76,22 +80,29 @@ import type { duration } from 'moment';
                           : option.duration_type === "daily"
                             ? "day"
                             : ""
-                  }}{{ option.duration > 1 ? "s" : "" }}
+                  }}{{ option.duration > 1 ? "s" : "" }} -->
+                  {{ formattedDuration(option.frequency_duration, option.duration, option.duration_type) }}
                 </p>
               </div>
             </div>
             <div class="w-[100%] flex justify-between">
               <div class="basis-[33%]">
                 <p class="text-[#6A707E] font-[500]">Interest %</p>
-                <p class="text-[#6A707E] font-[700] mt-[10px]">{{ option.interest_rate }}%</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">
+                  {{ option.interest_rate }}%
+                </p>
               </div>
               <div class="basis-[33%]">
                 <p class="text-[#6A707E] font-[500]">Interest Value</p>
-                <p class="text-[#6A707E] font-[700] mt-[10px]">{{ functions.formatMoney(option.interest, 'NGN') }}</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">
+                  {{ functions.formatMoney(option.interest, "NGN") }}
+                </p>
               </div>
               <div class="basis-[33%]">
                 <p class="text-[#6A707E] font-[500]">Total payment</p>
-                <p class="text-[#6A707E] font-[700] mt-[10px]">{{ functions.formatMoney(option.total_repayment, 'NGN') }}</p>
+                <p class="text-[#6A707E] font-[700] mt-[10px]">
+                  {{ functions.formatMoney(option.total_repayment, "NGN") }}
+                </p>
               </div>
             </div>
           </div>
@@ -112,7 +123,7 @@ import type { duration } from 'moment';
 
 <script setup>
 import axios from "axios";
-const emit = defineEmits(["continue"])
+const emit = defineEmits(["continue"]);
 const dataStore = useUserStore();
 
 const repaymentData = ref(dataStore.repaymentOption || []);
@@ -126,8 +137,51 @@ const selctOption = (data) => {
 };
 
 const save = () => {
-  dataStore.updateSelectedRepaymentOption(seletedOption.value)
-  emit('continue')
+  dataStore.updateSelectedRepaymentOption(seletedOption.value);
+  emit("continue");
+};
+
+const formattedFreq = (frequency_duration, frequency_type, duration, duration_type, shorthand = true) => {
+  // const { frequency_duration, frequency_type, duration, duration_type } = plan;
+  if (
+    shorthand &&
+    frequency_duration === duration &&
+    frequency_type === duration_type
+  ) {
+    return "once";
+  }
+  if (
+    shorthand &&
+    frequency_duration === 2 &&
+    ["weekly", "monthly"].includes(frequency_type)
+  ) {
+    return `bi-${frequency_type}`;
+  }
+  return `every ${frequency_duration}
+      ${
+        frequency_duration > 1
+          ? `${
+              frequency_type === "daily"
+                ? frequency_type.replace("il", "")
+                : frequency_type.replace("ly", "s")
+            }`
+          : frequency_type.replace("ly", "")
+      }`;
+};
+
+const formattedDuration = (frequency_duration, duration, duration_type) => {
+  // const { frequency_duration, duration, duration_type } = plan;
+  return `
+       ${frequency_duration === duration ? "in" : "for"} ${duration}
+       ${
+         duration > 1
+           ? `${
+               duration_type === "daily"
+                 ? `${duration_type.replace("il", "")}`
+                 : duration_type.replace("ly", "")
+             }s`
+           : duration_type.replace("ly", "")
+       }`;
 };
 </script>
 
