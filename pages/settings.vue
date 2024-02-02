@@ -19,17 +19,35 @@
       </div>
       <div class="center_line"></div>
       <div class="rhs">
-        <SettingsPersonalDetails v-if="activeTab === 'Personal Details'" @editProfile="editProfile = !editProfile" />
+        <SettingsPersonalDetails
+          v-if="activeTab === 'Personal Details'"
+          @editProfile="editProfile = !editProfile"
+        />
         <SettingsCards v-if="activeTab === 'Cards'" @addCard="addCard = true" />
         <SettingsAccountManagement
-          v-if="activeTab === 'Bank Account Management'" @addBank="addBank = true"
+          v-if="activeTab === 'Bank Account Management'"
+          @addBank="addBank = true"
         />
         <SettingsSecurity v-if="activeTab === 'Security'" />
       </div>
     </div>
-    <ModalSettingsAddBank v-if="addBank" :banks="banks" @close-modal="addBank = false" />
+    <ModalSettingsAddBank
+      v-if="addBank"
+      :banks="banks"
+      @close-modal="addBank = false"
+    />
     <ModalSettingsAddCard v-if="addCard" @close-modal="addCard = false" />
-    <ModalEditProfile v-if="editProfile" @close-modal="editProfile = false" @continue="editProfile = false"  />
+    <ModalEditProfile
+      v-if="editProfile"
+      @close-modal="editProfile = false"
+      @continue="editProfile = false"
+    />
+    <ModalCardCheck
+      v-if="showCardWait"
+      :title="'Card Added Successfully'"
+      :subTitle="'You just added your card. Please wait for 10 seconds for it to reflect'"
+      @close-modal="showCardWait = false"
+    />
   </div>
 </template>
 
@@ -41,7 +59,7 @@ const dataStore = useUserStore();
 
 const updateRoute = (val) => {
   navigateTo({
-    path: '/settings',
+    path: "/settings",
     query: {
       tab: val,
     },
@@ -50,17 +68,27 @@ const updateRoute = (val) => {
 
 // updateRoute('Personal Details');
 // console.log(route.params.tab);
-const editProfile = ref(false)
+const showCardWait = ref(false);
+const editProfile = ref(false);
 const addBank = ref(false);
 const addCard = ref(false);
 const activeTab = ref(route.query?.tab || "Personal Details");
 const banksLoading = ref(false);
 const loading = ref(false);
 const banks = ref([]);
+const checkCard = ref(dataStore.setCard || false);
 
 const setActiveTab = (tab) => {
   activeTab.value = tab;
   updateRoute(tab);
+};
+
+const checkAddedCard = () => {
+  console.log('check card', checkCard.value);
+  if (checkCard.value) {
+    showCardWait.value = true;
+    dataStore.updateSetCard(false);
+  }
 };
 
 const getUserProfile = () => {
@@ -97,7 +125,7 @@ const getBanks = () => {
       banksLoading.value = false;
     });
 };
-
+checkAddedCard();
 getUserProfile();
 getBanks();
 </script>
