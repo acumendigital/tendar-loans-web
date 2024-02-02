@@ -39,11 +39,11 @@
           <div v-else class="main_content">
             <div v-if="$route.name === 'loans'">
               <div class="title">Loan Details</div>
-              <div class="content">
+              <!-- <div class="content">
                 <p class="content_title main_title">Loan ID</p>
                 <p class="content_value">{{ detailsData.id }}</p>
-              </div>
-              <p class="other_details_head">Other details</p>
+              </div> -->
+              <!-- <p class="other_details_head">Other details</p> -->
               <div class="contents">
                 <div class="content">
                   <p class="content_title">Amount borrowed</p>
@@ -74,11 +74,11 @@
             </div>
             <div v-else>
               <div class="title">Transaction Details</div>
-              <div class="content">
+              <!-- <div class="content">
                 <p class="content_title main_title">Transaction ID</p>
                 <p class="content_value">{{ detailsData.id }}</p>
-              </div>
-              <p class="other_details_head">Other details</p>
+              </div> -->
+              <!-- <p class="other_details_head">Other details</p> -->
               <div class="contents">
                 <div class="content">
                   <p class="content_title">Amount</p>
