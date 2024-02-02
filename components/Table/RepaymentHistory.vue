@@ -16,14 +16,17 @@
         <table>
           <thead>
             <tr class="table-header">
-              <td class="td-2">
+              <!-- <td class="td-2">
                 <div class="th-content">Transaction ID</div>
-              </td>
+              </td> -->
               <td class="td-2">
                 <div class="th-content">Amount Paid</div>
               </td>
               <td class="td-4">
                 <div class="th-content">Date</div>
+              </td>
+              <td class="td-4">
+                <div class="th-content">Due Date</div>
               </td>
               <td class="td-2">
                 <div class="th-content">Status</div>
@@ -32,9 +35,9 @@
           </thead>
           <tbody>
             <tr v-for="(data, index) in tableData" :key="index" class="table-row">
-              <td class="td-2">
+              <!-- <td class="td-2">
                 <div class="td-content">{{ data.id }}</div>
-              </td>
+              </td> -->
               <td class="td-2">
                 <div class="td-content text-bold">
                   {{ formatMoney(data.amount_paid, "NGN") }}
@@ -42,6 +45,9 @@
               </td>
               <td class="td-4">
                 <div class="td-content">{{ detailedDate(data.created_at) }}</div>
+              </td>
+              <td class="td-4">
+                <div class="td-content">{{ detailedDate(data.due_date) }}</div>
               </td>
               <td class="td-2">
                 <div class="td-content">
