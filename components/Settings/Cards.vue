@@ -100,6 +100,7 @@
 
 <script setup>
 import axios from "axios";
+const dataStore = useUserStore();
 const addCardLoading = ref(false);
 const loading = ref(false);
 const cards = ref([]);
@@ -133,6 +134,7 @@ const addCard = () => {
     .post("card/create", data)
     .then((onfulfilled) => {
       console.log(onfulfilled);
+      dataStore.updateSetCard(true);
       const checkoutRoute = onfulfilled.data.data.card.checkout_url;
       window.location.href = checkoutRoute;
     })

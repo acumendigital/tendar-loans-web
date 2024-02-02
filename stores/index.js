@@ -22,6 +22,7 @@ export const useUserStore = defineStore("users", {
     loanAmount: 0,
     purposeForLoan: "",
     selectedRepaymentOption: {},
+    setCard: false,
   }),
   actions: {
     resetStore() {
@@ -34,6 +35,7 @@ export const useUserStore = defineStore("users", {
       this.loanAmount = 0;
       this.purposeForLoan = "";
       this.selectedRepaymentOption = {};
+      this.setCard = false;
     },
     updateToken(val) {
       this.token = val;
@@ -62,6 +64,9 @@ export const useUserStore = defineStore("users", {
     },
     updateSelectedRepaymentOption(val) {
       this.selectedRepaymentOption = val;
+    },
+    updateSetCard(val) {
+      this.setCard = val;
     },
   },
   persist: true,
