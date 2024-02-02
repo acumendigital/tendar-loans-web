@@ -88,7 +88,7 @@
               <td class="td-4">
                 <div class="th-content">Transaction status</div>
               </td>
-              <td class="td-1"></td>
+              <!-- <td class="td-1"></td> -->
             </tr>
           </thead>
           <tbody>
@@ -121,7 +121,7 @@
                   <!-- <Badge type="failed" /> -->
                 </div>
               </td>
-              <td class="td-1">
+              <!-- <td class="td-1">
                 <div class="td-content">
                   <button>
                     <svg
@@ -138,7 +138,7 @@
                     </svg>
                   </button>
                 </div>
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>

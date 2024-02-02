@@ -23,7 +23,7 @@
                 <div class="th-content">Amount Paid</div>
               </td>
               <td class="td-4">
-                <div class="th-content">Date</div>
+                <div class="th-content">Amount Remaining</div>
               </td>
               <td class="td-4">
                 <div class="th-content">Due Date</div>
@@ -44,7 +44,7 @@
                 </div>
               </td>
               <td class="td-4">
-                <div class="td-content">{{ detailedDate(data.created_at) }}</div>
+                <div class="td-content">{{ formatMoney(data.amount_remaining_to_pay, "NGN") }}</div>
               </td>
               <td class="td-4">
                 <div class="td-content">{{ detailedDate(data.due_date) }}</div>
