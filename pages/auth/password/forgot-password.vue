@@ -16,7 +16,7 @@
             placeholder="Enter your username or email"
           />
         </div>
-        <p v-if="sendClicked && !email" class="error-text">
+        <p v-if="submitClicked && !email" class="error-text">
           This field is reqired
         </p>
         <div class="btn-div">
@@ -42,38 +42,41 @@ import axios from "axios";
 const toast = useToast();
 const email = ref("");
 const loading = ref(false);
-const sendClicked = ref(false);
+const submitClicked = ref(false);
 
 const sendEmail = () => {
-  console.log(email.value);
-  loading.value = true;
-  const data = {
-    email: email.value,
-  };
-  console.log(data);
-  // const path = "user/send-verification-email";
-  axios
-    .post("auth/password/reset/send-email", data)
-    .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
-      toast.add({ title: "Reset password email sent", color: "green" });
-      navigateTo(`/auth/password/reset-password?email=${email.value}`);
-    })
-    .catch((_err) => {
-      const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
-        toast.add({ title: errorMsg, color: "red" });
-      } else {
-        toast.add({
-          title: "Oops, something went wrong, please try again later",
-          color: "red",
-        });
-      }
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  submitClicked.value = true;
+  if (email.value) {
+    console.log(email.value);
+    loading.value = true;
+    const data = {
+      email: email.value,
+    };
+    console.log(data);
+    // const path = "user/send-verification-email";
+    axios
+      .post("auth/password/reset/send-email", data)
+      .then((onfulfilled) => {
+        // const data = onfulfilled?.data?.data
+        console.log(onfulfilled);
+        toast.add({ title: "Reset password email sent", color: "green" });
+        navigateTo(`/auth/password/reset-password?email=${email.value}`);
+      })
+      .catch((_err) => {
+        const errorMsg = _err?.response?.data?.message || _err?.message;
+        if (errorMsg) {
+          toast.add({ title: errorMsg, color: "red" });
+        } else {
+          toast.add({
+            title: "Oops, something went wrong, please try again later",
+            color: "red",
+          });
+        }
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  }
 };
 </script>
 
