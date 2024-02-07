@@ -106,7 +106,7 @@
       v-if="openTopup"
       @close-modal="
         openTopup = false;
-        navigateTo('wallet');
+        navigateTo('/wallet');
       "
       @proceed="proceed"
     />
@@ -115,7 +115,7 @@
       :balance="walletData.available_balance"
       @close-modal="
         openWithdrawal = false;
-        navigateTo('wallet');
+        navigateTo('/wallet');
       "
       @proceed="transDetails"
     />
