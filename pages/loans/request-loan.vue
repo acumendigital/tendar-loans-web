@@ -3,10 +3,10 @@
     <div class="top_section">
       <h1 class="title">Request a loan</h1>
     </div>
-    <LoanProfileUpdate
+    <!-- <LoanProfileUpdate
       v-if="activeSection === 'Profile Update'"
       @continue="profileUpdateDone"
-    />
+    /> -->
     <LoanDetails
       v-if="activeSection === 'Loan Details'"
       @continue="LoanDetailsDone"
@@ -40,7 +40,7 @@ const config = useRuntimeConfig();
 const encryptionKey = config.public.ENCRYPTION_KEY;
 const toast = useToast();
 
-const activeSection = ref(route.query?.section || "Profile Update");
+const activeSection = ref(route.query?.section || "Loan Details");
 const openPinModal = ref(false);
 const loanApproved = ref(false);
 const loading = ref(false);
@@ -55,10 +55,10 @@ const updateRoute = (val) => {
   });
 };
 
-const profileUpdateDone = () => {
-  activeSection.value = "Loan Details";
-  updateRoute(activeSection.value);
-};
+// const profileUpdateDone = () => {
+//   activeSection.value = "Loan Details";
+//   updateRoute(activeSection.value);
+// };
 
 const LoanDetailsDone = (reason) => {
   console.log(reason);
@@ -73,8 +73,7 @@ const repaymentPlanDone = () => {
 };
 
 const LoanDetailsBack = () => {
-  activeSection.value = "Profile Update";
-  updateRoute(activeSection.value);
+  navigateTo('/loans')
 };
 
 const repaymentPlanBack = () => {
