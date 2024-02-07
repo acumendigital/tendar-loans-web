@@ -86,8 +86,8 @@ const createPin = () => {
   /* margin-top: 5%; */
   position: relative;
   background-color: white;
-  max-width: 550px;
-  width: 30%;
+  max-width: 600px;
+  width: 35%;
   height: fit-content;
   align-items: center;
   border-radius: 20px;
