@@ -19,7 +19,7 @@
     />
     <LoanReviewDetails
       v-if="activeSection === 'Review Details'"
-      @continue="openPinModal = true"
+      @continue="enterPin"
       @go-back="reviewDetailsBack"
     />
     <ModalEnterPin
@@ -85,6 +85,15 @@ const repaymentPlanBack = () => {
 const reviewDetailsBack = () => {
   activeSection.value = "Repayment Plan";
   updateRoute(activeSection.value);
+};
+
+const enterPin = () => {
+  if (!dataStore.userProfile.user.pin_set) {
+    toast.add({ title: "Please set your PIN", color: "red" });
+    navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
+  } else {
+    openPinModal.value = true;
+  }
 };
 
 const transSuccess = (data) => {

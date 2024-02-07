@@ -21,10 +21,10 @@
           <div v-if="props.loading" class="loader_ctn">
             <BtnLoader color="#7a62eb" size="20" />
           </div>
-          <p v-else class="bottom_text">
+          <!-- <p v-else class="bottom_text">
             Don’t have a pin?
             <span class="resend_btn" @click="createPin()">Create one</span>
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
