@@ -3,7 +3,7 @@
     <p class="section_title">Pin Management</p>
     <TabHeaders
       v-if="true"
-      :tabs="['Password', 'Pin']"
+      :tabs="['Password', 'PIN']"
       :active-tab="activeTab"
       @set-active-tab="setActiveTab"
     />

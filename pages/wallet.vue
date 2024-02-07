@@ -143,6 +143,7 @@
 
 <script setup>
 import axios from "axios";
+const dataStore = useUserStore();
 import LogoVue from "~/components/Tendar/Logo.vue";
 import { useClipboard, usePermission } from "@vueuse/core";
 const config = useRuntimeConfig();
@@ -182,8 +183,13 @@ const updateIsOpen = (newVal) => {
 
 const proceed = (data) => {
   amount.value = data;
-  openTopup.value = false;
-  openPinModal.value = true;
+  if (!dataStore.userProfile.user.pin_set) {
+    toast.add({ title: "Please set your PIN", color: "red" });
+    navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
+  } else {
+    openTopup.value = false;
+    openPinModal.value = true;
+  }
 };
 
 const startTopup = () => {
@@ -215,8 +221,13 @@ const transDetails = (data, bank) => {
 };
 
 const enterPin = () => {
-  openTransactionDetails.value = false;
-  openPinModal.value = true;
+  if (!dataStore.userProfile.user.pin_set) {
+    toast.add({ title: "Please set your PIN", color: "red" });
+    navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
+  } else {
+    openTransactionDetails.value = false;
+    openPinModal.value = true;
+  }
 };
 
 const transSuccess = (data) => {

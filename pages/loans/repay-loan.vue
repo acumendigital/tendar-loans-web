@@ -46,9 +46,14 @@ const paymentOption = ref("");
 const carId = ref("");
 
 const enterPin = (data) => {
-  totalAmount.value = data
+  totalAmount.value = data;
   openTransactionDetails.value = false;
-  openPinModal.value = true;
+  if (!dataStore.userProfile.user.pin_set) {
+    toast.add({ title: "Please set your PIN", color: "red" });
+    navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
+  } else {
+    openPinModal.value = true;
+  }
 };
 
 const transSuccess = () => {
@@ -59,21 +64,21 @@ const transSuccess = () => {
 const openDetails = (amount, option, id) => {
   amount_to_pay.value = amount;
   paymentOption.value = option;
-  carId.value = id
+  carId.value = id;
   openTransactionDetails.value = true;
 };
 
 const proceed = (data) => {
   const encrptedPin = functions.encryptData(data, encryptionKey);
-  const loanid = route.query.id || dataStore.loanData.id
+  const loanid = route.query.id || dataStore.loanData.id;
   if (paymentOption.value === "wallet") {
-    payWithWallet(encrptedPin, loanid)
+    payWithWallet(encrptedPin, loanid);
   } else if (paymentOption.value === "card") {
     payWithCard(encrptedPin, loanid);
   } else if (paymentOption.value === "online") {
     payOnline(encrptedPin, loanid);
   }
-}
+};
 
 const payWithWallet = (pin, id) => {
   loading.value = true;
@@ -103,7 +108,7 @@ const payWithCard = (pin, id) => {
     pin: pin,
     loan_id: id,
     amount: totalAmount.value,
-    card_id: carId.value
+    card_id: carId.value,
   };
   axios
     .post("loan/recollect/card", data)
