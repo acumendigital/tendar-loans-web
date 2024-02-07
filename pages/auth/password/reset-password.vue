@@ -16,7 +16,7 @@
             placeholder="Enter the OTP sent to your email"
           />
         </div>
-        <p v-if="sendClicked && !otp" class="error-text">
+        <p v-if="submitClicked && !otp" class="error-text">
           This field is reqired
         </p>
         <div class="form-group">
@@ -30,7 +30,7 @@
             @update-value="updatePasswordValue($event)"
           />
         </div>
-        <p v-if="sendClicked && !password" class="error-text">
+        <p v-if="submitClicked && !password" class="error-text">
           This field is reqired
         </p>
         <div class="form-group">
@@ -44,7 +44,7 @@
             @update-value="updateConfirmPasswordValue($event)"
           />
         </div>
-        <p v-if="sendClicked && !confirm_password" class="error-text">
+        <p v-if="submitClicked && !confirm_password" class="error-text">
           This field is reqired
         </p>
         <p class="bottom_text">
@@ -87,7 +87,7 @@ const confirm_password = ref("");
 const emailError = ref(false);
 const loading = ref(false);
 const resendLoading = ref(false);
-const sendClicked = ref(false);
+const submitClicked = ref(false);
 
 const updatePasswordValue = (e) => {
   password.value = e;
@@ -130,6 +130,7 @@ const resendOtp = () => {
 };
 
 const resetPassword = () => {
+  submitClicked.value = true;
   if (
     otp.value === "" ||
     password.value === "" ||
