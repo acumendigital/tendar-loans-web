@@ -18,10 +18,10 @@
           <OTPInput inputs="4" @inputs="handlePINChange($event)" />
         </div>
         <div class="bottom_link">
-          <p class="bottom_text">
+          <!-- <p class="bottom_text">
             Don’t have a pin?
             <span class="resend_btn" @click="createPin()">Create one</span>
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
@@ -108,8 +108,8 @@ const sendPin = () => {
   /* margin-top: 5%; */
   position: relative;
   background-color: white;
-  max-width: 550px;
-  width: 30%;
+  max-width: 600px;
+  width: 35%;
   height: fit-content;
   align-items: center;
   border-radius: 20px;
