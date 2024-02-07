@@ -32,6 +32,12 @@
             name="email"
             placeholder="Enter your email"
           />
+          <div
+            :class="submitClicked && !email ? '' : 'not-vis'"
+            class="error-text"
+          >
+            This field is required
+          </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -43,6 +49,12 @@
             @keyup.enter="signIn()"
             @update-value="updateValue($event)"
           />
+          <div
+            :class="submitClicked && !password ? '' : 'not-vis'"
+            class="error-text"
+          >
+            This field is required
+          </div>
         </div>
         <div class="forgot-pass-row">
           <div class="keep-signin">
@@ -54,7 +66,7 @@
           >
         </div>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signIn()">
+          <button v-if="!loading" class="action-btn" @click="save()">
             Sign In
           </button>
           <button v-else class="action-btn" disabled>
@@ -84,10 +96,22 @@ const email = ref("");
 const password = ref("");
 const showPassword = ref(false);
 const loading = ref(false);
+const submitClicked = ref(false);
 // const encryptData = functions.encryptData;
 
 const updateValue = (e) => {
   password.value = e;
+};
+
+
+const save = () => {
+  submitClicked.value = true;
+  if (
+    email.value &&
+    password.value
+  ) {
+    signIn();
+  }
 };
 
 const signIn = () => {

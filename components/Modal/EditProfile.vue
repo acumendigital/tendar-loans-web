@@ -85,6 +85,12 @@
                 <option value="student">Student</option>
                 <option value="unemployed">Unemployed</option>
               </select>
+              <div
+                :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
+                class="error-text"
+              >
+                This field is required
+              </div>
               <!-- </div> -->
               <!-- <div
               :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
@@ -116,6 +122,12 @@
                 name="address"
                 placeholder="Enter your Address"
               />
+              <div
+                :class="submitClicked && !address ? '' : 'not-vis'"
+                class="error-text"
+              >
+                This field is required
+              </div>
             </div>
             <div class="form-group">
               <label class="form_label" for="country">Country</label>
@@ -130,6 +142,12 @@
                   {{ c.name }}
                 </option>
               </select>
+              <div
+                :class="submitClicked && !country.name ? '' : 'not-vis'"
+                class="error-text"
+              >
+                This field is required
+              </div>
             </div>
           </div>
           <div class="form_group_flex">
@@ -141,6 +159,12 @@
                   {{ s }}
                 </option>
               </select>
+              <div
+                :class="submitClicked && !state ? '' : 'not-vis'"
+                class="error-text"
+              >
+                This field is required
+              </div>
             </div>
             <div class="form-group">
               <label class="form_label" for="city">City</label>
@@ -150,6 +174,12 @@
                   {{ c }}
                 </option>
               </select>
+              <div
+                :class="submitClicked && !city ? '' : 'not-vis'"
+                class="error-text"
+              >
+                This field is required
+              </div>
             </div>
           </div>
           <div class="btn-div">
@@ -173,6 +203,7 @@ import compCities from "countrycitystatejson";
 const toast = useToast();
 const dataStore = useUserStore();
 const emit = defineEmits(["continue"]);
+const submitClicked = ref(false);
 const props = defineProps({
   email: {
     type: String,
@@ -255,6 +286,19 @@ console.log("date - ", dataStore.userProfile?.date_of_birth);
 console.log("new date - ", new Date(dataStore.userProfile?.date_of_birth));
 
 const save = () => {
+  submitClicked.value = true;
+  if (
+    employmentStatus.value &&
+    address.value &&
+    city.value &&
+    state.value &&
+    country.value.name
+  ) {
+    saveProfile();
+  }
+};
+
+const saveProfile = () => {
   loading.value = true;
   console.log(loading.value);
   const data = {
@@ -280,7 +324,7 @@ const save = () => {
       toast.add({ title: "Profile Updated", color: "green" });
       console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
-      dataStore.updateUserProfile(user_profile);
+      // dataStore.updateUserProfile(user_profile);
       // navigateTo("/user/verify-identity");
       // }
       emit("continue");

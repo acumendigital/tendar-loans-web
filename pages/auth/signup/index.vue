@@ -32,6 +32,12 @@
             name="email"
             placeholder="Enter your email"
           />
+          <div
+            :class="submitClicked && !email ? '' : 'not-vis'"
+            class="error-text"
+          >
+            This field is required
+          </div>
         </div>
         <div class="form-group">
           <label for="phone">Phone number</label>
@@ -47,6 +53,12 @@
               placeholder="Enter your phone number"
             />
           </div>
+              <div
+                :class="submitClicked && !phone ? '' : 'not-vis'"
+                class="error-text"
+              >
+                This field is required
+              </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -58,6 +70,12 @@
             @keyup.enter="signIn()"
             @update-value="updateValue($event)"
           />
+          <div
+            :class="submitClicked && !password ? '' : 'not-vis'"
+            class="error-text"
+          >
+            This field is required
+          </div>
         </div>
         <p class="terms_privacy_text">
           By clicking continue, you agree to
@@ -65,7 +83,7 @@
           <span class="link_text">Privacy Policy</span>.
         </p>
         <div class="btn-div">
-          <button v-if="!loading" class="action-btn" @click="signUp()">
+          <button v-if="!loading" class="action-btn" @click="save()">
             Continue
           </button>
           <button v-else class="action-btn" disabled>
@@ -99,6 +117,7 @@ const phone = ref("");
 const password = ref("");
 const showOtpModal = ref(route.query?.emailToVerify || false);
 const loading = ref(false);
+const submitClicked = ref(false);
 
 const tokenStore = useUserStore();
 
@@ -115,6 +134,18 @@ const updateValue = (e) => {
 //     },
 //   });
 // };
+
+
+const save = () => {
+  submitClicked.value = true;
+  if (
+    email.value &&
+    phone.value &&
+    password.value
+  ) {
+    signUp();
+  }
+};
 
 const signUp = () => {
   loading.value = true;

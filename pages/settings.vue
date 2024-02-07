@@ -40,7 +40,7 @@
     <ModalEditProfile
       v-if="editProfile"
       @close-modal="editProfile = false"
-      @continue="editProfile = false"
+      @continue="closeEditProfile"
     />
     <ModalCardCheck
       v-if="showCardWait"
@@ -84,11 +84,16 @@ const setActiveTab = (tab) => {
 };
 
 const checkAddedCard = () => {
-  console.log('check card', checkCard.value);
+  console.log("check card", checkCard.value);
   if (checkCard.value) {
     showCardWait.value = true;
     dataStore.updateSetCard(false);
   }
+};
+
+const closeEditProfile = () => {
+  getUserProfile();
+  editProfile.value = false;
 };
 
 const getUserProfile = () => {
