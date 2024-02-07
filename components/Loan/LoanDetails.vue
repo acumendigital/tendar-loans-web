@@ -60,6 +60,18 @@
             This field is required
           </div>
         </div>
+        <div v-if="reasonForLoan === 'other'" class="form-group">
+          <label class="form_label" for="address"
+            >Other (reason for loan)</label
+          >
+          <input
+            id="other"
+            v-model="other"
+            type="text"
+            name="other"
+            placeholder="Enter your reason for loan"
+          />
+        </div>
         <div class="btn-div">
           <button v-if="!loading" class="action-btn" @click="save">
             Continue
@@ -82,6 +94,7 @@ const dataStore = useUserStore();
 
 const amount = ref("");
 const reasonForLoan = ref("");
+const other = ref("");
 const highestAmount = ref(null);
 const submitClicked = ref(false);
 const loading = ref(false);
@@ -128,7 +141,9 @@ const save = () => {
         dataStore.updateRepaymentOption(repaymentOption);
         dataStore.updateLoanAmount(amount.value);
         dataStore.updatePurposeForLoan(reasonForLoan.value);
-        emit("continue", reasonForLoan.value);
+        const reason =
+          reasonForLoan.value === "other" ? other.value : reasonForLoan.value;
+        emit("continue", reason);
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
