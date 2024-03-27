@@ -17,10 +17,10 @@
           <div class="skeleton card" style="width: 140px; height: 45px" />
         </div>
       </div> -->
-      <LoadersTabHeaders
+      <!-- <LoadersTabHeaders
         v-if="tabHeadersLoader"
         :loader-length="tabHeadersLoaderLength"
-      />
+      /> -->
       <div v-if="paginated" class="search-filter-row">
         <div class="skeleton card" style="width: 25%; height: 35px" />
         <div class="skeleton card" style="width: 10%; height: 35px" />
