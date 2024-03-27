@@ -53,7 +53,7 @@
           </div>
         </div>
       </div>
-      <div v-if="activeTab === 'Pin'" class="">
+      <div v-if="activeTab === 'PIN'" class="">
         <div class="pin_form">
           <div class="pin_ctn">
             <div class="form-group">
