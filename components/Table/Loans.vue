@@ -20,7 +20,7 @@
         <div class="search_filter">
           <div class="search-filter-row">
             <TableSearch
-              :searchName="'Loan ID'"
+              :searchName="'Reference'"
               :loading="searchLoading"
               @search="searchTransaction($event)"
             />
@@ -69,7 +69,7 @@
           <thead>
             <tr class="table-header">
               <td class="td-4">
-                <div class="th-content">Loan ID</div>
+                <div class="th-content">Reference</div>
               </td>
               <td class="td-4">
                 <div class="th-content">Amount borrowed</div>
@@ -97,7 +97,7 @@
               @click="$emit('openSidebar', data.id)"
             >
               <td class="td-4">
-                <div class="td-content">{{ data.id }}</div>
+                <div class="td-content">{{ data.reference }}</div>
               </td>
               <td class="td-4">
                 <div class="td-content text-bold">
@@ -149,24 +149,25 @@
         <TableEmpty v-else>
           <template #tableHeader>
             <tr class="table-header">
-              <td class="td-3">
-                <div class="th-content">Full Name</div>
+              <td class="td-4">
+                <div class="th-content">Reference</div>
               </td>
               <td class="td-4">
-                <div class="th-content">Email</div>
-              </td>
-              <td class="td-3">
-                <div class="th-content">Phone Number</div>
+                <div class="th-content">Amount borrowed</div>
               </td>
               <td class="td-4">
-                <div class="th-content">Date Registered</div>
+                <div class="th-content">Amount repaid</div>
               </td>
               <td class="td-3">
-                <div class="th-content">Loan Status</div>
+                <div class="th-content">Date disbursed</div>
               </td>
-              <td class="td-3">
-                <div class="th-content">Transaction Status</div>
+              <td class="td-4">
+                <div class="th-content">Next repayment date</div>
               </td>
+              <td class="td-4">
+                <div class="th-content">Loan status</div>
+              </td>
+              <!-- <td class="td-1"></td> -->
             </tr>
           </template>
         </TableEmpty>
