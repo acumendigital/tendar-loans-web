@@ -2,7 +2,7 @@
   <div class="modal-backdrop" @click="$emit('close-modal')">
     <div class="modal reveals" @click.stop>
       <div class="top_section">
-        <h1 class="modal_title">Enter Profile</h1>
+        <h1 class="modal_title">Edit Profile</h1>
         <span
           class="material-icons-outlined close"
           @click="$emit('close-modal')"
