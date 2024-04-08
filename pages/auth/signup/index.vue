@@ -150,7 +150,7 @@ const save = () => {
 const signUp = () => {
   loading.value = true;
   const encrptedPassword = functions.encryptData(password.value, encryptionKey);
-  console.log(encrptedPassword);
+  // console.log(encrptedPassword);
   // password.value =
   //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const phoneNum = `+234${phone.value}`;
