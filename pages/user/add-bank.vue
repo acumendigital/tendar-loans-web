@@ -10,11 +10,11 @@
           />
         </div>
         <div class="rhs">
-          <img
+          <!-- <img
             class="payment_logo"
             src="~assets/images/stripe_logo.png"
             alt=""
-          />
+          /> -->
         </div>
       </div>
       <p class="welcome_text">Add bank details</p>
