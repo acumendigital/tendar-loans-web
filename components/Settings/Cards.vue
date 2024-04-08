@@ -103,6 +103,7 @@ import axios from "axios";
 const dataStore = useUserStore();
 const addCardLoading = ref(false);
 const loading = ref(false);
+const deleteLoading = ref(false);
 const cards = ref([]);
 const toast = useToast();
 
@@ -167,10 +168,10 @@ const deleteCard = (id) => {
 };
 
 const setDefault = (id) => {
-  console.log(id);
+  console.log('default', id);
   deleteLoading.value = true;
   axios
-    .delete(`card/set-default/${id}`)
+    .get(`card/set-default/${id}`)
     .then((onfulfilled) => {
       console.log(onfulfilled);
       toast.add({ title: "Card set as default", color: "green" });
