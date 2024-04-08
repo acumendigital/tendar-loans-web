@@ -45,11 +45,19 @@
               <input
                 id="dob"
                 v-model="dob"
+                type="text"
+                name="dob"
+                placeholder=""
+                disabled
+              />
+              <!-- <input
+                id="dob"
+                v-model="dob"
                 type="date"
                 name="dob"
                 @change="formateDate"
                 disabled
-              />
+              /> -->
             </div>
             <div class="modal-input-field">
               <label class="form_label" for="gender">Gender</label>
@@ -218,30 +226,30 @@ const countries = ref(
 
 const formattedDob = ref("");
 
-const reFormatDate = (e) => {
-  console.log(e);
-  const date = e;
-  console.log(date);
-  const newDate = new Date(date);
-  const yyyy = newDate.getFullYear();
-  let mm = newDate.getMonth() + 1; // Months start at 0!
-  let dd = newDate.getDate();
+// const reFormatDate = (e) => {
+//   console.log(e);
+//   const date = e;
+//   console.log(date);
+//   const newDate = new Date(date);
+//   const yyyy = newDate.getFullYear();
+//   let mm = newDate.getMonth() + 1; // Months start at 0!
+//   let dd = newDate.getDate();
 
-  if (dd < 10) dd = "0" + dd;
-  if (mm < 10) mm = "0" + mm;
+//   if (dd < 10) dd = "0" + dd;
+//   if (mm < 10) mm = "0" + mm;
 
-  const formattedDate = yyyy + "-" + mm + "-" + dd;
-  formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
-  return formattedDob.value;
-};
+//   const formattedDate = yyyy + "-" + mm + "-" + dd;
+//   formattedDob.value = formattedDate;
+//   console.log(formattedDob.value);
+//   return formattedDob.value;
+// };
 
 const otp = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
 const firstName = ref(dataStore.userProfile?.first_name || "");
 const lastName = ref(dataStore.userProfile?.last_name || "");
-const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || "");
+const dob = ref(dataStore.userProfile?.date_of_birth || "");
 const gender = ref(dataStore.userProfile?.gender || "");
 const employmentStatus = ref(dataStore.userProfile?.employment_status || "");
 const jobTitle = ref(dataStore.userProfile?.job_title || "");
