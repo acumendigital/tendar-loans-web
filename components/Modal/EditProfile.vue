@@ -309,10 +309,11 @@ const save = () => {
 const saveProfile = () => {
   loading.value = true;
   console.log(loading.value);
+  formattedDob.value
   const data = {
     first_name: firstName.value,
     last_name: lastName.value,
-    date_of_birth: formateDate(formattedDob.value),
+    date_of_birth: dob.value,
     gender: gender.value,
     address: {
       address: address.value,
