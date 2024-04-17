@@ -306,13 +306,17 @@ h1 {
 .vs__selected-options > input {
   width: unset !important;
   height: 40px !important;
-  padding: 0 !important;
+  padding: 0 10px !important;
   margin: 0 !important;
   border: none !important;
 }
 
 .vs__selected {
   font-size: 14px;
+}
+
+.vs__dropdown-option--highlight {
+  background-color: var(--primary-purple) !important;
 }
 
 .page-hero-text {
@@ -589,7 +593,7 @@ select {
 .modal-input-field select:focus {
   outline: none;
   box-shadow: 0 0 0 0.2rem var(--primary-purple-bg);
-  border: var(--input-border-width) solid var(--primary-purple-outline) !important;
+  /* border: var(--input-border-width) solid var(--primary-purple-outline) !important; */
 }
 
 /* end */
