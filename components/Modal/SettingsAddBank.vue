@@ -15,16 +15,23 @@
         <div class="form">
           <div class="modal-input-field">
             <label class="form_label" for="bank">Bank</label>
-            <select id="bank" v-model="bank" name="bank" @change="selectBankName(bank)">
+            <v-select
+              v-model="bank"
+              :options="banks"
+              label="name"
+              @change="selectBankName(bank)"
+            ></v-select>
+            <!-- <select
+              id="bank"
+              v-model="bank"
+              name="bank"
+              @change="selectBankName(bank)"
+            >
               <option value="">Select</option>
-              <option
-                v-for="(data, index) in banks"
-                :key="index"
-                :value="data"
-              >
+              <option v-for="(data, index) in banks" :key="index" :value="data">
                 {{ data.name }}
               </option>
-            </select>
+            </select> -->
             <!-- </div> -->
             <!-- <div
               :class="submitClicked && !bank ? '' : 'not-vis'"
@@ -75,7 +82,9 @@
 
 <script setup>
 import axios from "axios";
-const emit = defineEmits(['close-modal'])
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+const emit = defineEmits(["close-modal"]);
 
 const props = defineProps({
   banks: {
@@ -102,8 +111,8 @@ const countAcctNum = (val) => {
 
 const selectBankName = (val) => {
   console.log(val);
-  bankCode.value = val.code
-  bankName.value = val.name
+  bankCode.value = val.code;
+  bankName.value = val.name;
 };
 
 const getAccount = () => {
@@ -142,7 +151,7 @@ const addBankAccount = () => {
     bank_name: bankName.value,
     account_number: accountNumber.value,
     bank_code: bankCode.value,
-    currency: 'NGN',
+    currency: "NGN",
   };
   axios
     .post("bank-account/create", data)
@@ -151,7 +160,7 @@ const addBankAccount = () => {
       console.log(onfulfilled);
       toast.add({ title: "Bank Account Added", color: "green" });
       setTimeout(() => {
-        window.location.reload()
+        window.location.reload();
       }, 1000);
     })
     .catch((_err) => {
@@ -293,7 +302,7 @@ const addBankAccount = () => {
 
 .holder_input p {
   font-size: 14px;
-    line-height: 17px;
+  line-height: 17px;
 }
 
 @media only screen and (max-width: 1400px) {
