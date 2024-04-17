@@ -299,7 +299,7 @@ h1 {
 }
 
 .vs__selected-options > input:focus {
-  border: 1px solid red !important;
+  border: none !important;
   box-shadow: none !important;
 }
 
