@@ -103,10 +103,10 @@
               name="employment-status"
             >
               <option value="">Select</option>
-              <option value="contract worker">Contract Worker</option>
-              <option value="self employed">Self Employed</option>
+              <option value="contract-worker">Contract Worker</option>
+              <option value="self-employed">Self Employed</option>
               <option value="employed">Employed</option>
-              <option value="business owner">Business Owner</option>
+              <option value="business-owner">Business Owner</option>
               <option value="student">Student</option>
               <option value="unemployed">Unemployed</option>
             </select>
