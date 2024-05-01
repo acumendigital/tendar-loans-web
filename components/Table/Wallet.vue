@@ -304,33 +304,22 @@ export default {
       const toast = useToast();
       const route = useRoute();
       const actionPath = route.query?.action
-      console.log(actionPath);
       this.loading = loading;
       this.searchLoading = searchLoading;
       this.$axios({
         url: "wallet/transaction/list",
         params: {
           limit: limit,
-          // start_date: fromDate,
-          // end_date: toDate,
           page: currentPage,
           search,
-          // active: tab,
           currency: "",
           type: type,
           status: status,
         },
       })
         .then((success) => {
-          // this.activeTab =
-          //   tab === true
-          //     ? "Active Transactions"
-          //     : tab === false
-          //       ? "Inactive Transactions"
-          //       : "All";
           this.transactionData = success.data.data.transactions;
           this.tableData = this.transactionData.data;
-          // console.log(this.tableData);
           this.totalPages = this.transactionData.total_pages;
           this.totalData = this.transactionData.total;
           this.currentPage = this.transactionData.page;
@@ -339,7 +328,6 @@ export default {
           this.search = search;
           this.limit = Number(limit);
           const query = {
-            // ...this.$route.query,
             from: this.filterFromDate,
             to: this.filterToDate,
             q: this.search,
@@ -378,7 +366,6 @@ export default {
       }
     },
     navigate(item) {
-      // this.$store.commit('setTransactionData', item)
       this.$router.push(`/customers/${item._id}`);
     },
     checkAll() {

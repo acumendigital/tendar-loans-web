@@ -55,13 +55,7 @@ const updateRoute = (val) => {
   });
 };
 
-// const profileUpdateDone = () => {
-//   activeSection.value = "Loan Details";
-//   updateRoute(activeSection.value);
-// };
-
 const LoanDetailsDone = (reason) => {
-  console.log(reason);
   purpose.value = reason;
   activeSection.value = "Repayment Plan";
   updateRoute(activeSection.value);
@@ -115,16 +109,12 @@ const requestLoan = (pin) => {
     interest_type: loanDetails.interest_type,
     purpose: purpose.value || purpose,
   };
-  console.log(data);
   axios
     .post("loan/request", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       loanApproved.value = true;
     })
     .catch((_err) => {
-      console.log(_err);
       const errorMsg = _err?.response?.data?.message || _err?.message;
       if (errorMsg) {
         toast.add({ title: errorMsg, color: "red" });

@@ -150,11 +150,7 @@ const save = () => {
 const signUp = () => {
   loading.value = true;
   const encrptedPassword = functions.encryptData(password.value, encryptionKey);
-  // console.log(encrptedPassword);
-  // password.value =
-  //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const phoneNum = `+234${phone.value}`;
-  console.log(phoneNum);
   const data = {
     email: email.value.trim(),
     phone: phoneNum,
@@ -164,8 +160,6 @@ const signUp = () => {
   axios
     .post("user/register", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       const token = onfulfilled.data.data.token;
       const api_token = onfulfilled.data.data.api_token;
       tokenStore.token = token;

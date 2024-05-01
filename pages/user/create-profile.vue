@@ -256,17 +256,13 @@ const loading = ref(false);
 
 const setStates = () => {
   states.value = compCities.getStatesByShort(country.value.shortName);
-  // console.log(states.value);
 };
 const setCities = () => {
   cities.value = compCities.getCities(country.value.shortName, state.value);
-  // console.log(compCities.getCities(country.value.shortName, state.value))
 };
 
 const formateDate = (e) => {
-  // console.log(e.target.value);
   const date = e.target.value;
-  // console.log(date);
   const newDate = new Date(date);
   const yyyy = newDate.getFullYear();
   let mm = newDate.getMonth() + 1; // Months start at 0!
@@ -277,7 +273,6 @@ const formateDate = (e) => {
 
   const formattedDate = dd + "/" + mm + "/" + yyyy;
   formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
 };
 
 const save = () => {
@@ -314,13 +309,9 @@ const saveProfile = () => {
     employment_status: employmentStatus.value,
     job_title: jobTitle.value,
   };
-  console.log(data);
-  // const path = "customer/create";
   axios
     .post("customer/create", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       if (fallBackUrl) {
         toast.add({ title: "Pin Created", color: "green" });
         navigateTo(fallBackUrl);

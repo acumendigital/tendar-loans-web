@@ -105,7 +105,6 @@ const countAcctNum = (val) => {
 };
 
 const selectBankName = (val) => {
-  console.log(val);
   bankCode.value = val.code;
   bankName.value = val.name;
 };
@@ -119,8 +118,6 @@ const getAccount = () => {
   axios
     .post("bank-account/account-number/resolve", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       holderName.value = onfulfilled.data.data.account.account_name;
     })
     .catch((_err) => {
@@ -151,8 +148,6 @@ const addBankAccount = () => {
   axios
     .post("bank-account/create", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       toast.add({ title: "Bank Account Added", color: "green" });
       navigateTo("/user/create-pin");
     })
@@ -177,7 +172,6 @@ const getBanks = () => {
   axios
     .get("bank-account/bank/list")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       banks.value = onfulfilled.data.data.banks;
     })
     .catch((err) => {

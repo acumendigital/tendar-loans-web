@@ -213,7 +213,6 @@ const startWithdrawal = () => {
 };
 
 const transDetails = (data, bank) => {
-  console.log(bank);
   withdrawAmount.value = data;
   bankData.value = bank;
   openWithdrawal.value = false;
@@ -231,8 +230,6 @@ const enterPin = () => {
 };
 
 const transSuccess = (data) => {
-  // openPinModal.value = false;
-  // openSuccess.value = true;
   const encrptedPin = functions.encryptData(data, encryptionKey);
   if (route.query?.action === "topup") {
     topupWallet(encrptedPin);
@@ -248,7 +245,6 @@ const getTransactions = () => {
   axios
     .get("wallet/balance")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
       walletData.value = onfulfilled.data.data.balance;
     })
     .catch((err) => {
@@ -268,11 +264,9 @@ const topupWallet = (pin) => {
     cancel_url: "https://tendar-loans-web.vercel.app/wallet",
     pin: pin,
   };
-  console.log(data);
   axios
     .post("wallet/fund/initialize", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       const checkoutRoute = onfulfilled.data.data.transaction.checkout_url;
       window.location.href = checkoutRoute;
     })
@@ -292,11 +286,9 @@ const widthdraw = (pin) => {
     beneficiary: bankData.value.id,
     pin: pin,
   };
-  console.log(data);
   axios
     .post("wallet/transfer/initialize", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
     })
     .catch((err) => {
       const errorMsg = err.response?.data?.message || err.message;

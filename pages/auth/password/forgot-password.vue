@@ -47,18 +47,13 @@ const submitClicked = ref(false);
 const sendEmail = () => {
   submitClicked.value = true;
   if (email.value) {
-    console.log(email.value);
     loading.value = true;
     const data = {
       email: email.value,
     };
-    console.log(data);
-    // const path = "user/send-verification-email";
     axios
       .post("auth/password/reset/send-email", data)
       .then((onfulfilled) => {
-        // const data = onfulfilled?.data?.data
-        console.log(onfulfilled);
         toast.add({ title: "Reset password email sent", color: "green" });
         navigateTo(`/auth/password/reset-password?email=${email.value}`);
       })

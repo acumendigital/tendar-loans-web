@@ -55,18 +55,14 @@ const loading = ref(false);
 
 const handleNewPinChange = (value) => {
   newPin.value = value;
-  console.log(value);
-  console.log(newPin.value);
 };
 
 const handleConfirmPinChange = (value) => {
   confirmPin.value = value;
-  console.log(confirmPin.value);
 };
 
 const save = () => {
   const fallBackUrl = route.query?.fallBackUrl;
-  console.log(fallBackUrl);
   if (newPin.value === "" || confirmPin.value === "") {
     toast.add({
       title: "Incomplete feilds",
@@ -80,17 +76,12 @@ const save = () => {
   } else if (newPin.value === confirmPin.value) {
     loading.value = true;
     const encrptedPin = functions.encryptData(newPin.value, encryptionKey);
-    // console.log(encrptedPin);
-    // newPin.value =
-    //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     const data = {
       pin: encrptedPin,
     };
-    console.log(data);
     axios
       .post("user/pin/set", data)
       .then((onfulfilled) => {
-        console.log(onfulfilled);
         if (fallBackUrl) {
           toast.add({ title: "Pin Created", color: "green" });
           navigateTo(fallBackUrl);

@@ -55,8 +55,6 @@ definePageMeta({
   layout: "auth-layout",
 });
 
-console.log(route);
-
 const toast = useToast();
 const otp = ref("");
 const loading = ref(false);
@@ -65,7 +63,6 @@ const resendLoading = ref(false);
 const handleOTPChange = (value) => {
   otp.value = value;
   if (otp.value.length === 6) {
-    console.log(otp.value);
     save();
   }
 };
@@ -75,11 +72,9 @@ const save = () => {
   const data = {
     token: otp.value,
   };
-  console.log(data);
   axios
     .post("identity/verify", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       toast.add({ title: "Identity Verified", color: "green" });
       let url = "";
       if (route.query.from) {
@@ -88,7 +83,6 @@ const save = () => {
         url = "/user/add-bank";
       }
       navigateTo(`${url}`);
-      // }
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -112,15 +106,12 @@ const resendOtp = () => {
     type: route.query?.type,
     number: route.query?.id,
   };
-  console.log(data);
   axios
     .post("identity/create", data)
     .then((onfulfilled) => {
       const message = onfulfilled?.data?.message;
       toast.add({ title: message, color: "green" });
-      console.log(onfulfilled);
       const phone = onfulfilled.data.data.identity.phone_number;
-      // }
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;

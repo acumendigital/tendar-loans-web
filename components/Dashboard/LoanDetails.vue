@@ -12,14 +12,12 @@ export default {
   props: {
     isOpenProp: Boolean,
   },
-  watch: {
-    isOpenProp(newVal) {
-      console.log(newVal);
-    },
-  },
+  // watch: {
+  //   isOpenProp(newVal) {
+  //   },
+  // },
   methods: {
     updateIsOpen() {
-      // this.isOpen = false;
       this.$emit("update:isOpenProp", false); // Emit an event to update the prop in the parent
     },
   },

@@ -112,7 +112,6 @@ const getCards = () => {
   axios
     .get("card/list")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       cards.value = onfulfilled.data.data.cards;
     })
     .catch((err) => {
@@ -134,7 +133,6 @@ const addCard = () => {
   axios
     .post("card/create", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       dataStore.updateSetCard(true);
       const checkoutRoute = onfulfilled.data.data.card.checkout_url;
       window.location.href = checkoutRoute;
@@ -149,12 +147,10 @@ const addCard = () => {
 };
 
 const deleteCard = (id) => {
-  console.log(id);
   deleteLoading.value = true;
   axios
     .delete(`card/delete/${id}`)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       toast.add({ title: "Card Deleted", color: "green" });
       getCards();
     })
@@ -168,12 +164,10 @@ const deleteCard = (id) => {
 };
 
 const setDefault = (id) => {
-  console.log('default', id);
   deleteLoading.value = true;
   axios
     .get(`card/set-default/${id}`)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       toast.add({ title: "Card set as default", color: "green" });
       getCards();
     })

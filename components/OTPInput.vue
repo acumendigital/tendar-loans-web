@@ -17,42 +17,6 @@
 </template>
 
 <script>
-// const props = defineProps({
-//   inputs: {
-//     type: String,
-//     default: () => "4",
-//   },
-// });
-// const emit = defineEmits('input')
-// const pin = ref("");
-// const nextInput = (el, index) => {
-//   const { value } = el.target;
-//   console.log(el)
-//   console.log(index)
-//   if (index < props.inputs.value) {
-//     if (value !== "") {
-//       pinCtn.children[index].focus();
-//     }
-//   }
-//   pin.value.length = props.inputs.value;
-//   emit("input", pin.value.toString().replaceAll(",", ""));
-// };
-// const previousInput = (_el, index) => {
-//   if (index > 1) {
-//     pin.value[index] = "";
-//     pinCtn.children[index - 2].focus();
-//   }
-// };
-// const pasteCodeFromClipboard = (e) => {
-//   if (e.target.type === "password") {
-//     let data = e.clipboardData.getData("Text");
-//     data = data.split("");
-//     pin.value = data;
-//     $refs.pinCtn?.children?.[Number(props.inputs.value) - 1].focus();
-//   }
-// };
-
-// import Vue from "vue";
 export default {
   name: "PinInput",
   props: {
@@ -72,19 +36,12 @@ export default {
   methods: {
     nextInput(el, index) {
       const { value } = el.target;
-      // console.log(el)
-      // console.log(index)
       if (index < this.inputs) {
         if (
           value !== ""
-          // &&
-          // el.inputType !== 'deleteContentBackward'
         ) {
           this.$refs.pinCtn.children[index].focus();
         }
-        //  else if (value === '' && el.inputType !== 'deleteContentBackward') {
-        //   this.$refs.pinCtn.children[index+1].focus()
-        // }
       }
       this.pin.length = this.inputs;
       this.$emit("inputs", this.pin.toString().replaceAll(",", ""));

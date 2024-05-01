@@ -106,7 +106,6 @@ const getBankAccounts = () => {
   axios
     .get("bank-account/list")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       bankAccounts.value = onfulfilled.data.data.bank_accounts;
     })
     .catch((err) => {
@@ -119,12 +118,10 @@ const getBankAccounts = () => {
 };
 
 const deleteBank = (id) => {
-  console.log(id);
   deleteLoading.value = true;
   axios
     .delete(`bank-account/delete/${id}`)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       toast.add({ title: "Bank Account Deleted", color: "green" });
       getBankAccounts();
     })
@@ -138,12 +135,10 @@ const deleteBank = (id) => {
 };
 
 const setDefault = (id) => {
-  console.log(id);
   deleteLoading.value = true;
   axios
     .get(`bank-account/set-default/${id}`)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       toast.add({ title: "Bank Account set as default", color: "green" });
       getBankAccounts();
     })

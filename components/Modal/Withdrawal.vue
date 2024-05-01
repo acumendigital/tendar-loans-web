@@ -108,7 +108,6 @@ const getSavedBanks = () => {
   axios
     .get("bank-account/list")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       bankAccounts.value = onfulfilled.data.data.bank_accounts;
     })
     .catch((err) => {
@@ -128,7 +127,6 @@ const selectBank = (data) => {
 
 const save = () => {
   submitClicked.value = true;
-  console.log(props.balance);
   if (submitClicked && amount.value && amount.value <= props.balance && selectAccount.value) {
     emit("proceed", amount.value, selectedBank.value);
   }

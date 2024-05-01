@@ -288,30 +288,15 @@ export default {
       status,
       search
     ) {
-      // switch (tab.toLowerCase()) {
-      //   case "all":
-      //     tab = "";
-      //     break;
-      //   case "active customers":
-      //     tab = true;
-      //     break;
-      //   case "inactive customers":
-      //     tab = false;
-      //     break;
-      //   default:
-      //     tab = "";
-      // }
+
 
       const toast = useToast();
-      // console.log(search);
       this.loading = loading;
       this.searchLoading = searchLoading;
       this.$axios({
         url: "dashboard/transaction/list",
         params: {
           limit: limit,
-          // start_date: fromDate,
-          // end_date: toDate,
           page: currentPage,
           search,
           // active: tab,
@@ -322,13 +307,6 @@ export default {
         },
       })
         .then((success) => {
-          console.log(success);
-          // this.activeTab =
-          //   tab === true
-          //     ? "Active Transactions"
-          //     : tab === false
-          //       ? "Inactive Transactions"
-          //       : "All";
           this.transactionData = success.data.data.transactions;
           this.tableData = this.transactionData.data;
           this.totalPages = this.transactionData.total_pages;
@@ -339,7 +317,6 @@ export default {
           this.search = search;
           this.limit = Number(limit);
           const query = {
-            // ...this.$route.query,
             from: this.filterFromDate,
             to: this.filterToDate,
             q: this.search,
@@ -377,7 +354,6 @@ export default {
       }
     },
     navigate(item) {
-      // this.$store.commit('setTransactionData', item)
       this.$router.push(`/customers/${item._id}`);
     },
     checkAll() {
