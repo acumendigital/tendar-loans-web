@@ -21,24 +21,6 @@
               label="name"
               @change="selectBankName(bank)"
             ></v-select>
-            <!-- <select
-              id="bank"
-              v-model="bank"
-              name="bank"
-              @change="selectBankName(bank)"
-            >
-              <option value="">Select</option>
-              <option v-for="(data, index) in banks" :key="index" :value="data">
-                {{ data.name }}
-              </option>
-            </select> -->
-            <!-- </div> -->
-            <!-- <div
-              :class="submitClicked && !bank ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
           </div>
           <div class="form-group">
             <label for="">Account Number</label>
@@ -110,7 +92,6 @@ const countAcctNum = (val) => {
 };
 
 const selectBankName = (val) => {
-  console.log(val);
   bankCode.value = val.code;
   bankName.value = val.name;
 };
@@ -124,8 +105,6 @@ const getAccount = () => {
   axios
     .post("bank-account/account-number/resolve", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       holderName.value = onfulfilled.data.data.account.account_name;
     })
     .catch((_err) => {
@@ -156,8 +135,6 @@ const addBankAccount = () => {
   axios
     .post("bank-account/create", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       toast.add({ title: "Bank Account Added", color: "green" });
       setTimeout(() => {
         window.location.reload();

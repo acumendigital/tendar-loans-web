@@ -160,23 +160,14 @@ const savePassword = () => {
       newPassword.value,
       encryptionKey
     );
-    console.log(encrptedOldPassword);
-    console.log(encrptedNewPassword);
-    // newPassword.value =
-    //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
-    // console.log(newPassword.value);
     const data = {
       old_password: encrptedOldPassword,
       new_password: encrptedNewPassword,
     };
-    console.log(data);
     axios
       .post("user/password/change", data)
       .then((onfulfilled) => {
-        console.log(onfulfilled);
         toast.add({ title: "Password changed!", color: "green" });
-        // navigateTo("/dashboard");
-        // }
       })
       .catch((_err) => {
         const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -195,42 +186,6 @@ const savePassword = () => {
   } else {
   }
 };
-
-// const savePin = () => {
-//   if (newPin.value === confirmPin.value) {
-//     loading.value = true;
-//     console.log(loading.value);
-//     newPin.value =
-//       "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
-//     console.log(newPin.value);
-//     const data = {
-//       old_pin: currentPin.value,
-//       new_pin: newPin.value,
-//     };
-//     console.log(data);
-//     axios
-//       .post("user/pin/change", data)
-//       .then((onfulfilled) => {
-//         console.log(onfulfilled);
-//         // navigateTo("/dashboard");
-//         // }
-//       })
-//       .catch((_err) => {
-//         const errorMsg = _err?.response?.data?.message || _err?.message;
-//         if (errorMsg) {
-//           toast.add({ title: errorMsg, color: "red" });
-//         } else {
-//           toast.add({
-//             title: "Oops, something went wrong, please try again later",
-//             color: "red",
-//           });
-//         }
-//       })
-//       .finally(() => {
-//         loading.value = false;
-//       });
-//   }
-// };
 
 const savePin = () => {
   if (
@@ -254,19 +209,13 @@ const savePin = () => {
       encryptionKey
     );
     const encrptedNewPin = functions.encryptData(newPin.value, encryptionKey);
-    console.log(encrptedOldPin);
-    console.log(encrptedNewPin);
-    // newPin.value =
-    //   "71fe25b4bc4807bc40acfe54ad0f68e86a023a8b1a35494420f5b7d403cca51d2fe3ad48";
     const data = {
       old_pin: encrptedOldPin,
       new_pin: encrptedNewPin,
     };
-    console.log(data);
     axios
       .post("user/pin/change", data)
       .then((onfulfilled) => {
-        console.log(onfulfilled);
         toast.add({ title: "Pin Changed", color: "green" });
       })
       .catch((_err) => {

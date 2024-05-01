@@ -7,12 +7,10 @@
         <label for="sms"
           >Enter the code sent to your Phone Number
         </label>
-        <!-- <input v-model="otp" type="number" placeholder="Mobile verification code" /> -->
         <OTPInput inputs="6" @input="handleSMSOTPChange($event)" />
       </div>
       <div v-else-if="$route.query.authType === 'email'" class="form-group">
         <label for="email">Enter the code sent to your Email Address</label>
-        <!-- <input v-model="emailOtp" type="number" placeholder="Email verification code" /> -->
         <OTPInput inputs="6" @input="handleEmailOTPChange($event)" />
       </div>
       <div v-if="$route.query.authType === 'sms'" class="action-div">
@@ -37,9 +35,7 @@
 
 <script>
 import functions from '@/utils/functions'
-// import VOtpInput from '~/components/Vuetify/VOtpInput.vue'
 export default {
-  // components: { VOtpInput },
   layout: 'auth-layout',
   data() {
     return {
@@ -47,7 +43,6 @@ export default {
       loading: false,
       otp: '',
       emailOtp: '',
-      // inputsFilled: true,
       postDataLoading: false,
       otpAuth: '',
     }
@@ -65,40 +60,17 @@ export default {
       return this.emailOtp.length < 4
     }
   },
-  watch: {
-    // emailOtp(val) {
-    //   console.log(val);
-    //   if (val.length > 3) {
-    //     this.inputsFilled = false
-    //   } else {
-    //     this.inputsFilled = true
-    //   }
-    // },
-  },
-  // computed: {
-  //   companyAdmin () {
-  //     return this.$store.state.companyAdminDetails
-  //   }
-  // },
   created () {
     const data = this.$route.query
-    // console.log(data);
     this.otpAuth = data.authType
-    // console.log('data', this.otpAuth);
   },
   methods: {
-    // updateOTP(e) {
-    //   this.emailOtp = e
-    //   // console.log(e);
-    // },
     
     handleSMSOTPChange (value) {
       this.otp = value
-      // console.log(value);
     },
     handleEmailOTPChange (value) {
       this.emailOtp = value
-      // console.log(value);
     },
     submitOTP() {
       this.postDataLoading = true
@@ -124,15 +96,6 @@ export default {
           this.$store.commit('saveAdminDetails', data.admin)
           const url = this.$route.query.fallBackUrl || '/'
           this.$router.push(`${url}`)
-          //   this.$toast.success('Login successful', {
-          //     duration: 3000,
-          //     action: {
-          //       icon: 'check',
-          //       onClick: (e, toastObject) => {
-          //         toastObject.goAway(0)
-          //       },
-          //     },
-          //   })
         })
         .catch((_err) => {
           const errorMsg = _err?.response?.data?.message || _err?.message
@@ -148,35 +111,6 @@ export default {
           this.postDataLoading = false
         })
     },
-    // getDetails() {
-    //   this.detailsLoading = true
-    //   this.$axios.$get('/admin/me')
-    //     .then((res) => {
-    //       console.log(res.data.admin)
-    //       const data = res.data.admin
-    //       this.user_email = data.email
-    //       this.user_phone = data.phone
-    //       // this.user_id = data._id
-    //       this.name = `${data.first_name} ${data.last_name}`
-    //       this.smsChecked = data.sms_authentication || false
-    //       this.emailChecked = data.email_authentication || false
-    //       this.image = data.image
-    //       this.$store.commit('saveAdminDetails', data)
-    //     })
-    //     .catch((_err) => {
-    //       const errorMsg = _err?.response?.data?.message || _err?.message
-    //       if (errorMsg) {
-    //         this.$toast.error(errorMsg)
-    //       } else {
-    //         this.$toast.error(
-    //           'Oops, something went wrong, please try again later'
-    //         )
-    //       }
-    //     })
-    //     .finally(() => {
-    //       this.detailsLoading = false
-    //     })
-    // },
   },
 }
 </script>

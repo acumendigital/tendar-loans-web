@@ -21,10 +21,6 @@
           <div v-if="props.loading" class="loader_ctn">
             <BtnLoader color="#7a62eb" size="20" />
           </div>
-          <!-- <p v-else class="bottom_text">
-            Don’t have a pin?
-            <span class="resend_btn" @click="createPin()">Create one</span>
-          </p> -->
         </div>
       </div>
     </div>
@@ -51,13 +47,11 @@ const pin = ref("");
 const handlePINChange = (value) => {
   pin.value = value;
   if (pin.value.length === 6) {
-    console.log(pin.value);
     emit("proceed", pin.value);
   }
 };
 
 const createPin = () => {
-  console.log(dataStore.userProfile.user.pin_set);
   if (!dataStore.userProfile.user.pin_set) {
     navigateTo(`/user/create-pin?fallBackUrl=${window.location.pathname}`);
   } else {

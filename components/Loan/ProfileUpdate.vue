@@ -48,13 +48,6 @@
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-          <!-- </div> -->
-          <!-- <div
-              :class="submitClicked && !gender ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
         </div>
       </div>
       <div class="form_group_flex">
@@ -75,13 +68,6 @@
             <option value="student">Student</option>
             <option value="unemployed">Unemployed</option>
           </select>
-          <!-- </div> -->
-          <!-- <div
-              :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
         </div>
         <div class="form-group">
           <label class="form_label" for="jobTitle">Job title (Optional)</label>
@@ -169,9 +155,7 @@ const countries = ref(
 const formattedDob = ref("");
 
 const reFormatDate = (e) => {
-  console.log(e);
   const date = e;
-  console.log(date);
   const newDate = new Date(date);
   const yyyy = newDate.getFullYear();
   let mm = newDate.getMonth() + 1; // Months start at 0!
@@ -182,7 +166,6 @@ const reFormatDate = (e) => {
 
   const formattedDate = yyyy + "-" + mm + "-" + dd;
   formattedDob.value = formattedDate;
-  console.log(formattedDob.value);
   return formattedDob.value;
 };
 
@@ -192,7 +175,6 @@ const resendLoading = ref(false);
 const firstName = ref(dataStore.userProfile?.first_name || "");
 const lastName = ref(dataStore.userProfile?.last_name || "");
 const dob = ref(reFormatDate(dataStore.userProfile?.date_of_birth) || "");
-console.log(dob);
 const gender = ref(dataStore.userProfile?.gender || "");
 const employmentStatus = ref(dataStore.userProfile?.employment_status || "");
 const jobTitle = ref(dataStore.userProfile?.job_title || "");
@@ -211,18 +193,13 @@ const cities = ref([]);
 
 const setStates = () => {
   states.value = compCities.getStatesByShort(country.value.shortName);
-  // console.log(states.value);
 };
 const setCities = () => {
   cities.value = compCities.getCities(country.value.shortName, state.value);
-  // console.log(compCities.getCities(country.value.shortName, state.value))
 };
 
 const formateDate = (e) => {
-  // console.log(e);
-  // console.log(e.target.value);
   const date = e;
-  // console.log(date);
   const newDate = new Date(date);
   const yyyy = newDate.getFullYear();
   let mm = newDate.getMonth() + 1; // Months start at 0!
@@ -236,12 +213,8 @@ const formateDate = (e) => {
   return formattedDob.value;
 };
 
-console.log("date - ", dataStore.userProfile?.date_of_birth);
-console.log("new date - ", new Date(dataStore.userProfile?.date_of_birth));
-
 const save = () => {
   loading.value = true;
-  console.log(loading.value);
   const data = {
     first_name: firstName.value,
     last_name: lastName.value,
@@ -256,18 +229,12 @@ const save = () => {
     employment_status: employmentStatus.value,
     job_title: jobTitle.value,
   };
-  console.log(data);
-  // const path = "customer/create";
   axios
     .put("customer/update", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
       toast.add({ title: "Profile Updated", color: "green" });
-      console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
-      // navigateTo("/user/verify-identity");
-      // }
       emit("continue");
     })
     .catch((_err) => {

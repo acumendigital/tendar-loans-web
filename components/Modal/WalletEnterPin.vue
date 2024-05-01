@@ -18,10 +18,6 @@
           <OTPInput inputs="4" @inputs="handlePINChange($event)" />
         </div>
         <div class="bottom_link">
-          <!-- <p class="bottom_text">
-            Don’t have a pin?
-            <span class="resend_btn" @click="createPin()">Create one</span>
-          </p> -->
         </div>
       </div>
     </div>
@@ -45,10 +41,7 @@ const resendLoading = ref(false);
 const handlePINChange = (value) => {
   pin.value = value;
 
-  console.log(pin.value);
   if (pin.value.length === 4) {
-    console.log(pin.value);
-    // sendPin();
     emit("proceed");
   }
 };
@@ -67,8 +60,6 @@ const sendPin = () => {
   axios
     .post("user/email/verify", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       navigateTo("/user/create-profile");
     })
     .catch((_err) => {

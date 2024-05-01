@@ -132,7 +132,6 @@ const seletedOption = ref({});
 const loading = ref(false);
 
 const selctOption = (data) => {
-  console.log(data);
   seletedOption.value = data;
 };
 

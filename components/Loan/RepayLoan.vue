@@ -269,24 +269,13 @@ const submitClicked = ref(false);
 const cards = ref([]);
 
 const selectPayType = (amount, type) => {
-  console.log(amount);
-  console.log(type);
   amount_to_pay.value = amount;
   payType.value = type;
 };
 
-// const selectCard = (data) => {
-//   console.log(data.target.value);
-//   const id = data.target.value;
-//   const card = cards.value.find((val) => val.id === id);
-//   console.log(card);
-//   selectedBank.value = card;
-// };
-
 const pay = () => {
   submitClicked.value = true;
   if (paymentOption.value === "card") {
-    console.log(selectedCard.value);
     if (
       amount_to_pay.value >= dataStore.loanData.next_pay_amount &&
       paymentOption.value && selectedCard.value
@@ -308,7 +297,6 @@ const getCards = () => {
   axios
     .get("card/list")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       cards.value = onfulfilled.data.data.cards;
     })
     .catch((err) => {

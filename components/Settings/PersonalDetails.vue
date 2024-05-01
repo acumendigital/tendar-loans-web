@@ -120,14 +120,11 @@ const image = ref(dataStore.userProfile?.image || "");
 const setImage = (e) => {
   picLoading.value = true;
   const image = e.target.files[0];
-  // console.log(image)
   const formData = new FormData();
   formData.append("image", image);
   axios
     .post("customer/image/upload", formData)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
-      console.log(onfulfilled.data.data.image);
       image.value = onfulfilled.data.data.image;
       getUserProfile();
     })
@@ -152,7 +149,6 @@ const getUserProfile = () => {
   axios
     .get("customer/profile")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
       toast.add({ title: "Profile picture updated", color: "green" });

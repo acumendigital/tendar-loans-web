@@ -90,7 +90,6 @@ const payWithWallet = (pin, id) => {
   axios
     .post("loan/recollect/wallet", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       transSuccess();
     })
     .catch((err) => {
@@ -113,7 +112,6 @@ const payWithCard = (pin, id) => {
   axios
     .post("loan/recollect/card", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       transSuccess();
     })
     .catch((err) => {
@@ -127,7 +125,6 @@ const payWithCard = (pin, id) => {
 
 const payOnline = (pin, id) => {
   loading.value = true;
-  console.log(totalAmount.value);
   const data = {
     pin: pin,
     loan_id: id,
@@ -138,7 +135,6 @@ const payOnline = (pin, id) => {
   axios
     .post("loan/recollect/initiate", data)
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       const checkoutRoute = onfulfilled.data.data.recollection.checkout_url;
       window.location.href = checkoutRoute;
     })

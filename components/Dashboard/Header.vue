@@ -13,12 +13,6 @@
           <div v-else class="image_sec">
             <span class="material-icons-round"> account_circle </span>
           </div>
-          <!-- <MazDropdown :items="dropDownItems">
-        Josh Anaba
-        <MazAvatar
-          src="https://pbs.twimg.com/profile_images/598181608198381570/-cFG43y2_400x400.jpg"
-        />
-      </MazDropdown> -->
         </div>
         <div v-show="dropDownShow" class="action-filter-drop-down">
           <div class="action-item" @click="$router.push('/settings')">
@@ -54,16 +48,11 @@ const handleLogout = () => {
   axios
     .get("auth/logout")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       toast.add({ title: "Logged out!", color: "green" });
       const logoutResponse = onfulfilled.data.code;
       dataStore.resetStore();
       if (logoutResponse === 200) {
         navigateTo("/auth/login");
-        // setTimeout(() => {
-        //   this.$store.commit('setLoggedInState', false)
-        //   this.$store.commit('setToDefault')
-        // }, 200)
       }
     })
     .catch((err) => {
@@ -76,11 +65,9 @@ const handleLogout = () => {
 };
 
 const getUserProfile = () => {
-  // loading.value = true;
   axios
     .get("customer/profile")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
       image.value = user_profile?.image

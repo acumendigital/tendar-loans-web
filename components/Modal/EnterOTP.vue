@@ -3,12 +3,6 @@
     <div class="modal reveals" @click.stop>
       <div class="top_section">
         <h1 class="modal_title">Enter OTP</h1>
-        <!-- <span
-          class="material-icons-outlined close"
-          
-        >
-          close
-        </span> -->
       </div>
       <p class="modal_subtitle">
         Please enter the verification code we sent to
@@ -42,7 +36,6 @@
 
 <script setup>
 const route = useRoute();
-console.log(route);
 import axios from "axios";
 const props = defineProps({
   email: {
@@ -59,24 +52,18 @@ const resendLoading = ref(false);
 const handleOTPChange = (value) => {
   otp.value = value;
   if (otp.value.length === 6) {
-    console.log(otp.value);
     sendOtp();
   }
 };
 
 const resendOtp = () => {
-  console.log(email.value);
   resendLoading.value = true;
   const data = {
     email: email.value || route.query?.emailToVerify,
   };
-  console.log(data);
-  // const path = "user/send-verification-email";
   axios
     .post("user/send-verification-email", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       toast.add({ title: "Code resent", color: "green" });
     })
     .catch((_err) => {
@@ -109,8 +96,6 @@ const sendOtp = () => {
   axios
     .post("user/email/verify", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       toast.add({ title: "Email Verified", color: "green" });
       navigateTo("/user/create-profile");
     })

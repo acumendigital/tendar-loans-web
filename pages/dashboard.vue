@@ -97,10 +97,8 @@ const getUserProfile = () => {
   axios
     .get("customer/profile")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
-      console.log(dataStore.userProfile.first_name);
       checkEmailVerification();
     })
     .catch((err) => {
@@ -117,13 +115,10 @@ const getAnalytics = () => {
   axios
     .get("dashboard/analytics/fetch")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       analytics.value = onfulfilled.data.data;
       walletData.value = onfulfilled.data.data.wallet;
       loanData.value = onfulfilled.data.data.loan;
       repaymentData.value = onfulfilled.data.data.repayment;
-      // dataStore.updateNextRepayment(repaymentData.value.next_due_amount)
-      // dataStore.updateFullRepayment(loanData.value.loan_amount)
       getDueDate(repaymentData.value.next_due_date);
     })
     .catch((err) => {
@@ -140,10 +135,8 @@ const getLoanData = () => {
   axios
     .get("loan/list")
     .then((onfulfilled) => {
-      // console.log(onfulfilled);
       const fullLoanData = onfulfilled.data?.data?.loans?.data[0];
       loanId.value = fullLoanData?.id;
-      console.log(fullLoanData);
       dataStore.updateLoanData(fullLoanData);
     })
     .catch((err) => {
@@ -156,7 +149,6 @@ const getLoanData = () => {
 };
 
 const getDueDate = (date) => {
-  console.log("date", date);
   if (date === null || date === undefined) {
     overdueStatus.value = "";
   } else {
@@ -177,7 +169,6 @@ const getDueDate = (date) => {
   }
 };
 const checkEmailVerification = () => {
-  console.log("Verified? - ", dataStore.userProfile.user?.email_verified);
   if (!dataStore.userProfile.user?.email_verified) {
     toast.add({ title: "Please verify your email", color: "green" });
     navigateTo(

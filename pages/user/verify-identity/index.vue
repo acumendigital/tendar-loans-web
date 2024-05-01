@@ -96,13 +96,11 @@ const save = () => {
     type: preference.value,
     number: nin.value || bvn.value,
   };
-  console.log(data);
   axios
     .post("identity/create", data)
     .then((onfulfilled) => {
       const message = onfulfilled?.data?.message;
       toast.add({ title: message, color: "green" });
-      console.log(onfulfilled);
       const phone = onfulfilled.data.data.identity.phone_number;
       if (route.query.from) {
         navigateTo(

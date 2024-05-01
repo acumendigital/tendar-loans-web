@@ -39,11 +39,6 @@
           <div v-else class="main_content">
             <div v-if="$route.name === 'loans'">
               <div class="title">Loan Details</div>
-              <!-- <div class="content">
-                <p class="content_title main_title">Loan ID</p>
-                <p class="content_value">{{ detailsData.id }}</p>
-              </div> -->
-              <!-- <p class="other_details_head">Other details</p> -->
               <div class="contents">
                 <div class="content">
                   <p class="content_title">Amount borrowed</p>
@@ -74,11 +69,6 @@
             </div>
             <div v-else>
               <div class="title">Transaction Details</div>
-              <!-- <div class="content">
-                <p class="content_title main_title">Transaction ID</p>
-                <p class="content_value">{{ detailsData.id }}</p>
-              </div> -->
-              <!-- <p class="other_details_head">Other details</p> -->
               <div class="contents">
                 <div class="content">
                   <p class="content_title">Amount</p>
@@ -142,7 +132,7 @@ import functions from "@/utils/functions";
 import axios from "axios";
 export default {
   props: {
-    isOpenProp: Boolean, // Prop to receive the open state from the parent
+    isOpenProp: Boolean,
     transactionId: {
       type: String,
       default: () => "",
@@ -161,7 +151,6 @@ export default {
   },
   watch: {
     isOpenProp(newVal) {
-      // Update the local isOpen state when the prop changes
       this.isOpen = newVal;
       const route = useRoute();
       if (this.isOpen) {
@@ -178,16 +167,14 @@ export default {
   methods: {
     closeSidebar() {
       this.isOpen = false;
-      this.$emit("update:isOpenProp", false); // Emit an event to update the prop in the parent
+      this.$emit("update:isOpenProp", false);
     },
     getTransactionData() {
       this.loading = true;
       const toast = useToast();
-      console.log(this.transactionId);
       axios
         .get(`wallet/transaction/fetch/${this.transactionId}`)
         .then((onfulfilled) => {
-          console.log(onfulfilled);
           this.detailsData = onfulfilled.data.data.transaction;
         })
         .catch((err) => {
@@ -201,11 +188,9 @@ export default {
     getLoanData() {
       this.loading = true;
       const toast = useToast();
-      console.log("loan", this.transactionId);
       axios
         .get(`loan/fetch/${this.transactionId}`)
         .then((onfulfilled) => {
-          console.log(onfulfilled);
           this.detailsData = onfulfilled.data.data.loan;
           this.repayments = onfulfilled.data.data.loan.repayments;
         })

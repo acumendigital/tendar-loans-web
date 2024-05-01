@@ -66,8 +66,6 @@ const updateRoute = (val) => {
   });
 };
 
-// updateRoute('Personal Details');
-// console.log(route.params.tab);
 const showCardWait = ref(false);
 const editProfile = ref(false);
 const addBank = ref(false);
@@ -84,7 +82,6 @@ const setActiveTab = (tab) => {
 };
 
 const checkAddedCard = () => {
-  console.log("check card", checkCard.value);
   if (checkCard.value) {
     showCardWait.value = true;
     dataStore.updateSetCard(false);
@@ -101,7 +98,6 @@ const getUserProfile = () => {
   axios
     .get("customer/profile")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
       dataStore.updateUserProfile(user_profile);
     })
@@ -119,7 +115,6 @@ const getBanks = () => {
   axios
     .get("bank-account/bank/list")
     .then((onfulfilled) => {
-      console.log(onfulfilled);
       banks.value = onfulfilled.data.data.banks;
     })
     .catch((err) => {

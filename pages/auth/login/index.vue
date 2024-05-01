@@ -117,9 +117,6 @@ const save = () => {
 const signIn = () => {
   loading.value = true;
   const encrptedPassword = functions.encryptData(password.value, encryptionKey);
-  // console.log(encrptedPassword);
-  // password.value =
-  //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
   const data = {
     email: email.value.trim(),
     password: encrptedPassword,
@@ -128,20 +125,14 @@ const signIn = () => {
     .post("auth/login", data)
     .then((onfulfilled) => {
       dataStore.resetStore();
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       const token = onfulfilled.data.data.token;
       const api_token = onfulfilled.data.data.api_token;
       const user_data = onfulfilled.data.data.user;
-      // console.log('L-Token', token);
-      // console.log('L-APIToken', api_token);
       dataStore.updateToken(token);
       dataStore.updateApiToken(api_token);
       dataStore.updateUserData(user_data);
-      // console.log(dataStore.token);
       let url = ''
       let successMsg = ''
-      // console.log(user_data);
       if (!user_data.email_verified) {
         successMsg = "Login Successful. Please verify your email"
         url = `/auth/signup?emailToVerify=${email.value.trim()}&from=${window.location.pathname}`
@@ -157,14 +148,6 @@ const signIn = () => {
       }
       toast.add({ title: successMsg, color: "green" });
       navigateTo(`${url}`);
-      // navigateTo("/dashboard");
-      // this.$store.commit('setLoggedInState', true)
-      //   this.$store.commit('saveUserDetails', data)
-      //   this.$store.commit('saveToken', data.token)
-      //   this.$store.commit('saveXApiKey', data.api_token)
-      //   this.$store.commit('saveAdminDetails', data.admin)
-      //   const url = this.$route.query.fallBackUrl || '/'
-      //   this.$router.push(`${url}`)
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
@@ -182,120 +165,6 @@ const signIn = () => {
     });
 };
 
-// import functions from '~/utils/functions'
-// export default {
-//   layout: 'auth-layout',
-//   data() {
-//     return {
-//       encryptData: functions.encryptData,
-//       email: '',
-//       password: '',
-//       showPassword: false,
-//       loading: false,
-//       encryption_key: this.$config.ENCRYPTION_KEY
-//     }
-//   },
-//   head() {
-//     return {
-//       title: 'Login | Tendar Admin',
-//     }
-//   },
-// watch: {
-//   password(val) {
-//     if (this.email.length && val.length) {
-//       this.inputsFilled = false
-//     } else {
-//       this.inputsFilled = true
-//     }
-//   },
-// },
-// methods: {
-//   updateValue(e) {
-//     this.password = e
-//   },
-//   // signIn() {
-//   //   this.$router.push('/auth/login/security')
-//   // }
-//   signIn() {
-//     this.loading = true
-//     // const encrptedPassword = this.encryptData(this.password, this.encryption_key)
-//     // console.log(this.email.trim());
-//     // console.log(encrptedPassword)
-//     const data = {
-//       email: this.email.trim(),
-//       password: this.encryptData(this.password, this.encryption_key),
-//       address: '',
-//       longitude: null,
-//       latitude: null,
-//     }
-//     this.$axios({
-//       url: '/admin/auth/login',
-//       method: 'POST',
-//       data,
-//     })
-//       .then((onfulfilled) => {
-//         const data = onfulfilled?.data?.data
-//         // console.log(onfulfilled)
-//         if (
-//           onfulfilled.data.message ===
-//             'A one time token has been sent to your email address' ||
-//           onfulfilled.data.message ===
-//             'A one time token has been sent to your phone number'
-//         ) {
-//           this.$store.commit('saveEmailForOTP', this.email)
-//           this.$toast.success(onfulfilled.data.message, {
-//             duration: 4000,
-//             action: {
-//               icon: 'check',
-//               onClick: (e, toastObject) => {
-//                 toastObject.goAway(0)
-//               },
-//             },
-//           })
-//           let otpAuth = ""
-//           if (data.email_authentication) {
-//             otpAuth = "email"
-//           } else if (data.sms_authentication) {
-//             otpAuth = "sms"
-//           }
-//           // console.log("david", otpAuth)
-//           this.$router.push(`/auth/login/security?authType=${otpAuth}`)
-//         } else if (
-//           onfulfilled.data.message === 'user signed in successfully'
-//         ) {
-//           this.$store.commit('setLoggedInState', true)
-//           this.$store.commit('saveUserDetails', data)
-//           this.$store.commit('saveToken', data.token)
-//           this.$store.commit('saveXApiKey', data.api_token)
-//           this.$store.commit('saveAdminDetails', data.admin)
-//           const url = this.$route.query.fallBackUrl || '/'
-//           this.$router.push(`${url}`)
-//         } else {
-//           this.$store.commit('setLoggedInState', true)
-//           this.$store.commit('saveUserDetails', data)
-//           this.$store.commit('saveToken', data.token)
-//           this.$store.commit('saveXApiKey', data.api_token)
-//           this.$store.commit('saveAdminDetails', data.admin)
-//           const url = this.$route.query.fallBackUrl || '/'
-//           this.$router.push(`${url}`)
-//         }
-//       })
-//       .catch((_err) => {
-//         const errorMsg = _err?.response?.data?.message || _err?.message
-//         if (errorMsg) {
-//           this.$toast.error(errorMsg)
-//         } else {
-//           this.$toast.error(
-//             'Oops, something went wrong, please try again later'
-//           )
-//         }
-//       })
-//       .finally(() => {
-//         this.loading = false
-//       })
-//   },
-// },
-// }
 </script>
 
 <style scoped>

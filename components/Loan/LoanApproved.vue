@@ -65,11 +65,6 @@ export default {
       countdown: 5
     }
   },
-  // created () {
-  //   setTimeout(() => {
-  //     this.$router.push('/')
-  //   }, 3000)
-  // },
 
   mounted () {
     this.startCountdown()
@@ -82,8 +77,7 @@ export default {
         } else {
           this.countdown = 0
           clearInterval(interval)
-          // this.$router.push('/')
-          navigateTo('/dashboard')
+          navigateTo('/loans')
         }
       }, 1000)
     }

@@ -125,24 +125,6 @@
                   <!-- <Badge type="failed" /> -->
                 </div>
               </td>
-              <!-- <td class="td-1">
-                <div class="td-content">
-                  <button>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="25"
-                      viewBox="0 0 24 25"
-                      fill="none"
-                    >
-                      <path
-                        d="M8 12.5781C8 13.1086 7.78929 13.6173 7.41421 13.9923C7.03914 14.3674 6.53043 14.5781 6 14.5781C5.46957 14.5781 4.96086 14.3674 4.58579 13.9923C4.21071 13.6173 4 13.1086 4 12.5781C4 12.0477 4.21071 11.539 4.58579 11.1639C4.96086 10.7888 5.46957 10.5781 6 10.5781C6.53043 10.5781 7.03914 10.7888 7.41421 11.1639C7.78929 11.539 8 12.0477 8 12.5781ZM14 12.5781C14 13.1086 13.7893 13.6173 13.4142 13.9923C13.0391 14.3674 12.5304 14.5781 12 14.5781C11.4696 14.5781 10.9609 14.3674 10.5858 13.9923C10.2107 13.6173 10 13.1086 10 12.5781C10 12.0477 10.2107 11.539 10.5858 11.1639C10.9609 10.7888 11.4696 10.5781 12 10.5781C12.5304 10.5781 13.0391 10.7888 13.4142 11.1639C13.7893 11.539 14 12.0477 14 12.5781ZM18 14.5781C18.5304 14.5781 19.0391 14.3674 19.4142 13.9923C19.7893 13.6173 20 13.1086 20 12.5781C20 12.0477 19.7893 11.539 19.4142 11.1639C19.0391 10.7888 18.5304 10.5781 18 10.5781C17.4696 10.5781 16.9609 10.7888 16.5858 11.1639C16.2107 11.539 16 12.0477 16 12.5781C16 13.1086 16.2107 13.6173 16.5858 13.9923C16.9609 14.3674 17.4696 14.5781 18 14.5781Z"
-                        fill="#5B6871"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </td> -->
             </tr>
           </tbody>
         </table>
@@ -246,16 +228,6 @@ export default {
       }
       return false;
     },
-    // computedCompanies() {
-    //   if (this.activeTab.toLowerCase() === "inactive customers") {
-    //     return this.dataItems.filter((c) => c.loanStatus === "Inactive");
-    //   } else if (this.activeTab.toLowerCase() === "active customers") {
-    //     return this.dataItems.filter((c) => c.loanStatus === "Active");
-    //   } else if (this.activeTab.toLowerCase() === "owing") {
-    //     return this.dataItems.filter((c) => c.loanStatus === "Owing");
-    //   }
-    //   return this.dataItems;
-    // },
     dataItems: {
       get() {
         return this.tableData?.map((c) => {
@@ -293,22 +265,8 @@ export default {
       status,
       search
     ) {
-      // switch (tab.toLowerCase()) {
-      //   case "all":
-      //     tab = "";
-      //     break;
-      //   case "active customers":
-      //     tab = true;
-      //     break;
-      //   case "inactive customers":
-      //     tab = false;
-      //     break;
-      //   default:
-      //     tab = "";
-      // }
 
       const toast = useToast();
-      // console.log(search);
       this.loading = loading;
       this.searchLoading = searchLoading;
       this.$axios({
@@ -325,15 +283,8 @@ export default {
         },
       })
         .then((success) => {
-          // this.activeTab =
-          //   tab === true
-          //     ? "Active Transactions"
-          //     : tab === false
-          //       ? "Inactive Transactions"
-          //       : "All";
           this.transactionData = success.data.data.loans;
           this.tableData = this.transactionData.data;
-          // console.log(this.tableData);
           this.totalPages = this.transactionData.total_pages;
           this.totalData = this.transactionData.total;
           this.currentPage = this.transactionData.page;

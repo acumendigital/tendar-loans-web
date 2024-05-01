@@ -50,14 +50,6 @@
                 placeholder=""
                 disabled
               />
-              <!-- <input
-                id="dob"
-                v-model="dob"
-                type="date"
-                name="dob"
-                @change="formateDate"
-                disabled
-              /> -->
             </div>
             <div class="modal-input-field">
               <label class="form_label" for="gender">Gender</label>
@@ -66,13 +58,6 @@
                 <option value="male">Male</option>
                 <option value="female">Female</option>
               </select>
-              <!-- </div> -->
-              <!-- <div
-              :class="submitClicked && !gender ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
             </div>
           </div>
           <div class="form_group_flex">
@@ -86,10 +71,10 @@
                 name="employment-status"
               >
                 <option value="">Select</option>
-                <option value="contract worker">Contract Worker</option>
-                <option value="self employed">Self Employed</option>
+                <option value="contract-worker">Contract Worker</option>
+                <option value="self-employed">Self Employed</option>
                 <option value="employed">Employed</option>
-                <option value="business owner">Business Owner</option>
+                <option value="business-owner">Business Owner</option>
                 <option value="student">Student</option>
                 <option value="unemployed">Unemployed</option>
               </select>
@@ -99,13 +84,6 @@
               >
                 This field is required
               </div>
-              <!-- </div> -->
-              <!-- <div
-              :class="submitClicked && !employmentStatus ? '' : 'not-vis'"
-              class="error-text"
-            >
-              This field is required
-            </div> -->
             </div>
             <div class="form-group">
               <label class="form_label" for="jobTitle"
@@ -198,7 +176,6 @@
               <BtnLoader color="#fff" />
             </button>
           </div>
-          <!-- <p class="link_text">Cancel</p> -->
         </div>
       </div>
     </div>
@@ -226,24 +203,6 @@ const countries = ref(
 
 const formattedDob = ref("");
 
-// const reFormatDate = (e) => {
-//   console.log(e);
-//   const date = e;
-//   console.log(date);
-//   const newDate = new Date(date);
-//   const yyyy = newDate.getFullYear();
-//   let mm = newDate.getMonth() + 1; // Months start at 0!
-//   let dd = newDate.getDate();
-
-//   if (dd < 10) dd = "0" + dd;
-//   if (mm < 10) mm = "0" + mm;
-
-//   const formattedDate = yyyy + "-" + mm + "-" + dd;
-//   formattedDob.value = formattedDate;
-//   console.log(formattedDob.value);
-//   return formattedDob.value;
-// };
-
 const otp = ref("");
 const loading = ref(false);
 const resendLoading = ref(false);
@@ -268,11 +227,9 @@ const cities = ref([]);
 
 const setStates = () => {
   states.value = compCities.getStatesByShort(country.value.shortName);
-  // console.log(states.value);
 };
 const setCities = () => {
   cities.value = compCities.getCities(country.value.shortName, state.value);
-  // console.log(compCities.getCities(country.value.shortName, state.value))
 };
 
 const formateDate = (e) => {
@@ -290,9 +247,6 @@ const formateDate = (e) => {
   return formattedDob.value;
 };
 
-console.log("date - ", dataStore.userProfile?.date_of_birth);
-console.log("new date - ", new Date(dataStore.userProfile?.date_of_birth));
-
 const save = () => {
   submitClicked.value = true;
   if (
@@ -308,7 +262,6 @@ const save = () => {
 
 const saveProfile = () => {
   loading.value = true;
-  console.log(loading.value);
   formattedDob.value
   const data = {
     first_name: firstName.value,
@@ -324,18 +277,12 @@ const saveProfile = () => {
     employment_status: employmentStatus.value,
     job_title: jobTitle.value,
   };
-  console.log(data);
   // const path = "customer/create";
   axios
     .put("customer/update", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
       toast.add({ title: "Profile Updated", color: "green" });
-      console.log(onfulfilled);
       const user_profile = onfulfilled.data.data.customer;
-      // dataStore.updateUserProfile(user_profile);
-      // navigateTo("/user/verify-identity");
-      // }
       emit("continue");
     })
     .catch((_err) => {

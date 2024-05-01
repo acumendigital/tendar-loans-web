@@ -69,9 +69,6 @@
               <BtnLoader color="#fff" />
             </button>
           </div>
-          <!-- <p class="link_text" @click="$emit('close-modal')">
-          Cancel
-        </p> -->
         </div>
       </div>
     </div>
@@ -98,8 +95,6 @@ const sendOtp = () => {
   axios
     .post("user/email/verify", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       navigateTo("/user/create-profile");
     })
     .catch((_err) => {

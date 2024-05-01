@@ -99,18 +99,13 @@ const updateConfirmPasswordValue = (e) => {
 
 const resendOtp = () => {
   email.value = route.query.email;
-  console.log(email.value);
   resendLoading.value = true;
   const data = {
     email: email.value,
   };
-  console.log(data);
-  // const path = "user/send-verification-email";
   axios
     .post("auth/password/reset/send-email", data)
     .then((onfulfilled) => {
-      // const data = onfulfilled?.data?.data
-      console.log(onfulfilled);
       toast.add({ title: "Code resent", color: "green" });
     })
     .catch((_err) => {
@@ -147,26 +142,19 @@ const resetPassword = () => {
     });
   } else if (password.value === confirm_password.value) {
     email.value = route.query.email;
-    console.log(email.value);
     loading.value = true;
     const encrptedPassword = functions.encryptData(
       password.value,
       encryptionKey
     );
-    console.log(encrptedPassword);
-    // password.value =
-    //   "e03a6564a8d8c15dafd6389680a3933a5ed8720fb6ecdf5bc447601d8b67ecb4f0200b35000fc4";
     const data = {
       email: email.value,
       token: otp.value.toString(),
       password: encrptedPassword,
     };
-    console.log(data);
     axios
       .post("auth/password/reset", data)
       .then((onfulfilled) => {
-        // const data = onfulfilled?.data?.data
-        console.log(onfulfilled);
         toast.add({ title: "Reset password successful", color: "green" });
         navigateTo("/auth/login");
       })
