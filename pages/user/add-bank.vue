@@ -26,7 +26,7 @@
             <label class="mr-[10px]" for="bank">Bank</label>
             <BtnLoader class="mt-[5px]" v-if="banksLoading" color="#7a62eb" size="15" />
           </div>
-          <select
+          <!-- <select
             id="bank"
             v-model="bank"
             name="bank"
@@ -36,7 +36,13 @@
             <option v-for="(data, index) in banks" :key="index" :value="data">
               {{ data.name }}
             </option>
-          </select>
+          </select> -->
+          <v-select
+              v-model="bank"
+              :options="banks"
+              label="name"
+              @change="selectBankName(bank)"
+            ></v-select>
         </div>
         <div class="form-group">
           <label for="acct_num">Account number</label>
@@ -74,6 +80,8 @@
 
 <script setup>
 import axios from "axios";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 definePageMeta({
   layout: "auth-layout",
 });
