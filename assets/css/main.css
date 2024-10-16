@@ -104,6 +104,10 @@ body {
   background-color: #fff;
 }
 
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
 .text-bold {
   font-family: var(--HS-Bold), sans-serif;
 }

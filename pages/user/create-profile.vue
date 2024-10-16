@@ -231,9 +231,7 @@ import axios from "axios";
 const route = useRoute();
 import compCities from "countrycitystatejson";
 const countries = ref(
-  compCities
-    .getCountries()
-    .filter((c) => c.shortName === "NG" || c.shortName === "US")
+  compCities.getCountries().filter((c) => c.shortName === "NG")
 );
 
 const toast = useToast();
@@ -323,7 +321,17 @@ const saveProfile = () => {
     })
     .catch((_err) => {
       const errorMsg = _err?.response?.data?.message || _err?.message;
-      if (errorMsg) {
+      const errors = _err?.response?.data?.errors || _err?.errors;
+      if (errorMsg === "Validation Error") {
+        Object.keys(errors).forEach((field) => {
+          errors[field].forEach((message) => {
+            toast.add({
+              title: `${field.replace("_", " ")}: ${message}`,
+              color: "red",
+            });
+          });
+        });
+      } else if (errorMsg !== "Validation Error") {
         toast.add({ title: errorMsg, color: "red" });
       } else {
         toast.add({

@@ -102,13 +102,14 @@ const save = () => {
       const message = onfulfilled?.data?.message;
       toast.add({ title: message, color: "green" });
       const phone = onfulfilled.data.data.identity.phone_number;
+      const email = onfulfilled.data.data.identity.email;
       if (route.query.from) {
         navigateTo(
-          `/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}&from=${route.query?.from}`
+          `/user/verify-identity/enter-otp?phone=${phone}&email=${email}&type=${data.type}&id=${data.number}&from=${route.query?.from}`
         );
       } else {
         navigateTo(
-          `/user/verify-identity/enter-otp?phone=${phone}&type=${data.type}&id=${data.number}`
+          `/user/verify-identity/enter-otp?phone=${phone}&email=${email}&type=${data.type}&id=${data.number}`
         );
       }
 

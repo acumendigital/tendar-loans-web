@@ -79,7 +79,7 @@
         </div>
         <p class="terms_privacy_text">
           By clicking continue, you agree to
-          <span class="link_text">Tendar’s Terms of Service</span> and
+          <span class="link_text">Terms of Service</span> and
           <span class="link_text">Privacy Policy</span>.
         </p>
         <div class="btn-div">
