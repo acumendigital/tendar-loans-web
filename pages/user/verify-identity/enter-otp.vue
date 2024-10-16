@@ -12,7 +12,7 @@
       </div>
       <p class="welcome_text">Enter verification code</p>
       <p class="instruction_text">
-        Please enter the code sent to {{ route.query?.phone }}
+        Please enter the code sent to {{ route.query?.phone }} or {{ route.query?.email }}
       </p>
       <div class="form">
         <div class="pin_ctn">

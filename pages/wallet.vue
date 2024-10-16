@@ -25,7 +25,7 @@
                 {{ showAmount ? "visibility_off" : "visibility_on" }}
               </span>
             </p>
-            <p class="card_text">
+            <!-- <p class="card_text">
               Account number: <span class="acct_num">{{ accountNum }}</span
               ><span
                 class="material-icons-outlined copy_icon"
@@ -33,7 +33,7 @@
               >
                 content_copy
               </span>
-            </p>
+            </p> -->
           </div>
         </div>
       </div>
